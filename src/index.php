@@ -9,6 +9,8 @@ namespace yellowheroes\bootwrap;
 
 require dirname(__DIR__, 1) . "/vendor/autoload.php";
 
-$invoke = new Header();
-$invoke = new Body();
-$invoke = new Footer();
+$bootWrap = new BootWrap();
+
+$invoke = new Header($bootWrap);
+$invoke = new Body($bootWrap);
+$invoke = new Footer($bootWrap);

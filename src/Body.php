@@ -9,13 +9,12 @@ namespace yellowheroes\bootwrap;
 
 class Body
 {
-    public function __construct()
+    public function __construct(BootWrap $bootWrap)
     {
         echo "<!-- start class Body generated HTML -->\n";
         echo "<body>";
         echo "<header><nav></nav></header>";
         echo "<main role='main' class='container'>";
-        $bootWrap = new BootWrap();
         $bodyHtml = $bootWrap->jumbotron('yoohoo', 'there it is', 'enjoy BootWrap');
         echo $bodyHtml;
 

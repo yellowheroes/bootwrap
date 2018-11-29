@@ -9,9 +9,8 @@ namespace yellowheroes\bootwrap;
 
 class Header
 {
-    public function __construct()
+    public function __construct(BootWrap $bootWrap)
     {
-        $bootWrap = new BootWrap();
 
         // set extra CSS - Bootswatch and sticky footer
         $theme = 'slate';
