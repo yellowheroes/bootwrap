@@ -1,0 +1,33 @@
+{
+  "name": "yellowheroes/bootwrap",
+  "version": "1.0.0",
+  "type": "library",
+  "description": "bootwrap",
+  "keywords": [
+    "",
+    "",
+    ""
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yellow Heroes",
+      "email": "admin@yellowheroes.com"
+    }
+  ],
+  "_comment": [
+    {
+      "remark1": "do not use in production",
+      "remark2": "no error / exception handling",
+      "remark3": "unstable"
+    }
+  ],
+  "config": {
+    "optimize-autoloader": false
+  },
+  "autoload": {
+    "psr-4": {
+      "yellowheroes\\bootwrap\\": "src/"
+    }
+  }
+}
