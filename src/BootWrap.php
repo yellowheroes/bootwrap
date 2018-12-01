@@ -68,7 +68,7 @@ class BootWrap
      * set the opening block for html5 page
      * @return void
      */
-    public function setHtmlInit()
+    public function setHtmlInit(): void
     {
         $this->htmlInit = <<<HEREDOC
 <!doctype html>
@@ -81,7 +81,7 @@ HEREDOC;
      * set the required html meta tags (in <head> block)
      * @return void
      */
-    public function setMeta()
+    public function setMeta(): void
     {
         $this->meta = <<<HEREDOC
 <meta charset="utf-8">
@@ -94,7 +94,7 @@ HEREDOC;
      * @param array $styleSheets defines path to each style sheet
      * @return void
      */
-    public function setStyles($styleSheets = [])
+    public function setStyles($styleSheets = []): void
     {
         // default CSS (minimum requirement for Bootstrap to function)
         if(empty($styleSheets)) {
@@ -116,7 +116,7 @@ HEREDOC;
      * @param array $libs
      * @return void
      */
-    public function setLibs($libs = [])
+    public function setLibs($libs = []): void
     {
         // default libraries (minimum requirement for Bootstrap to function)
         if(empty($libs)) {
@@ -140,7 +140,7 @@ HEREDOC;
      * e.g. Bootstrap tooltips, or Bootstrap dropdowns, or some .js editor
      * @param array $js
      */
-    public function setJs($js = [])
+    public function setJs($js = []): void
     {
         foreach ($js as $key)
             $this->js .= <<<HEREDOC
@@ -153,7 +153,7 @@ HEREDOC;
      * @param null $other
      * @return void
      */
-    public function setOther($other = null)
+    public function setOther($other = null): void
     {
         $this->other .= <<<HEREDOC
 $other\n\n
@@ -165,7 +165,7 @@ HEREDOC;
      * @param string $title     defaults to 'jimmy'
      * @return void
      */
-    public function setTitle($title = 'jimmy')
+    public function setTitle($title = 'jimmy'): void
     {
         $this->title = <<<HEREDOC
 <title>$title</title>\n\n
@@ -176,7 +176,7 @@ HEREDOC;
      * set the document footer
      * @param string|null $footerContent
      */
-    public function setFooter($footerContent = null)
+    public function setFooter($footerContent = null): void
     {
         /** set default: copyright symbol and year */
         $copyRightSymbol =  " &#169 ";
@@ -219,7 +219,7 @@ $this->htmlInit
 		<!-- CSS -->
         $this->styles
 
-        <!-- Libraries - jQuery first, then Popper.js, then Bootstrap.js -->
+        <!-- Libraries - jQuery, Popper.js, Bootstrap.js -->
         $this->libs
         
         <!-- jQuery / JavaScript / CSS complementary -->\n
@@ -237,36 +237,54 @@ HEREDOC;
     /**
      * getters
      */
-    public function getHtmlInit()
+    public function getHtmlInit(): string
     {
         return $this->htmlInit;
     }
 
-    public function getMeta()
+    public function getMeta(): string
     {
         return $this->meta;
     }
 
-    public function getStyles()
+    public function getStyles(): string
     {
         return $this->styles;
     }
 
-    public function getLibs()
+    public function getLibs(): string
     {
         return $this->libs;
     }
 
-    public function getFooter()
+    public function getFooter(): string
     {
         return $this->footer;
     }
 
 
     /**
-     * Modal
+     * Create a Bootstrap modal
+     *
+     * https://getbootstrap.com/docs/4.1/components/modal/
+     * Modals are built with HTML, CSS, and JavaScript. They’re positioned over everything else in the document and
+     * remove scroll from the <body> so that modal content scrolls instead.
+     * Clicking on the modal “backdrop” will automatically close the modal.
+     * Bootstrap only supports one modal window at a time. Nested modals aren’t supported as we believe them to be poor user experiences.
+     * Modals use position: fixed, which can sometimes be a bit particular about its rendering. Whenever possible,
+     * place your modal HTML in a top-level position to avoid potential interference from other elements. You’ll likely run into issues
+     * when nesting a .modal within another fixed element.
+     * Once again, due to position: fixed, there are some caveats with using modals on mobile devices. See our browser support docs for details.
+     * Due to how HTML5 defines its semantics, the autofocus HTML attribute has no effect in Bootstrap modals. To achieve the same effect,
+     * use some custom JavaScript.
+     *
+     * @param string|null       $title
+     * @param string|null       $msg
+     * @param bool              $showOnload
+     * @param string            $id
+     * @return string           return Bootstrap modal HTML
      */
-    public function modal($title = null, $msg = null, $showOnload = false, $id = 'yhModal')
+    public function modal($title = null, $msg = null, $showOnload = false, $id = 'yhModal'): string
     {
         $onload = <<<HEREDOC
 <script type="text/javascript">
