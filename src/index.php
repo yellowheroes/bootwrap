@@ -12,5 +12,9 @@ require dirname(__DIR__, 1) . "/vendor/autoload.php";
 $bootWrap = new BootWrap();
 
 $invoke = new Header($bootWrap);
-$invoke = new Body($bootWrap);
+
+/* construct array of component(s) for rendering in body */
+$components = ['jumbotron' => array('yoohoo', 'there it is', 'enjoy BootWrap')];
+$invoke = new Body($bootWrap, $components);
+
 $invoke = new Footer($bootWrap);

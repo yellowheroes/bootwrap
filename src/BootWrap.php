@@ -817,22 +817,24 @@ HEREDOC;
         return $navButtonHtml;
     }
 
-    /**                                 ACTION BUTTONS
+    /**
+     * Action Button (this is not a Bootstrap Component)
+     * - Button used in anything but navigation, e.g. forms, dialogs etc.
+     * - The client can invoke a 'filled'(default) or 'outline' button
      *
-     * Button used in anything but navigation, e.g. forms, dialogs
-     * The client can invoke the rendering of a 'filled'(default) or 'outline' button
-     *
-     * we can also turn the action buttons into navigation buttons, like so:
+     * we can also turn action buttons into navigation buttons, like so:
      * <button type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational action</button>
+     * find this functionality in BootWrap::navButton()
      *
-     * we offer this functionality in BootWrap::navButton()
-     *
-     * @param string $display text displayed on button
-     * @param string $class primary, secondary, success, danger, warning, info, light, dark
-     * @param string $outline default solid fill, set to true if you want an outline-styled button
+     * @param string $display               text displayed on button
+     * @param string $class                 primary, secondary, success, danger, warning, info, light, dark
+     * @param bool $outline                 default solid fill, set to true if you want an outline-styled button
+     * @return string                       the action button html ready for echoing
      */
-    public function actButton($display = 'click me', $class = 'primary', $outline = false)
+    public function actionButton($display = 'click me', $class = 'primary', $outline = false): string
     {
+        $actionButtonHtml = '';
+
         $button = <<<HEREDOC
         <button type="button" class="btn btn-$class">$display</button>\n
 HEREDOC;
@@ -842,8 +844,8 @@ HEREDOC;
 HEREDOC;
 
         // does the user want a filled / outline button
-        $actButtonHtml = ($outline !== true) ? $button : $buttonOl;
-        return $actButtonHtml;
+        $actionButtonHtml = ($outline !== true) ? $button : $buttonOl;
+        return $actionButtonHtml;
     }
 
     public function href($link = null, $display = 'click me', $class = 'primary', $cssClass = null)
