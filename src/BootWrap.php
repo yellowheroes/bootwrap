@@ -1,4 +1,5 @@
 <?php
+
 namespace yellowheroes\bootwrap;
 
 /*
@@ -20,15 +21,16 @@ namespace yellowheroes\bootwrap;
  * the user sees based on our MVC-routing: i.e. controller/action/params
  *
  */
+
 class BootWrap
 {
     /**
-     * @var string $htmlInit    opening block html5 page
-     * @var string $meta        html meta-data
-     * @var string $styles      html code CSS stylesheets (in <head>)
-     * @var string $libs        html code Bootstrap libraries, other javascript libraries (in <head>)
-     * @var string $js          html code additional javascript (libraries) and related CSS (e.g. for editor: Quill.js and snow.css in same block)  in <head>
-     * @var string $other       optional any other html (in <head>)
+     * @var string $htmlInit opening block html5 page
+     * @var string $meta html meta-data
+     * @var string $styles html code CSS stylesheets (in <head>)
+     * @var string $libs html code Bootstrap libraries, other javascript libraries (in <head>)
+     * @var string $js html code additional javascript (libraries) and related CSS (e.g. for editor: Quill.js and snow.css in same block)  in <head>
+     * @var string $other optional any other html (in <head>)
      * @var string title        browser tab title
      * @var string footer       closing block html5 page
      */
@@ -58,7 +60,7 @@ class BootWrap
      *          setMeta(), setStyles(), setLibs()       - <head> </head> section
      *          setTitle()                              - browser-tab title
      *              ...
-     *              nav-bar                             - defined in Header.php
+     *              nav-bar                             - defined in Head.php
      *              document body                       - each view-page renders the core content of the page
      *              ...
      *          setFooter()                             - document close
@@ -97,7 +99,7 @@ HEREDOC;
     public function setStyles($styleSheets = []): void
     {
         // default CSS (minimum requirement for Bootstrap to function)
-        if(empty($styleSheets)) {
+        if (empty($styleSheets)) {
             $this->styles = <<<HEREDOC
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">\n
 HEREDOC;
@@ -119,7 +121,7 @@ HEREDOC;
     public function setLibs($libs = []): void
     {
         // default libraries (minimum requirement for Bootstrap to function)
-        if(empty($libs)) {
+        if (empty($libs)) {
             $this->libs = <<<HEREDOC
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -162,7 +164,7 @@ HEREDOC;
 
     /**
      * set the document title that will be shown on the browser-tab and used in search engine results
-     * @param string $title     defaults to 'jimmy'
+     * @param string $title defaults to 'jimmy'
      * @return void
      */
     public function setTitle($title = 'jimmy'): void
@@ -179,7 +181,7 @@ HEREDOC;
     public function setFooter($footerContent = null): void
     {
         /** set default: copyright symbol and year */
-        $copyRightSymbol =  " &#169 ";
+        $copyRightSymbol = " &#169 ";
         $copyrightYear = date("Y");
         $footerContent .= $copyRightSymbol . $copyrightYear; // append Copyright notice: c YYYY - to footer content
         $this->footer = <<<HEREDOC
@@ -278,10 +280,10 @@ HEREDOC;
      * Due to how HTML5 defines its semantics, the autofocus HTML attribute has no effect in Bootstrap modals. To achieve the same effect,
      * use some custom JavaScript.
      *
-     * @param string|null       $title
-     * @param string|null       $msg
-     * @param bool              $showOnload
-     * @param string            $id
+     * @param string|null $title
+     * @param string|null $msg
+     * @param bool $showOnload
+     * @param string $id
      * @return string           return Bootstrap modal HTML
      */
     public function modal($title = null, $msg = null, $showOnload = false, $id = 'yhModal'): string
@@ -494,7 +496,7 @@ HEREDOC;
     /**
      * Form
      *
-     * @param string $submitDisplay     set it to false if no form submit button should be rendered, anything else will be displayed on button
+     * @param string $submitDisplay set it to false if no form submit button should be rendered, anything else will be displayed on button
      *                                  a typical use-case for a form without a submit button is where we substitute it for a confirmDialog button (are you sure...)
      *                                  where field-name 'submit' becomes 'confirm' (e.g. delete actions, where we need to be sure this is what user wants).
      *
@@ -532,7 +534,7 @@ HEREDOC;
      */
 
     /**
-     * @param array $inputFields            text, password, select, hidden...
+     * @param array $inputFields text, password, select, hidden...
      * @param string $submitDisplay
      * @param string $method
      * @param string $action
@@ -709,7 +711,7 @@ HEREDOC;
     }
 
     /**
-     * dropdown items only work with js-plugin - we include the functionality in Header.php
+     * dropdown items only work with js-plugin - we include the functionality in Head.php
      * <script>
      *  $(function () {
      *       $('.dropdown-toggle').dropdown()
@@ -826,10 +828,10 @@ HEREDOC;
      * <button type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational action</button>
      * find this functionality in BootWrap::navButton()
      *
-     * @param string $display               text displayed on button
-     * @param string $class                 primary, secondary, success, danger, warning, info, light, dark
-     * @param bool $outline                 default solid fill, set to true if you want an outline-styled button
-     * @return string                       the action button html ready for echoing
+     * @param string $display text displayed on button
+     * @param string $class primary, secondary, success, danger, warning, info, light, dark
+     * @param bool $outline default solid fill, set to true if you want an outline-styled button
+     * @return string : the action-button-html ready for echoing
      */
     public function actionButton($display = 'click me', $class = 'primary', $outline = false): string
     {
@@ -1430,12 +1432,16 @@ HEREDOC;
     }
 
     /**
-     * alerts
+     * Alert
+     * Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.
+     *
      * @param string $type 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
-     * @param string $msg the message to be displayed in the alert box (use markup to <strong> or <bold> or <href> other)
-     * @param boolean $dismiss if set to false, the alert box will not have a 'x' dismiss button, it cannot be dismissed.
+     * @param null|string $msg the message to be displayed in the alert box (use markup to <strong> or <bold> or <href> other)
+     * @param bool|integer $zIndex
+     * @param bool $dismiss if set to false, the alert box will not have a 'x' dismiss button, it cannot be dismissed.
+     * @return string : alert-html ready for echoing
      */
-    public function alert($type = 'info', $msg = null, $zIndex = false, $dismiss = true)
+    public function alert($type = 'info', $msg = null, $zIndex = false, $dismiss = true): string
     {
         $buttonHtml = <<<HEREDOC
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -1455,8 +1461,17 @@ HEREDOC;
         return $alertHtml;
     }
 
-    public function jumbotron($title = null, $subTitle = null, $msg = null, $buttonDisplay = null)
+    /**
+     * @param null|string $title
+     * @param null|string $subTitle
+     * @param null|string $msg
+     * @param null|string $buttonDisplay
+     * @return string : jumbotron-html ready for echoing
+     */
+    public function jumbotron($title = null, $subTitle = null, $msg = null, $buttonDisplay = null): string
     {
+        $jumbotronHtml = '';
+        
         $jumbotronOpen = <<<HEREDOC
         <div class="jumbotron">
             <h1 class="display-3">$title</h1>

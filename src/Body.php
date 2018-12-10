@@ -28,8 +28,7 @@ class Body
     {
         $this->bootWrapComponents = array_flip($this->bootWrapComponents); // each value (component name) in the list becomes a key
         foreach ($components as $component => $params) {
-            echo 'calling for component : ' . $component;
-            /* verify if the component exists - method is defined - in BootWrap */
+            /* verify if the component exists / whitelisted */
             if(array_key_exists($component, $this->bootWrapComponents)) {
                 $componentHtml = call_user_func_array([$bootWrap, $component], $params);
                 echo $componentHtml;

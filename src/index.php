@@ -11,10 +11,18 @@ require dirname(__DIR__, 1) . "/vendor/autoload.php";
 
 $bootWrap = new BootWrap();
 
-$invoke = new Header($bootWrap);
-
-/* construct array of component(s) for rendering in body */
-$components = ['jumbotron' => array('yoohoo', 'there it is', 'enjoy BootWrap')];
+/* <head> </head> block */
+$components = ['tabtitle' => 'BootWrappertje', 'theme' => 'superhero'];
+$invoke = new Head($bootWrap, $components);
+/*
+ * <body> </body> block
+ * construct array of component(s) for rendering in body
+ */
+$components = ['jumbotron' => array('BootWrap', 'Bootstrap components made easy', 'enjoy the ride')];
 $invoke = new Body($bootWrap, $components);
 
-$invoke = new Footer($bootWrap);
+/*
+ * <footer> </footer> block
+ */
+$components = ['jumbotron' => array('yoohoo', 'there it is', 'enjoy BootWrap')];
+$invoke = new Footer($bootWrap, $components);
