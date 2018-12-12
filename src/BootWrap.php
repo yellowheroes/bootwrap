@@ -195,15 +195,17 @@ HEREDOC;
         $copyRight = $copyRight . $copyRightSymbol . $copyRightYear; // append Copyright notice: c YYYY - to footer content
 
         /* construct the href - text-links - block */
-        $links = "<div class='row'>";
-        $links .= "<div class='col'><img class='float-right' src='./images/yh_logo.png' width='48px' height='48' style='margin: 10px;'></div>";
-        foreach($hrefs as $title => $textLink) { // each href list-block can have a title
-            $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
-            foreach ($textLink as $display => $link) { // the actual links
-                $title = $title ?? null;
-                $title = strtoupper($title);
-                $href = $this->href($link, $display);
-                $links .= <<<HEREDOC
+        $links = ''; // initialize
+        if(!empty($hrefs)) {
+            $links = "<div class='row'>";
+            $links .= "<div class='col'><img class='float-right' src='./images/yh_logo.png' width='48px' height='48' style='margin: 10px;'></div>";
+            foreach ($hrefs as $title => $textLink) { // each href list-block can have a title
+                $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
+                foreach ($textLink as $display => $link) { // the actual links
+                    $title = $title ?? null;
+                    $title = strtoupper($title);
+                    $href = $this->href($link, $display);
+                    $links .= <<<HEREDOC
             $title
             <ul class="list-unstyled quick-links" style="line-height: 10px; font-size: 0.8em;">
             <li style="text-left">
@@ -211,11 +213,12 @@ HEREDOC;
             </li>
             </ul>\n
 HEREDOC;
-            $title = null; // render title only once for each block or category of hrefs
+                    $title = null; // render title only once for each block or category of hrefs
+                }
+                $links .= "</div>"; // end div-column for a list-block of hrefs
             }
-            $links .= "</div>"; // end div-column for a list-block of hrefs
+            $links .= "</div>"; // end div-row - all hypertext link blocks are generated
         }
-        $links .= "</div>"; // end div-row
 
         $this->footer = <<<HEREDOC
 </main>

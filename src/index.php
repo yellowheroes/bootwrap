@@ -25,14 +25,14 @@ $invoke = new Body($bootWrap, $components);
 /*
  * <footer> </footer> block
  */
-/*
+
 $hrefs = [
     // title            display         href        display         href
     'general' => ['contact us' => 'index.php', 'about us' => 'about.php'],
     'products' => ['bits and pieces' => 'prod1.php', 'scrap and metal' => 'prod2.php'],
     'other' => ['sitemap' => 'other.php', 'licence' => 'other2.php']
     ];
-*/
+
 $copyright = 'Jimbean';
-$components = [$copyright];
+$components = [$copyright, $hrefs];
 $invoke = new Footer($bootWrap, $components);
