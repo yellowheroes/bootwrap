@@ -179,10 +179,15 @@ HEREDOC;
      * @param array|null $footerContent             two keys: 'hrefs' is an array with links, 'copyright' is the organisation/company name
      */
     /**
-     * @param array $hrefs
-     * @param string $copyRight
+     * @param array $hrefs          hypertext links.
+     *
+     *                              format:
+     *                                        title        display txt     linked doc   display txt     linked doc
+     *                                      ['general' => ['contact us' => 'index.php', 'about us' => 'about.php']]
+     *
+     * @param string $copyRight     copyright message
      */
-    public function setFooter($hrefs = [], $copyRight = 'organisation'): void
+    public function setFooter($copyRight = 'organisation', $hrefs = []): void
     {
         /** set default: copyright symbol and year */
         $copyRightSymbol = " &#169 ";
