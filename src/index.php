@@ -20,9 +20,24 @@ $invoke = new Head($bootWrap, $components);
  */
 $components = ['jumbotron' => array('BootWrap', 'Bootstrap components made easy', 'enjoy the ride')];
 $invoke = new Body($bootWrap, $components);
+$someText = <<<HEREDOC
+<div>
+very little text
+</div>
+HEREDOC;
+for($i=0; $i<3; $i++) {
+    echo $i . $someText;
+}
 
 /*
  * <footer> </footer> block
  */
-$components = ['jumbotron' => array('yoohoo', 'there it is', 'enjoy BootWrap')];
+$hrefs = [
+    // title            display         href        display         href
+    'general' => ['contact us' => 'index.php', 'about us' => 'about.php'],
+    'products' => ['bits and pieces' => 'prod1.php', 'scrap and metal' => 'prod2.php'],
+    'other' => ['sitemap' => 'other.php', 'licence' => 'other2.php']
+    ];
+$copyright = 'Jimbean';
+$components = [$hrefs, $copyright];
 $invoke = new Footer($bootWrap, $components);

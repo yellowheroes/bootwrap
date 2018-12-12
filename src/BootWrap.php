@@ -176,20 +176,49 @@ HEREDOC;
 
     /**
      * set the document footer
-     * @param string|null $footerContent
+     * @param array|null $footerContent             two keys: 'hrefs' is an array with links, 'copyright' is the organisation/company name
      */
-    public function setFooter($footerContent = null): void
+    /**
+     * @param array $hrefs
+     * @param string $copyRight
+     */
+    public function setFooter($hrefs = [], $copyRight = 'organisation'): void
     {
         /** set default: copyright symbol and year */
         $copyRightSymbol = " &#169 ";
-        $copyrightYear = date("Y");
-        $footerContent .= $copyRightSymbol . $copyrightYear; // append Copyright notice: c YYYY - to footer content
+        $copyRightYear = date("Y");
+        $copyRight = $copyRight . $copyRightSymbol . $copyRightYear; // append Copyright notice: c YYYY - to footer content
+
+        /* construct the href - text-links - block */
+        $links = "<div class='row'>";
+        $links .= "<div class='col'><img class='float-right' src='./images/yh_logo.png' width='48px' height='48' style='margin: 10px;'></div>";
+        foreach($hrefs as $title => $textLink) { // each href list-block can have a title
+            $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
+            foreach ($textLink as $display => $link) { // the actual links
+                $title = $title ?? null;
+                $title = strtoupper($title);
+                $href = $this->href($link, $display);
+                $links .= <<<HEREDOC
+            $title
+            <ul class="list-unstyled quick-links" style="line-height: 10px; font-size: 0.8em;">
+            <li style="text-left">
+            $href
+            </li>
+            </ul>\n
+HEREDOC;
+            $title = null; // render title only once for each block or category of hrefs
+            }
+            $links .= "</div>"; // end div-column for a list-block of hrefs
+        }
+        $links .= "</div>"; // end div-row
+
         $this->footer = <<<HEREDOC
 </main>
 
-<footer class="footer bg-dark">
-    <div class="container text-center">
-        <span class="text-muted" style="color: #FFFFFF !important;">$footerContent</span>
+<footer class="footer">
+    <div class="container-fluid bg-dark">
+        <div class="text-muted" style="color: #FFFFFF !important;">$links</div>
+        <div class="text-muted text-center" style="color: #FFFFFF !important;">$copyRight</div>
     </div>
 </footer>
 
@@ -852,8 +881,11 @@ HEREDOC;
 
     public function href($link = null, $display = 'click me', $class = 'primary', $cssClass = null)
     {
+        /*$hrefHtml = <<<HEREDOC
+       <span class="$cssClass" style='margin-left: 10px;'><a href="$link">$display</a></span>
+HEREDOC;*/
         $hrefHtml = <<<HEREDOC
-       <ul class="$cssClass" style='margin-left: 10px;'><a href="$link">$display</a></ul>
+       <span class="$cssClass"><a href="$link">$display</a></span>
 HEREDOC;
         return $hrefHtml;
     }
