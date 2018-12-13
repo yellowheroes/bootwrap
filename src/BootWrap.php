@@ -1042,15 +1042,15 @@ HEREDOC;
 HEREDOC;
         $searchFormHtml = ($search !== false) ? $searchFormHtml : ''; // include search form html or keep empty if $search === false
 
-        $logo = $logoSrc = $logoHref = ''; // initialize
+        $logoTxt = $logoSrc = $logoHref = ''; // initialize
         if(!empty($logo)) {
-            $logo = $logo[0];
-            $logoSrc = $logo[1];
-            $logoHref = $logo[2];
+            $logoTxt = $logo[0]; // e.g. organisation name / company name
+            $logoSrc = $logo[1]; // the path to the logo image
+            $logoHref = $logo[2]; // link when the logo is clicked
         }
         $navBarHtml = <<<HEREDOC
 <nav class="navbar $alignment navbar-expand-lg navbar-$textColor p-3 bg-$bgColor">
-    <img src="{$logoSrc}" width="24" height="24"><a class="navbar-brand p-2" href="{$logoHref}">{$logo}</a>
+    <img src="{$logoSrc}" width="24" height="24"><a class="navbar-brand p-2" href="{$logoHref}">{$logoTxt}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
