@@ -2,6 +2,8 @@
 
 namespace yellowheroes\bootwrap;
 
+use yellowheroes\bootwrap\config as config;
+
 /*
  * class bootWrap (bootstrap wrapper)
  * we use heredoc to wrap Bootstrap mark-up (components) into class functions.
@@ -968,7 +970,7 @@ HEREDOC;
      * end NEW
      */
     /**
-     * NEW navBarEnhanced
+     * NEW navBar
      * with navItems['type'=>['display', 'href'], 'type'=>['display', 'href']
      * because we want to be able to add multiple types (button, drop-down, ...)
      *
@@ -1006,7 +1008,7 @@ HEREDOC;
      * $logo = ['Yellow Heroes', $logoImage];
      * $navBar = $bootWrap->navBarNavButtons($navItems, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo);
      */
-    public function navBarEnhanced($navItems = [], $activeNav = null, $type = null, $class = 'primary', $size = 'md', $textColor = 'dark', $bgColor = 'dark', $alignment = 'top', $logo = [], $userName = 'visitor', $toolTip = null, $location = null, $search = false)
+    public function navBar($navItems = [], $activeNav = null, $type = null, $class = 'primary', $size = 'md', $textColor = 'dark', $bgColor = 'dark', $alignment = 'top', $logo = [], $userName = 'visitor', $toolTip = null, $location = null, $search = false)
     {
         $buttons = '';
 
@@ -1040,9 +1042,15 @@ HEREDOC;
 HEREDOC;
         $searchFormHtml = ($search !== false) ? $searchFormHtml : ''; // include search form html or keep empty if $search === false
 
-        $navBarEnhancedHtml = <<<HEREDOC
+        $logo = $logoSrc = $logoHref = ''; // initialize
+        if(!empty($logo)) {
+            $logo = $logo[0];
+            $logoSrc = $logo[1];
+            $logoHref = $logo[2];
+        }
+        $navBarHtml = <<<HEREDOC
 <nav class="navbar $alignment navbar-expand-lg navbar-$textColor p-3 bg-$bgColor">
-    <img src="{$logo[1]}" width="24" height="24"><a class="navbar-brand p-2" href="{$logo[2]}">{$logo[0]}</a>
+    <img src="{$logoSrc}" width="24" height="24"><a class="navbar-brand p-2" href="{$logoHref}">{$logo}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -1051,96 +1059,19 @@ HEREDOC;
 $buttons
     </ul>
  $searchFormHtml
-    <div class='col pull-right'>
-    <p class="navbar-text text-right pull-right text-white bg-dark navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[0]}"><i class="fa fa-user-circle-o"></i> $userName </p>
-    <p class="navbar-text text-right pull-right text-white bg-dark navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[1]}"><i class="fa fa-map-marker"></i> $location</p>  
+    <div class='col pull-right' style='border: 1px solid yellow;'>
+    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[0]}"><i class="fa fa-user-circle-o"></i><span class='text-right'>$userName</span></p>
+    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[1]}"><i class="fa fa-map-marker"></i><span class = 'text-right'>$location</span></p>  
     </div>
    </div>
 </nav>\n
 HEREDOC;
 
-        return $navBarEnhancedHtml;
-    }
-    /**
-     * end NEW navBarEnhanced
-     */
-
-    /**                     NEEDS LOOK, DOESNT FUNCTION
-     *
-     *
-     *
-     * Bootstrap component          nav
-     *
-     * BootWrap::navBar()           basic navigation bar with buttons and dropdown(s)
-     *
-     * @param array $navItems []     set each nav-item's display-name (key) and href=viewsDir (value)
-     *
-     *                                    display  href    display     href
-     *                              e.g. ['home'=>'/index', 'contact'=>'/contact']
-     *
-     * @param textColor             dark or light
-     *
-     * @param bgColor               primary, secondary, success, danger, warning, info, light, dark
-     *
-     * @param placement             top, bottom, sticky
-     *
-     * @param logo                  href to a small logo that will be rendered as first item on nav-bar
-     *
-     * @param string $alignment default the navbar renders from the left
-     *                              options:    center
-     *                                          right
-     *                                          fill (extend the full available width)
-     *                                          stack  (stacked tabs)
-     */
-    public function navBar($navItems = [], $textColor = null, $bgColor = null, $alignment = 'top', $logo = null)
-    {
-        $anchors = '';
-        $divs = '';
-        $count = 0;
-        foreach ($navItems as $key => $value) {
-            //$active = ($count === 0) ? 'active' : ''; // 'active' is CSS code, only first <a></a> needs this
-            $active = '';
-            //$sronly = ($count === 0) ? '<span class="sr-only">(current)</span>' : '';
-            $sronly = '';
-            $display = $key;
-            $href = $value;
-
-            // first, generate an anchor for each 'nav-item'
-            $anchor = <<<HEREDOC
-<li><a href="$href">$display</a></li>\r\n
-HEREDOC;
-            $anchors .= $anchor;
-
-            $count++;
-        }
-
-        if ($alignment !== 'top') {
-            if ($alignment === 'bottom') {
-                $alignment = 'fixed-bottom';
-            } elseif ($alignment === 'sticky') {
-                $alignment = 'sticky-top';
-            }
-        } else {
-            $alignment = 'fixed-top';
-        }
-
-        $navBar = <<<HEREDOC
-<div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-$anchors
-    </ul>
-          </div><!--/.nav-collapse -->
-       </div>
-      </div>
-    </div>\n
-
-HEREDOC;
-        $navBarHtml = $navBar;
         return $navBarHtml;
     }
+    /**
+     * end NEW navBar
+     */
 
     /**
      * Bootstrap component          nav

@@ -17,13 +17,19 @@ class Body
     {
         echo "<!-- start class Body generated HTML -->\n";
         echo "<body>";
-        echo "<header><nav></nav></header>";
-        echo "<main role='main' class='container'>";
 
-        /* render all requested components */
+        /* render components */
+        echo "<main role='main' class='container'>";
         return $this->renderComponents($bootWrap, $components);
     }
 
+    /**
+     * @param BootWrap $bootWrap
+     * @param array $components                        component name                           component parameters
+     *                              e.g.: $components = ['jumbotron' => array('BootWrap', 'Bootstrap components made easy', 'enjoy the ride')];
+     *
+     * @return bool|null
+     */
     protected function renderComponents(BootWrap $bootWrap, array $components = []): bool
     {
         $this->bootWrapComponents = array_flip($this->bootWrapComponents); // each value (component name) in the list becomes a key
@@ -31,7 +37,13 @@ class Body
             /* verify if the component exists / whitelisted */
             if(array_key_exists($component, $this->bootWrapComponents)) {
                 $componentHtml = call_user_func_array([$bootWrap, $component], $params);
-                echo $componentHtml;
+                if($component === 'navbar') {
+                    echo "<header><nav>";
+                    echo $componentHtml; // render navbar
+                    echo "</nav></header>";
+                } else {
+                    echo $componentHtml; // render component
+                }
             } else {
                 // Component does not exist in BootWrap
                 return true; // error

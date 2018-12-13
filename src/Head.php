@@ -17,7 +17,7 @@ class Head
         $stickyFooter = './sticky-footer-navbar.css';
         $bootWrap->setStyles([$bootSwatchCss, $stickyFooter]);
 
-        $title = $components['title'] ?? 'BootWrap';
+        $title = $components['tabtitle'] ?? 'BootWrap';
         $head = $bootWrap->head($title);
         echo $head;
         echo "<!-- end HTML generation class Head -->\n";

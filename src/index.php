@@ -11,15 +11,38 @@ require dirname(__DIR__, 1) . "/vendor/autoload.php";
 
 $bootWrap = new BootWrap();
 
-/* <head> </head> block */
-$components = ['tabtitle' => 'BootWrappertje', 'theme' => 'superhero'];
+/*
+ * <head> </head> block
+ * Bootswatch themes (21): cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, lux, materia, minty,
+ * pulse, sandstone, simplex, sketchy, slate, solar, spacelab, superhero, united, yeti
+ */
+$components = ['tabtitle' => 'BootWrap', 'theme' => 'spacelab'];
 $invoke = new Head($bootWrap, $components);
 
 /*
  * <body> </body> block
  * construct array with component(s) for rendering in body
  */
-$components = ['jumbotron' => array('BootWrap', 'Bootstrap components made easy', 'enjoy the ride')];
+$activeNav = basename($_SERVER["SCRIPT_FILENAME"], '.php');
+
+$index = "index.php";
+$blog = "blog.php";
+$quill = "quill.php";
+$chat = "chat.php";
+$contact = "contact.php";
+$register = "register.php";
+$deregister = "deregister.php";
+$logout = "logout.php";
+
+$navItems = ['home' => $index, 'blog' => $blog, 'quill' => $quill, 'chat' => $chat, 'contact' => $contact,
+    'admin' => ['register new user' => $register,
+        'remove existing user' => $deregister, 'hr1' => '',
+        'logout' => $logout]];
+
+//$navBar = $bootWrap->navBarEnhanced($navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo, $userName, $toolTip, $location, $search = false);
+
+//$components = ['navbar' => [$navItems, $activeNav], 'jumbotron' => array('BootWrap', 'Bootstrap components made easy', 'enjoy the ride')];
+$components = ['navbar' => [$navItems, $activeNav]];
 $invoke = new Body($bootWrap, $components);
 
 /*
@@ -28,9 +51,9 @@ $invoke = new Body($bootWrap, $components);
 
 $hrefs = [
     // title            display         href        display         href
-    'general' => ['contact us' => 'index.php', 'about us' => 'about.php'],
+    'general' => ['contact us' => 'contact.php', 'about us' => 'about.php'],
     'products' => ['bits and pieces' => 'prod1.php', 'scrap and metal' => 'prod2.php'],
-    'other' => ['sitemap' => 'other.php', 'licence' => 'other2.php']
+    'other' => ['sitemap' => 'sitemap.php', 'license' => 'license.php']
     ];
 
 $copyright = 'Jimbean';
