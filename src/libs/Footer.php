@@ -5,7 +5,7 @@
  * Date: 18/09/2018
  * Time: 15:35
  */
-namespace yellowheroes\bootwrap;
+namespace yellowheroes\bootwrap\libs;
 
 class Footer
 {

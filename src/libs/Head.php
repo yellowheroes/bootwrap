@@ -5,7 +5,7 @@
  * Date: 18/09/2018
  * Time: 15:35
  */
-namespace yellowheroes\bootwrap;
+namespace yellowheroes\bootwrap\libs;
 
 use yellowheroes\bootwrap\config as config;
 
@@ -16,7 +16,7 @@ class Head
         // set extra CSS - Bootswatch-theme, Bootswatch-CSS and Bootstrap sticky footer
         $theme = $components['theme'] ?? 'slate';
         $bootSwatchCss = "https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/" . $theme . "/bootstrap.min.css";
-        $stickyFooter = './assets/css/sticky-footer-navbar.css';
+        $stickyFooter = '../assets/css/sticky-footer-navbar.css';
         $bootWrap->setStyles([$bootSwatchCss, $stickyFooter]);
 
         $title = $components['tabtitle'] ?? 'BootWrap';

@@ -12,7 +12,7 @@ use yellowheroes\bootwrap\config as config;
 //require dirname(__DIR__, 1) . "/vendor/autoload.php";
 
 $config = new config\Config();
-$bootWrap = new BootWrap();
+$bootWrap = new libs\BootWrap();
 
 /*
  * <footer> </footer> block
@@ -26,4 +26,4 @@ $hrefs = [
 
 $copyright = 'Jimbean';
 $components = [$copyright, $hrefs];
-$invoke = new Footer($bootWrap, $components);
+$invoke = new libs\Footer($bootWrap, $components);

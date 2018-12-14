@@ -1,6 +1,6 @@
 <?php
 
-namespace yellowheroes\bootwrap;
+namespace yellowheroes\bootwrap\libs;
 
 use yellowheroes\bootwrap\config as config;
 
@@ -200,7 +200,7 @@ HEREDOC;
         $links = ''; // initialize
         if(!empty($hrefs)) {
             $links = "<div class='row'>";
-            $links .= "<div class='col'><img class='float-right' src='./images/yh_logo.png' width='48px' height='48' style='margin: 10px;'></div>";
+            $links .= "<div class='col'><img class='float-right' src='../images/yh_logo.png' width='48px' height='48' style='margin: 10px;'></div>";
             foreach ($hrefs as $title => $textLink) { // each href list-block can have a title
                 $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
                 foreach ($textLink as $display => $link) { // the actual links

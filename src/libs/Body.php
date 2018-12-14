@@ -6,7 +6,7 @@
  * Time: 15:35
  */
 
-namespace yellowheroes\bootwrap;
+namespace yellowheroes\bootwrap\libs;
 
 class Body
 {
