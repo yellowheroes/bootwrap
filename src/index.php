@@ -7,7 +7,7 @@
  * Date: 14/12/2018
  * Time: 10:21
  */
+/* redirect user to view-page 'views/index.php' */
 $index = './views/index.php';
-echo $index;
 header('Location: ' . $index);
 exit();
