@@ -227,7 +227,9 @@ HEREDOC;
 
 <footer class="footer">
     <div class="container-fluid bg-dark">
+    <div><hr class="bg-primary"/></div>
         <div class="text-muted" style="color: #FFFFFF !important;">$links</div>
+        <div><br /></div>
         <div class="text-muted text-center" style="color: #FFFFFF !important;">$copyRight</div>
     </div>
 </footer>
@@ -247,9 +249,9 @@ HEREDOC;
      */
     public function head($title = null, $styleSheets = null, $libs = null, $js = null, $other = null): string
     {
-        $invoke = (isset($styleSheets)) ? $this->setStyles($styleSheets) : '';
-        $invoke = (isset($libs)) ? $this->setLibs($libs) : '';
-        $invoke = (isset($js)) ? $this->setJs($js) : '';
+        $invoke = (isset($styleSheets)) ? $this->setStyles($styleSheets) : null;
+        $invoke = (isset($libs)) ? $this->setLibs($libs) : null;
+        $invoke = (isset($js)) ? $this->setJs($js) : null;
 
         $head = <<<HEREDOC
 $this->htmlInit
@@ -983,9 +985,6 @@ HEREDOC;
      *
      * @param array $navItems []     set each nav-item's display-name (key) and href (value)
      *
-     *                                    display  href    display     href
-     *                              e.g. ['home'=>'index', 'contact'=>'contact']
-     *
      *                              and if you want to add a dropdown menu, enter a [] with the dropdown menu items as follows:
      *
      *                                    display  href    display     href             menu-display         display            href            display             href
@@ -999,16 +998,11 @@ HEREDOC;
      *
      * @param alignment             place the navbar at 'top', 'bottom', or make it 'sticky' (scroll with content)
      * @param logo                  logo[0]=display text, logo[1]=href to image
-     *
-     *
-     * EXAMPLE: set appropriate nav-items dependent on the user profile: authorised / not authorised
-     * $nonAuthUser = ['home'=>'index', 'login'=>'login', 'contact us'=>'contact'];
-     * $authUser = ['home'=>'index', 'quill'=>'quill', 'repo'=>'repo', 'contact us'=>'contact', 'register new user'=>'dashboard/register', 'logout'=>'logout'];
-     * $navItems = ($logged === 'true') ? $authUser : $nonAuthUser;
-     * $logo = ['Yellow Heroes', $logoImage];
-     * $navBar = $bootWrap->navBarNavButtons($navItems, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo);
+     * @return string               navigation bar html
      */
-    public function navBar($navItems = [], $activeNav = null, $type = null, $class = 'primary', $size = 'md', $textColor = 'dark', $bgColor = 'dark', $alignment = 'top', $logo = [], $userName = 'visitor', $toolTip = null, $location = null, $search = false)
+    public function navBar($navItems = [], $activeNav = null, $type = null, $class = 'primary',
+                           $size = 'md', $textColor = 'dark', $bgColor = 'dark', $alignment = 'top',
+                           $logo = [], $userName = 'visitor', $toolTip = null, $location = null, $search = false): string
     {
         $buttons = '';
 
@@ -1059,9 +1053,9 @@ HEREDOC;
 $buttons
     </ul>
  $searchFormHtml
-    <div class='col pull-right' style='border: 1px solid yellow;'>
-    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[0]}"><i class="fa fa-user-circle-o"></i><span class='text-right'>$userName</span></p>
-    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[1]}"><i class="fa fa-map-marker"></i><span class = 'text-right'>$location</span></p>  
+    <div class='col pull-right text-right'>
+    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[0]}"><i class="fa fa-user-circle-o"></i><span class='pull-right'>$userName</span></p>
+    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[1]}"><i class="fa fa-map-marker"></i><span class ='pull-right'>$location</span></p>  
     </div>
    </div>
 </nav>\n

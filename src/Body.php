@@ -38,9 +38,9 @@ class Body
             if(array_key_exists($component, $this->bootWrapComponents)) {
                 $componentHtml = call_user_func_array([$bootWrap, $component], $params);
                 if($component === 'navbar') {
-                    echo "<header><nav>";
+                    echo "<header>";
                     echo $componentHtml; // render navbar
-                    echo "</nav></header>";
+                    echo "</header>";
                 } else {
                     echo $componentHtml; // render component
                 }
