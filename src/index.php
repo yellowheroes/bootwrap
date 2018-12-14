@@ -7,7 +7,6 @@
  * Date: 14/12/2018
  * Time: 10:21
  */
-echo 'hello';
 $index = './views/index.php';
 echo $index;
 header('Location: ' . $index);

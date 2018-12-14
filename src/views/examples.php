@@ -9,15 +9,14 @@ namespace yellowheroes\bootwrap;
 
 use yellowheroes\bootwrap\config as config;
 
-require dirname(__DIR__, 1) . "/vendor/autoload.php";
-require dirname(__DIR__) . "/src/views/header.php";
+require dirname(__DIR__) . "/views/header.php";
 
 /*
- * start view-page index.php content
+ * start view-page examples.php content
  */
 
 /*
- * end view-page index.php content
+ * end view-page examples.php content
  */
 
-require dirname(__DIR__) . "/src/views/footer.php";
+require dirname(__DIR__) . "/views/footer.php";

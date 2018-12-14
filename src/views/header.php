@@ -10,7 +10,7 @@ namespace yellowheroes\bootwrap;
 use yellowheroes\bootwrap\libs as libs;
 use yellowheroes\bootwrap\config as config;
 
-//require dirname(__DIR__, 1) . "/vendor/autoload.php";
+require dirname(__DIR__, 2) . "/vendor/autoload.php";
 
 $config = new config\Config();
 $bootWrap = new libs\BootWrap();
