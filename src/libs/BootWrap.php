@@ -185,7 +185,7 @@ HEREDOC;
      *
      *                              format:
      *                                        title        display txt     linked doc   display txt     linked doc
-     *                                      ['general' => ['contact us' => 'index.php', 'about us' => 'about.php']]
+     *                                      ['general' => ['contact us' => 'home.php', 'about us' => 'about.php']]
      *
      * @param string $copyRight     copyright message
      */
@@ -1079,7 +1079,7 @@ HEREDOC;
      *                              e.g. ['home'=>'home', 'contact'=>'contact us']
      *
      * @param array $pageContent the content that will be rendered on each 'tab' (page)
-     *                              argument can be a simple string or a file (e.g. index.php, contact.html, something.txt...)
+     *                              argument can be a simple string or a file (e.g. home.php, contact.html, something.txt...)
      *                              e.g. $pageContent = ['Site Under Construction', 'Something about the team...', 'index3.php'];
      *                              The first argument is content that will be rendered on the first 'tab', the second arg. is content for the second 'tab', etc.
      *
@@ -1180,7 +1180,7 @@ HEREDOC;
      *                              e.g. ['home'=>'home', 'contact'=>'contact us']
      *
      * @param array $pageContent the content that will be rendered on each 'tab' (page)
-     *                              argument can be a simple string or a file (e.g. index.php, contact.html, something.txt...)
+     *                              argument can be a simple string or a file (e.g. home.php, contact.html, something.txt...)
      *                              e.g. $pageContent = ['Site Under Construction', 'Something about the team...', 'index3.php'];
      *                              The first argument is content that will be rendered on the first 'tab', the second arg. is content for the second 'tab', etc.
      *

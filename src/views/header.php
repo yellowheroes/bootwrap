@@ -29,16 +29,13 @@ $invoke = new libs\Head($bootWrap, $components);
  */
 // $activeNav colors the selected view-page nav-button
 $activeNav = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);
-// adjust $activeNav where button display-name !== script linked
-if($activeNav === 'index') {
-    $activeNav = 'home';
-}
 
-$index = "index.php";
+$home = "home.php";
 $examples = "examples.php";
 $contact = "contact.php";
+$documentation = "documentation.php";
 
-$navItems = ['home' => $index, 'examples' => $examples, 'contact' => $contact];
+$navItems = ['home' => $home, 'examples' => $examples, 'contact' => $contact, 'documentation' => $documentation];
 
 $logo = ['BootWrap', '../images/yh_logo.png', ''];
 $components = ['navbar' => [$navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo]];
