@@ -6,9 +6,8 @@ use yellowheroes\bootwrap\config as config;
 
 /**
  * Class BootWrap
- * Summary: a PHP wrapper for (selected) Bootstrap components.
+ * A PHP wrapper for (selected) Bootstrap components.
  *
- * Description:
  * Quickly generate (a html5 document with) Bootstrap components
  * in your web-project.
  *
