@@ -3,8 +3,11 @@ namespace yellowheroes\bootwrap\libs;
 
 /**
  * Class Documentor
- * prepares formatted documentation for a class.
+ * Summary:
+ * Generates formatted documentation for a class.
  *
+ * Description:
+ * With Documentor
  * use Documentor::getDoc() to retrieve the formatted class documentation
  * each array element contains a string:
  *              - method docblock
@@ -17,7 +20,7 @@ namespace yellowheroes\bootwrap\libs;
  */
 class Documentor
 {
-    public $reflectClass = null;
+    public $reflectClass = null; // ReflectionClass object
     public $docStore = []; // the documentation store (raw)
     public $documentation = []; // formatted documentation for client-side rendering
 
@@ -49,9 +52,16 @@ class Documentor
         /* the store for all class docblocks and method signatures */
         $store = [];
 
-        /* store class-level DocBlock */
+        /* construct and store class-level DocBlock */
         $classDocComment = $this->reflectClass->getDocComment(); // get the class-level DocBlock
+        $classProperties = $this->reflectClass->getProperties(); // get the class-level properties DocBlock
+        $props = ["/* class properties - type hinting only starting from PHP7.4 */\r\n"]; // build array with class-level properties (@var)
+        foreach($classProperties as $key => $propStr) {
+            $propStr = explode(" ", $propStr);
+            $props[] = $propStr[3] . " " . $propStr[4];
+        }
         $store[] = \explode(PHP_EOL, $classDocComment); // store the class-level DocBlock
+        $store['properties'] = $props;
 
         /*
          * store method DocBlocks and method signatures in temporary store

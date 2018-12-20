@@ -16,9 +16,9 @@ require dirname(__DIR__) . "/views/header.php";
 /*
  * start view-page documentation.php content
  */
-
 $bootWrap = new libs\BootWrap();
 $doc = new libs\Documentor($bootWrap);
+
 $docBlocks = $doc->getDoc();
 
 foreach($docBlocks as $key => $docBlock) {
