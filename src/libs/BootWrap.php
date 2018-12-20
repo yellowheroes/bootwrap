@@ -1456,24 +1456,24 @@ HEREDOC;
     }
 
     /**
-     * Alert
-     * Provide contextual feedback messages for typical user actions
+     * BootWrap::alert() wraps BootStrap alert component
+     * use it to provide contextual feedback messages for typical user actions
      *
-     * @param string $type    : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
-     * @param null   $msg     : the message to be displayed in the alert box
-     * @param bool   $zIndex
-     * @param bool   $dismiss : if set to false, the alert cannot be dismissed.
+     * @param string   $type    : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
+     * @param string   $msg     : the message to be displayed in the alert box
+     * @param int|null $zIndex  : overlapping elements with a larger z-index cover those with a smaller one.
+     * @param bool     $dismiss : if set to false, the alert cannot be dismissed.
      *
-     * @return string         : alert-html ready for echoing
+     * @return string           : alert-html ready for echoing
      */
-    public function alert($type = 'info', $msg = null, $zIndex = false, $dismiss = true): string
+    public function alert(string $type = 'info', string $msg = '', int $zIndex = null, bool $dismiss = true): string
     {
         $buttonHtml = <<<HEREDOC
         <button type="button" class="close" data-dismiss="alert">&times;</button>
 HEREDOC;
         $dismissable = ($dismiss === true) ? "alert-dismissible" : '';
         $button = ($dismiss === true) ? $buttonHtml : '';
-        $z = ($zIndex !== false) ? "style='z-index: $zIndex;'" : '';
+        $z = ($zIndex !== null) ? "style='z-index: $zIndex;'" : '';
         $alertHtml = <<<HEREDOC
             <div class="bs-component col-sm-10">
               <div class="alert $dismissable alert-$type" $z>
@@ -1482,7 +1482,6 @@ HEREDOC;
               </div>
             </div>
 HEREDOC;
-
         return $alertHtml;
     }
 

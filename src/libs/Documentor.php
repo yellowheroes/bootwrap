@@ -1,8 +1,17 @@
 <?php
-namespace yellowheroes\bootwrap;
+namespace yellowheroes\bootwrap\libs;
 
 /**
  * Class Documentor
+ * prepares formatted documentation for a class.
+ *
+ * use Documentor::getDoc() to retrieve the formatted class documentation
+ * each array element contains a string:
+ *              - method docblock
+ *              - method signature
+ * the first aray element contains the class-level docblock (if it exists).
+ *
+ * use Documentor::dumpDoc() render human-readable array with class documentation
  *
  * @package yellowheroes\bootwrap
  */
@@ -17,7 +26,7 @@ class Documentor
      *
      * @param $object
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function __construct($object)
     {
@@ -42,7 +51,7 @@ class Documentor
 
         /* store class-level DocBlock */
         $classDocComment = $this->reflectClass->getDocComment(); // get the class-level DocBlock
-        $store[] = explode(PHP_EOL, $classDocComment); // store the class-level DocBlock
+        $store[] = \explode(PHP_EOL, $classDocComment); // store the class-level DocBlock
 
         /*
          * store method DocBlocks and method signatures in temporary store
@@ -50,13 +59,13 @@ class Documentor
          */
         $storeTemp = []; // intermediate store
         $c = 0;
-        $classMethods = get_class_methods($object); // store all class methods in array
-        asort($classMethods); // sort class methods alphabetically
-        $classMethods = array_values($classMethods); // rebase classMethods array to 0.
+        $classMethods = \get_class_methods($object); // store all class methods in array
+        \asort($classMethods); // sort class methods alphabetically
+        $classMethods = \array_values($classMethods); // rebase classMethods array to 0.
         foreach ($classMethods as $method) {
             $methodDocComment = $this->reflectClass->getMethod($method)->getDocComment();
             $signature = $this->getFunctionSignature($object, $method);
-            $storeTemp[$c] = explode(PHP_EOL, $methodDocComment);
+            $storeTemp[$c] = \explode(PHP_EOL, $methodDocComment);
             $storeTemp[$c][] = "\r\n"; // one extra empty line between DocComment and function signature
             $storeTemp[$c][] = $signature; // add the function signature to the temporary store
             $c++;
@@ -64,7 +73,10 @@ class Documentor
         /* reformat DocBlocks and put in final store */
         foreach ($storeTemp as $key0 => $value0) {
             foreach ($value0 as $key1 => $value1) {
-                if ($value1 !== "/**" && substr($value1, 0, 6) !== 'public' && substr($value1, 0, 9) !== 'protected' && substr($value1, 0, 7) !== 'private') {
+                if ($value1 !== "/**" &&
+                    \substr($value1, 0, 6) !== 'public' &&
+                    \substr($value1, 0, 9) !== 'protected' &&
+                    \substr($value1, 0, 7) !== 'private') {
                     $store[$key0 + 1][] = substr($value1, 4);
                 } else {
                     $store[$key0 + 1][] = $value1;
@@ -75,17 +87,19 @@ class Documentor
     }
 
     /**
+     * getFunctionSignature() constructs a method signature using reflection
+     *
      * @param object|null $object : class instantiation (an object)
      * @param string|null $method : a class method
      *
      * @return string     $signature : the method signature
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function getFunctionSignature($object = null, string $method = null): string
     {
         $parameters = '';
         $funcSignature['method'] = $method;
-        $reflectMethod = new ReflectionMethod($object, $method);
+        $reflectMethod = new \ReflectionMethod($object, $method);
         $publicMethod = ($reflectMethod->isPublic() === true) ? true : false;
         $protectedMethod = ($reflectMethod->isProtected() === true) ? true : false;
         $visibility = ($publicMethod === true) ? 'public' : (($protectedMethod === true) ? 'protected' : 'private');
@@ -96,33 +110,41 @@ class Documentor
             $funcSignature['optional'][] = $param->isOptional();
             $parameters .= $param->getType() . " $" . $param->getName() . ", ";
         }
-        $parameters = substr($parameters, 0, -2);
+        $parameters = \substr($parameters, 0, -2);
         $signature = $visibility . " function " . $funcSignature['method'] . "(" . $parameters . ")";
 
         return $signature;
     }
 
     /**
-     * dumpDoc() renders the formatted class documentation
+     * render the complete formatted class documentation
+     *
+     * @return void
      */
-    public function dumpDoc()
+    public function dumpDoc(): void
     {
-        /* render all the DocBlocks with function signatures */
-        echo $this->documentation;
+        /* render formatted class documentation */
+        \print_r($this->documentation);
     }
 
-    public function setDoc()
+    /**
+     * store formatted class documentation in array ($this->documentation)
+     * each array element holds a string with 1 docblock and 1 method signature
+     *
+     * @return void
+     */
+    public function setDoc(): void
     {
         /* format class documentation for echoing */
         foreach ($this->docStore as $key0 => $value0) {
-            $docBlock = implode("\r\n", $value0); // glue DocBlock lines back together
+            $docBlock = \implode("\r\n", $value0); // glue DocBlock lines back together
             $this->documentation[] = "<pre>" . $docBlock . "</pre>"; // wrap each docblock in <pre> block
         }
     }
 
     /**
-     * getDoc() returns the formatted class documentation
-     * each array element contains a docblock and a function signature.
+     * return the formatted class documentation
+     * each array element contains a docblock and a method signature.
      *
      * @return array : the formatted documentation ready for echoing
      */
@@ -132,6 +154,8 @@ class Documentor
     }
 
     /**
+     * return the raw (unformatted) class documentation
+     *
      * @return array : the unformatted documentation
      */
     public function getRaw(): array
