@@ -4,44 +4,30 @@ namespace yellowheroes\bootwrap\libs;
 
 use yellowheroes\bootwrap\config as config;
 
-/*
- * class bootWrap (bootstrap wrapper)
- * we use heredoc to wrap Bootstrap mark-up (components) into class functions.
- *
- * Heredoc tips: escaping
- * \n means newline
- * \r means return
- * \t means tab
- * \v means vertical tab
- * \b means backspace
- * \a means alert (beep or flash)
- *
- * this is not an exhaustive wrapper, we have selected only those components
- * we use regularly ourselves.
- *
- * the Bootstrap navigation components are custom-fitted to show active class on the correct DOM element (i.e. correct nav button)
- * the user sees based on our MVC-routing: i.e. controller/action/params
- *
- */
-
 /**
  * Class BootWrap
+ * Summary: a PHP wrapper for (selected) Bootstrap components.
+ *
+ * Description:
+ * Quickly generate (a html5 document with) Bootstrap components
+ * in your web-project.
  *
  * @package yellowheroes\bootwrap\libs
  */
 class BootWrap
 {
     /**
-     * @var string $htmlInit opening block html5 page
-     * @var string $meta     html meta-data
-     * @var string $styles   html code CSS stylesheets (in <head>)
-     * @var string $libs     html code Bootstrap libraries, other javascript libraries (in <head>)
-     * @var string $js       html code additional javascript (libraries) and related CSS (e.g. for editor: Quill.js and
-     *      snow.css in same block)  in <head>
-     * @var string $other    optional any other html (in <head>)
-     * @var string title browser tab title
-     * @var string footer closing block html5 page
+     * @var string $htmlInit : opening block html5 page
+     * @var string $meta     : html meta-data
+     * @var string $styles   : html code CSS stylesheets (in <head>)
+     * @var string $libs     : html code Bootstrap libraries, other javascript libraries (in <head>)
+     * @var string $js       : html code additional javascript (libraries) and related CSS in <head>
+     * @var string $other    : optional - any other html placed in <head>
+     * @var string $title    : browser tab title
+     * @var string $footer   : closing block html5 page
      */
+
+    /* type hinting of properties will only be possible starting PHP7.4 */
     private $htmlInit = '';
     private $meta = '';
     private $styles = '';
@@ -49,7 +35,7 @@ class BootWrap
     private $js = '';
     private $other = '';
     private $title = '';
-    private $footer = '';
+    private $footer = null;
 
     /**
      * BootWrap constructor.
@@ -906,6 +892,8 @@ HEREDOC;
     }
 
     /**
+     * BootWrap::actionButton() wraps BootStrap alert component
+     * use it to provide contextual feedback messages for typical user actions
      * Action Button (this is not a Bootstrap Component)
      * - Button used in anything but navigation, e.g. forms, dialogs etc.
      * - The client can invoke a 'filled'(default) or 'outline' button
