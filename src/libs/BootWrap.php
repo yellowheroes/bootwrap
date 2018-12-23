@@ -891,23 +891,21 @@ HEREDOC;
     }
 
     /**
-     * BootWrap::actionButton() wraps BootStrap alert component
-     * use it to provide contextual feedback messages for typical user actions
-     * Action Button (this is not a Bootstrap Component)
-     * - Button used in anything but navigation, e.g. forms, dialogs etc.
-     * - The client can invoke a 'filled'(default) or 'outline' button
+     * BootWrap::actionButton()
+     * Action buttons are normally not used in navigation but in e.g. forms, dialogs etc.
      *
-     * we can also turn action buttons into navigation buttons, like so:
-     * <button type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational
-     * action</button> find this functionality in BootWrap::navButton()
+     * The client can invoke a 'colored'(default) or 'outlined' button
+     * Action buttons can be turned into navigation buttons(see BootWrap::navButton()), like so:
+     * &ltbutton type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational
+     * action&lt/button&gt.
      *
-     * @param string $display text displayed on button
-     * @param string $class   primary, secondary, success, danger, warning, info, light, dark
-     * @param bool   $outline default solid fill, set to true if you want an outline-styled button
+     * @param string $display : text displayed on button
+     * @param string $class   : primary, secondary, success, danger, warning, info, light, dark
+     * @param bool   $outline : default solid fill, set to true if you want an outline-styled button
      *
-     * @return string : the action-button-html ready for echoing
+     * @return string         : the action-button-html
      */
-    public function actionButton($display = 'click me', $class = 'primary', $outline = false): string
+    public function actionButton(string $display = 'click me', string $class = 'primary', bool $outline = false): string
     {
         $actionButtonHtml = '';
 
