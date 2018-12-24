@@ -84,8 +84,12 @@ class Documentor
         /* reformat DocBlocks and put in final store */
         foreach ($storeTemp as $key0 => $value0) {
             foreach ($value0 as $key1 => $value1) {
-                if ($value1 !== "/**" && \substr($value1, 0, 12) !== "<code>public" && \substr($value1, 0, 15) !== "<code>protected" && \substr($value1, 0, 13) !== "<code>private") {
+                //@formatter:off
+                if ($value1 !== "/**" && \substr($value1, 0, 12) !== "<code>public" &&
+                    \substr($value1, 0, 15) !== "<code>protected" &&
+                    \substr($value1, 0, 13) !== "<code>private") {
                     $store[$key0 + 1][] = substr($value1, 4);
+                    //@formatter:on
                 } else {
                     $store[$key0 + 1][] = $value1;
                 }
