@@ -1,4 +1,5 @@
 <?php
+
 namespace yellowheroes\bootwrap\libs;
 
 /**
@@ -56,7 +57,7 @@ class Documentor
         $classDocComment = $this->reflectClass->getDocComment(); // get the class-level DocBlock
         $classProperties = $this->reflectClass->getProperties(); // get the class-level properties DocBlock
         $props = ["/* class properties - type hinting only starting from PHP7.4 */\r\n"]; // build array with class-level properties (@var)
-        foreach($classProperties as $key => $propStr) {
+        foreach ($classProperties as $key => $propStr) {
             $propStr = explode(" ", $propStr);
             $props[] = $propStr[3] . " " . $propStr[4];
         }
@@ -83,10 +84,7 @@ class Documentor
         /* reformat DocBlocks and put in final store */
         foreach ($storeTemp as $key0 => $value0) {
             foreach ($value0 as $key1 => $value1) {
-                if ($value1 !== "/**" &&
-                    \substr($value1, 0, 6) !== 'public' &&
-                    \substr($value1, 0, 9) !== 'protected' &&
-                    \substr($value1, 0, 7) !== 'private') {
+                if ($value1 !== "/**" && \substr($value1, 0, 12) !== "<code>public" && \substr($value1, 0, 15) !== "<code>protected" && \substr($value1, 0, 13) !== "<code>private") {
                     $store[$key0 + 1][] = substr($value1, 4);
                 } else {
                     $store[$key0 + 1][] = $value1;
@@ -113,7 +111,8 @@ class Documentor
         $publicMethod = ($reflectMethod->isPublic() === true) ? true : false;
         $protectedMethod = ($reflectMethod->isProtected() === true) ? true : false;
         $visibility = ($publicMethod === true) ? 'public' : (($protectedMethod === true) ? 'protected' : 'private');
-        $funcSignature['return'] = $reflectMethod->getReturnType();
+        $funcSignature['return'] = ($reflectMethod->getReturnType()) ?? '';
+        $colon = ($funcSignature['return'] !== '') ? ": " : "";
         $params = $reflectMethod->getParameters();
         foreach ($params as $param) {
             $funcSignature['parameters'][] = $param->getName();
@@ -121,8 +120,13 @@ class Documentor
             $parameters .= $param->getType() . " $" . $param->getName() . ", ";
         }
         $parameters = \substr($parameters, 0, -2);
-        $signature = $visibility . " function " . $funcSignature['method'] . "(" . $parameters . ")";
-
+        /* we wrap the method signature in <code></code> block for syntax highlighting */
+        // @formatter:off
+        $signature = "<code>" .
+                    $visibility . " function " . $funcSignature['method'] . "(" . $parameters . ")" .
+                    $colon . $funcSignature['return'] .
+                    "</code>";
+        // @formatter:on
         return $signature;
     }
 
