@@ -21,7 +21,10 @@ $msg = "BootWrap is a modest PHP 'wrapper' that aims to make using Bootstrap com
         in your web project easy and fun.";
 echo $bootWrap->jumbotron('BootWrap', $msg);
 
-$code = "<?php echo 'hello'; ?>";
+$code = "<?php echo 'hello'; \$a = 10; ?>";
+$code = <<<NOWDOC
+echo 'hello'; $a = 10;
+NOWDOC;
 
 echo "<pre>";
 highlight_string($code);

@@ -18,7 +18,7 @@ class Head
         $theme = $components['theme'] ?? 'slate';
         $bootSwatchCss = "https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/" . $theme . "/bootstrap.min.css";
         $stickyFooter = '../assets/css/sticky-footer-navbar.css';
-        $highlightJsCss = '../assets/css/highlightjs_styles/default.css';
+        //$highlightJsCss = '../assets/css/highlightjs_styles/default.css';
         $bootWrap->setStyles([$bootSwatchCss, $stickyFooter]);
 
         /*
@@ -26,7 +26,9 @@ class Head
          * any <pre><code> </code></pre> block will be
          * code highlighted using the set theme.
          */
-        $theme = "atom-one-dark"; // code highlighting theme for highlight.js
+        $theme = new config\Config();
+        $theme = $theme::HIGHLIGHTJS_THEME; // the theme is set in Config.php
+        //$theme = "atom-one-dark"; // code highlighting theme for highlight.js
         $highlightJs = <<<HEREDOC
         <!-- code higlighting with highlightjs -->
         <link rel="stylesheet" href="../assets/css/highlightjs_styles/$theme.css">

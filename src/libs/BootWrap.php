@@ -39,7 +39,8 @@ class BootWrap
     /**
      * BootWrap constructor.
      *
-     * set the default html5 and Bootstrap elements
+     * set the default html5 doctype elements
+     * and pull-in the necessary Bootstrap libs (js and css)
      */
     public function __construct()
     {
@@ -1449,7 +1450,7 @@ HEREDOC;
      * @param int|null $zIndex  : overlapping elements with a larger z-index cover those with a smaller one.
      * @param bool     $dismiss : if set to false, the alert cannot be dismissed.
      *
-     * @return string           : alert-html ready for echoing
+     * @return string           : alert-html
      */
     public function alert(string $type = 'info', string $msg = '', int $zIndex = null, bool $dismiss = true): string
     {
