@@ -10,7 +10,7 @@ namespace yellowheroes\bootwrap\libs;
 
 use yellowheroes\bootwrap\config as config;
 
-class Head
+class Header
 {
     public function __construct(BootWrap $bootWrap, $components = ['theme' => null, 'tabtitle' => null])
     {
@@ -42,6 +42,11 @@ HEREDOC;
         $head = $bootWrap->head($title);
         echo $head;
         echo "<!-- end HTML generation class Head -->\n";
+
+        /* open the <body> block - is closed by Footer.php */
+        echo "<!-- start class Body generated HTML -->\n";
+        echo "<body>";
+        echo "<main role='main' class='container'>";
     }
 
 }

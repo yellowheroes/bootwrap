@@ -14,6 +14,7 @@ require dirname(__DIR__, 2) . "/vendor/autoload.php";
 
 $config = new config\Config();
 $bootWrap = new libs\BootWrap();
+$body = new libs\Body(); // use this object in your VIEW(s) to render BootWrap component(s)
 
 /*
  * <head> </head> block
@@ -21,11 +22,13 @@ $bootWrap = new libs\BootWrap();
  * pulse, sandstone, simplex, sketchy, slate, solar, spacelab, superhero, united, yeti
  */
 $components = ['tabtitle' => $config::TABTITLE, 'theme' => $config::BOOTSWATCH_THEME];
-$invoke = new libs\Head($bootWrap, $components);
+$invoke = new libs\Header($bootWrap, $components);
 
 /*
- * <body> </body> block
- * construct array with component(s) to be rendered in body
+ * VIEW header.php contains the navigation menu (navbar) to ensure it is
+ * automatically rendered on all pages.
+ *
+ * The navbar sits in the <header> </header> block.
  */
 // $activeNav colors the selected view-page nav-button
 $activeNav = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);
@@ -39,4 +42,6 @@ $navItems = ['home' => $home, 'examples' => $examples, 'contact' => $contact, 'd
 
 $logo = ['BootWrap', '../images/yh_logo.png', ''];
 $components = ['navbar' => [$navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo]];
-$invoke = new libs\Body($bootWrap, $components);
+
+/* instantiate a Body object */
+$body->render($bootWrap, $components);

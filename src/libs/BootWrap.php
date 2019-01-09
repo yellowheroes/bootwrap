@@ -781,7 +781,7 @@ HEREDOC;
     }
 
     /**
-     * dropdown items only work with js-plugin - we include the functionality in Head.php
+     * dropdown items only work with js-plugin - we include the functionality in Header.php
      * <script>
      *  $(function () {
      *       $('.dropdown-toggle').dropdown()
