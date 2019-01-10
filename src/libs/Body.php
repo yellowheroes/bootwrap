@@ -10,14 +10,20 @@ namespace yellowheroes\bootwrap\libs;
 
 class Body
 {
-    /* whitelist of components defined in class BootWrap */
-    protected $bootWrapComponents = ['alert', 'card', 'carousel', 'form', 'jumbotron', 'modal', 'navbar'];
+    /**
+     *
+     */
 
-    //public function __construct(BootWrap $bootWrap, array $components = [])
+    /**
+     * @var array $bootWrapComponents   : whitelist of (working) components defined in class BootWrap
+     */
+    protected $bootWrapComponents = ['actionbutton', 'alert', 'card', 'carousel', 'form', 'jumbotron', 'modal', 'navbar'];
+
+    /**
+     * Body constructor.
+     */
     public function __construct()
     {
-        /* render requested components */
-        //return $this->render($bootWrap, $components); // returns false if no error(s)
     }
 
     /**

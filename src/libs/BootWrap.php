@@ -895,7 +895,7 @@ HEREDOC;
      * BootWrap::actionButton()
      * Action buttons are normally not used in navigation but in e.g. forms, dialogs etc.
      *
-     * The client can invoke a 'colored'(default) or 'outlined' button
+     * The client can invoke a 'filled'(default) or 'outlined' button
      * Action buttons can be turned into navigation buttons(see BootWrap::navButton()), like so:
      * &ltbutton type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational
      * action&lt/button&gt.
@@ -904,7 +904,7 @@ HEREDOC;
      * @param string $class   : primary, secondary, success, danger, warning, info, light, dark
      * @param bool   $outline : default solid fill, set to true if you want an outline-styled button
      *
-     * @return string         : the action-button-html
+     * @return string         : action-button html
      */
     public function actionButton(string $display = 'click me', string $class = 'primary', bool $outline = false): string
     {

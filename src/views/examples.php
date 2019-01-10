@@ -8,15 +8,16 @@
 namespace yellowheroes\bootwrap;
 
 use yellowheroes\bootwrap\config as config;
+use yellowheroes\bootwrap\libs\Documentor;
 
 /*
  * Easily render BootWrap components in your VIEW page
  *
  * We require views/header.php in all our VIEWs. This is
  * convenient as it gives access to two important objects
- * that enable quick rendering of BootWrap components.
- *
- * Specifically: views/header.php creates objects: $bootWrap and $body.
+ * that enable quick rendering of BootWrap components in your VIEW:
+ * 1. $bootWrap
+ * 2. $body
  *
  * $bootWrap is an instance of class BootWrap: new libs\BootWrap())
  * $body is an instance of class Body: new libs\Body().
@@ -35,6 +36,8 @@ require dirname(__DIR__) . "/views/header.php";
 /*
  * start view-page examples.php content
  */
+$components = ['actionbutton' => ["action button"]];
+$body->render($bootWrap, $components);
 
 /*
  * end view-page examples.php content
