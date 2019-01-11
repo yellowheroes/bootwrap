@@ -7,17 +7,18 @@
  */
 
 namespace yellowheroes\bootwrap\libs;
-
+/**
+ * Class Body
+ *
+ * @package yellowheroes\bootwrap\libs
+ */
 class Body
 {
     /**
-     *
+     * if a component is not in the whitelist, it won't get rendered.
+     * @var array $whiteList   : whitelist of (working) components defined in class BootWrap
      */
-
-    /**
-     * @var array $bootWrapComponents   : whitelist of (working) components defined in class BootWrap
-     */
-    protected $bootWrapComponents = ['actionbutton', 'alert', 'card', 'carousel', 'form', 'jumbotron', 'modal', 'navbar'];
+    protected $whiteList = ['alert', 'card', 'carousel', 'form', 'jumbotron', 'modal', 'navbar'];
 
     /**
      * Body constructor.
@@ -35,17 +36,18 @@ class Body
      */
     public function render(BootWrap $bootWrap, array $components = []): bool
     {
-        $flipped = array_flip($this->bootWrapComponents); // each value (component name) in the list becomes a key
         foreach ($components as $component => $params) {
             /* verify if the component exists / is whitelisted */
-            if(array_key_exists($component, $flipped)) {
+            if(in_array($component, $this->whiteList, true)) {
                 $componentHtml = call_user_func_array([$bootWrap, $component], $params);
                 if($component === 'navbar') {
                     echo "<header>";
                     echo $componentHtml; // render navbar
                     echo "</header>";
                 } else {
+                    echo "<div class='row'>";
                     echo $componentHtml; // render component
+                    echo "</div>";
                 }
             } else {
                 // Component does not exist in BootWrap

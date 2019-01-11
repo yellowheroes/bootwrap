@@ -229,7 +229,7 @@ HEREDOC;
         $this->footer = <<<HEREDOC
 </main>
 
-<footer class="footer">
+<footer class="footer" style="margin-top: 80px;">
     <div class="container-fluid bg-dark">
     <div><hr class="bg-primary"/></div>
         <div class="text-muted" style="color: #FFFFFF !important;">$links</div>
@@ -872,8 +872,10 @@ HEREDOC;
      * @param string $class     primary, secondary, success, danger, warning, info, light, dark
      * @param string $size      'lg' for large, 'sm' for small
      * @param string $type      'button' for a button-type nav-button
+     *
+     * @return string $navButtonHtml    : navigation button html
      */
-    public function navButton($display = 'click me', $href = '#', $activeNav = null, $type = null, $class = 'primary', $size = null)
+    public function navButton($display = 'click me', $href = '#', $activeNav = null, $type = null, $class = 'primary', $size = null): string
     {
         $textNormalColor = "color: " . config\Config::TXTCOLOR_NORMAL_NAV;
         $textActiveColor = "color: " . config\Config::TXTCOLOR_ACTIVE_NAV;
@@ -1128,8 +1130,10 @@ HEREDOC;
      *                                          right
      *                                          fill (extend the full available width)
      *                                          stack  (stacked tabs)
+     *
+     * @return string $navTabHtml       : navigation tab html
      */
-    public function navTabs($tabs = [], $pageContent = [], $alignment = null)
+    public function navTabs($tabs = [], $pageContent = [], $alignment = null): string
     {
         $anchors = '';
         $divs = '';
@@ -1445,14 +1449,14 @@ HEREDOC;
      * BootWrap::alert() wraps BootStrap alert component
      * use it to provide contextual feedback messages for typical user actions
      *
-     * @param string   $type    : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
      * @param string   $msg     : the message to be displayed in the alert box
-     * @param int|null $zIndex  : overlapping elements with a larger z-index cover those with a smaller one.
+     * @param string   $type    : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
      * @param bool     $dismiss : if set to false, the alert cannot be dismissed.
+     * @param int|null $zIndex  : overlapping elements with a larger z-index cover those with a smaller one.
      *
      * @return string           : alert-html
      */
-    public function alert(string $type = 'info', string $msg = '', int $zIndex = null, bool $dismiss = true): string
+    public function alert(string $msg = '', string $type = 'info', bool $dismiss = true, int $zIndex = null): string
     {
         $buttonHtml = <<<HEREDOC
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -1508,6 +1512,18 @@ HEREDOC;
         return $jumbotronHtml;
     }
 
+    /**
+     * @param string|null   $title
+     * @param string|null   $msg
+     * @param string        $class
+     * @param array         $list
+     * @param array         $links
+     * @param bool          $blank
+     * @param string|null   $image
+     * @param string|null   $footer
+     *
+     * @return string                   : card-html
+     */
     public function card($title = null, $msg = null, $class = 'primary', $list = [], $links = [], $blank = false, $image = null, $footer = null)
     {
         $cardImg = <<<HEREDOC
