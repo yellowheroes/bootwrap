@@ -1519,15 +1519,15 @@ HEREDOC;
      * @param array         $list
      * @param array         $links
      * @param bool          $blank
-     * @param string|null   $image
+     * @param array|null    $image
      * @param string|null   $footer
      *
      * @return string                   : card-html
      */
-    public function card($title = null, $msg = null, $class = 'primary', $list = [], $links = [], $blank = false, $image = null, $footer = null)
+    public function card($title = null, $msg = null, $class = 'primary', $list = [], $links = [], $blank = false, $image = [], $footer = null): string
     {
         $cardImg = <<<HEREDOC
-        <img class="card-img-top" src="$image" alt="Card image cap">
+        <img class="card-img-top" src="$image[0]" style = "width: $image[1]%;" alt="card image cap">
 HEREDOC;
 
         $image = ($image !== null) ? $cardImg : '';

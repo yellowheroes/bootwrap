@@ -105,7 +105,7 @@ echo usage($code);
 $body->render($bootWrap, $components);
 
 /* render code snippet -2- */
-$msg = 'I am a dismissable alert box';
+$msg = 'I am a dismissable alert box, give it a try...';
 $components = ['alert' => [$msg, 'info', true]];
 $code = <<<'NOWDOC'
 $msg = 'I am a dismissable alert box';
@@ -114,6 +114,40 @@ $body->render($bootWrap, $components);
 NOWDOC;
 echo usage($code);
 /* render component -2- */
+$body->render($bootWrap, $components);
+
+/*
+ * example: card
+ * signature: public function card($title = null, $msg = null, $class = 'primary',
+ *                                  $list = [], $links = [], $blank = false,
+ *                                  $image = null, $footer = null): string
+ */
+$title = "Card";
+$des = "cards provide a flexible and extensible content container with multiple variants and options.";
+$content = "A card is a flexible and extensible content container. It includes options for headers and footers,
+a wide variety of content, contextual background colors, and powerful display options. If you’re familiar with
+Bootstrap 3, cards replace our old panels, wells, and thumbnails. Similar functionality to those components is
+available as modifier classes for cards.";
+echo intro($title, $des, $content);
+/* render code snippet */
+$msg = 'I am a card';
+$title = 'BootWrap all the way';
+$list = ['1' => 'list item 1', '2' => 'list item 2', '3' => 'list item 3'];
+$links = ["examples.php" => 'BootWrap examples'];
+$image = ["../images/yh_logo.png", 10]; // image size 30% of container
+$footer = "let's stay in touch";
+$components = ['card' => [$title, $msg, 'primary', $list, $links, false, $image, $footer]];
+$code = <<<'NOWDOC'
+$msg = 'I am a card';
+$title = 'BootWrap all the way';
+$list = ['1' => 'list item 1', '2' => 'list item 2', '3' => 'list item 3'];
+$links = ['BootWrap examples' => "www.yellowheroes.com/examples"];
+$image = ["path/to/images/yellowheroes.png", 10]; // image size 10% of container
+$footer = "let's stay in touch";
+$components = ['card' => [$title, $msg, 'primary', $list, $links, false, $image, $footer]];
+NOWDOC;
+echo usage($code);
+/* render component */
 $body->render($bootWrap, $components);
 
 /*
