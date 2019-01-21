@@ -38,3 +38,11 @@ body > .container {
 code {
     font-size: 80%;
 }
+
+/*
+ * ensure in-page links do not disappear under the navbar
+ */
+.anchor {
+    padding-top: 120px;
+    margin-top: -120px;">
+}

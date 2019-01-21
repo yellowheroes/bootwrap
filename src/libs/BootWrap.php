@@ -798,7 +798,16 @@ HEREDOC;
      *                                  the two anchors
      * @param string $activeNav 'nav-item' or 'nav-item-active'
      */
-    public function dropDown($menuDisplay = 'dropdown', $navItems = [], $activeNav = null, $class = 'primary', $size = 'md')
+    /**
+     * @param string $menuDisplay
+     * @param array  $navItems
+     * @param string $activeNav
+     * @param string $class
+     * @param string $size
+     *
+     * @return string
+     */
+    public function dropDown($menuDisplay = 'dropdown', $navItems = [], $activeNav = '', $class = 'primary', $size = 'md'): string
     {
         $dropDownItems = null;
         /*
@@ -806,10 +815,10 @@ HEREDOC;
          * e.g. when user clicks drop-down button 'Dashboard', trying to highlight it with class 'active'
          * or 'nav-item active' doesn't work, so we set it manually here.
          */
-        //$textNormalColor = "color: #FFFFFF;"; // not selected, we set it to grey-blue
-        //$textActiveColor = "color: #FFC000;"; // selected, highlight text
-        $textNormalColor = "color: " . config\Config::TXTCOLOR_NORMAL_NAV;
-        $textActiveColor = "color: " . config\Config::TXTCOLOR_ACTIVE_NAV;
+        $textNormalColor = "color: #FFFFFF;"; // not selected, we set it to grey-blue
+        $textActiveColor = "color: #FFC000;"; // selected, highlight text
+        //$textNormalColor = "color: " . config\Config::TXTCOLOR_NORMAL_NAV;
+        //$textActiveColor = "color: " . config\Config::TXTCOLOR_ACTIVE_NAV;
         $color = ($activeNav === 'nav-item active') ? $textActiveColor : $textNormalColor;
 
         $dropDownOpen = <<<HEREDOC
@@ -1367,7 +1376,20 @@ HEREDOC;
      *
      * two field 'name' s : 'confirm' and 'cancel'
      */
-    public function confirmationDialog($display = '', $id = 'confirmationDialog', $msg = 'Please confirm...', $href = true)
+
+    /**
+     *
+     *
+     * @param string $display   : the text of the href link
+     * @param string $id        : the id of the element - IMPORTANT when e.g. rendering a list of blog-articles
+     *                            you need to set individual #id's for each <div> in the list
+     *                            so the dialog renders in the right place
+     * @param string $msg       : the confirmation message ('are you sure?')
+     * @param bool   $href      : set this to false if you want to render a button, not a <a> hypertext link
+     *
+     * @return string
+     */
+    public function confirmationDialog($display = '', $id = 'confirmationDialog', $msg = 'Please confirm...', $href = true): string
     {
         $button = '';
         if ($href === true) {
@@ -1411,15 +1433,21 @@ HEREDOC;
     /**
      * coverNav are underlined navigation items
      * the css styling sits in 'cover.css'
+     *
+     * @param array $navItems       : key=display, value=link(href)
+     * @param string $activeNav     : highlight the active VIEW nav-button text
+     * @param null  $brand          : e.g. a company logo that's rendered left of the navbar
+     *
+     * @return string               : a nav-bar (styled to Bootstrap class 'cover-container')
      */
-    public function coverNav($navItems = [], $viewsDir = null, $brand = null)
+    public function coverNav($navItems = [], $activeNav = '', $brand = null): string
     {
         $active = null;
         $anchors = null;
         foreach ($navItems as $key => $value) {
             $display = $key;
             $href = $value;
-            $active = ($href === $viewsDir) ? 'active' : '';
+            $active = ($href === $activeNav) ? 'active' : null;
             // generate an anchor for each 'nav-item'
             $anchor = <<<HEREDOC
 <a class = "nav-link $active"  href="$href">$display</a>\r\n
@@ -1465,12 +1493,10 @@ HEREDOC;
         $button = ($dismiss === true) ? $buttonHtml : '';
         $z = ($zIndex !== null) ? "style='z-index: $zIndex;'" : '';
         $alertHtml = <<<HEREDOC
-            <div class="bs-component col-sm-10">
-              <div class="alert $dismissable alert-$type" $z>
+              <div class="bs-component col-sm-10 alert $dismissable alert-$type" $z>
                 $button
                 $msg
               </div>
-            </div>
 HEREDOC;
         return $alertHtml;
     }

@@ -18,7 +18,7 @@ class Body
      * if a component is not in the whitelist, it won't get rendered.
      * @var array $whiteList   : whitelist of (working) components defined in class BootWrap
      */
-    protected $whiteList = ['alert', 'card', 'carousel', 'form', 'jumbotron', 'modal', 'navbar'];
+    protected $whiteList = ['alert', 'card', 'confirmationdialog', 'covernav', 'carousel', 'form', 'jumbotron', 'modal', 'navbar'];
 
     /**
      * Body constructor.
@@ -41,9 +41,9 @@ class Body
             if(in_array($component, $this->whiteList, true)) {
                 $componentHtml = call_user_func_array([$bootWrap, $component], $params);
                 if($component === 'navbar') {
-                    echo "<header>";
+                    echo "<header>\n";
                     echo $componentHtml; // render navbar
-                    echo "</header>";
+                    echo "</header>\n";
                 } else {
                     echo "<div class='row'>";
                     echo $componentHtml; // render component
