@@ -3,14 +3,16 @@
  * Created on : 20-Jan-2019
  * Author     : Robert
 */
+/*
 .cover-container {
   max-width: 42em;
 }
+*/
 
 .nav-masthead .nav-link {
   padding: .25rem 0;
   font-weight: 700;
-  color: rgba(0, 0, 0, 0.2) /* non-active link text color: original rgba(180, 100, 150, .5); */
+  /*color: rgba(0, 0, 0, 0.2) /* non-active link text color: original rgba(180, 100, 150, .5); */
   background-color: transparent;
   border-bottom: .25rem solid transparent;
 }
@@ -20,11 +22,14 @@
   border-bottom-color: rgba(255, 192, 0, 0.5); /* color underline when link hovered: original rgba(255, 255, 255, .25); */
 }
 
+/* space in between the links */
 .nav-masthead .nav-link + .nav-link {
   margin-left: 1rem;
 }
 
+
 .nav-masthead .active {
-  color: #000000; /* active link text color */
+  /*color: #000000; /* active link text color */
+  font-weight: 900;
   border-bottom-color: #FFC000; /* the underline color of currently active link */
 }

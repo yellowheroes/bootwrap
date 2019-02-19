@@ -6,7 +6,7 @@ use yellowheroes\bootwrap\config as config;
 
 /**
  * Class BootWrap
- * A PHP wrapper for (selected) Bootstrap components.
+ * A PHP wrapper for (selected) Bootstrap components...
  *
  * Quickly generate (a html5 document with) Bootstrap components
  * in your web-project.
@@ -177,23 +177,18 @@ HEREDOC;
     /**
      * set the document footer
      *
-     * @param array|null $footerContent two keys: 'hrefs' is an array with links, 'copyright' is the
-     *                                  organisation/company name
-     */
-    /**
-     * set the document footer
-     *
      * the footer can be constructed to contain hyperlinks
      * format:
      *          category title  display txt     linked doc  display txt   linked doc
      *          ['general' => ['contact us' => 'home.php', 'about us' => 'about.php']]
      *
-     * @param string $copyRight optional copyright message
-     * @param array  $hrefs     optional hypertext links
+     * @param string        $copyRight      : optional copyright message
+     * @param array         $hrefs          : optional hypertext links
+     * @param string        $imageSrcPath   : optional image src path (e.g. logo)
      *
      * @return void
      */
-    public function setFooter($copyRight = 'organisation', $hrefs = []): void
+    public function setFooter($copyRight = 'organisation', $hrefs = [], $imageSrcPath = ''): void
     {
         /** set default: copyright symbol and year */
         $copyRightSymbol = " &#169 ";
@@ -202,9 +197,10 @@ HEREDOC;
 
         /* construct the href - text-links - block */
         $links = ''; // initialize
+        $image = ($imageSrcPath !== '') ? "<img class='float-right' src='$imageSrcPath' width='48px' height='48' style='margin: 10px;'>" : ''; // logo
         if (!empty($hrefs)) {
             $links = "<div class='row'>";
-            $links .= "<div class='col'><img class='float-right' src='../images/yh_logo.png' width='48px' height='48' style='margin: 10px;'></div>";
+            $links .= "<div class='col'>$image</div>"; // logo
             foreach ($hrefs as $title => $textLink) { // each href list-block can have a title
                 $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
                 foreach ($textLink as $display => $link) { // the actual links
@@ -225,15 +221,15 @@ HEREDOC;
             }
             $links .= "</div>"; // end div-row - all hypertext link blocks are generated
         }
+        $links = ($links !== '') ? "<div class='text-muted' style='color: #FFFFFF !important;'>$links</div><div><br /></div>" : '';
 
         $this->footer = <<<HEREDOC
 </main>
 
 <footer class="footer" style="margin-top: 80px;">
     <div class="container-fluid bg-dark">
-    <div><hr class="bg-primary"/></div>
-        <div class="text-muted" style="color: #FFFFFF !important;">$links</div>
-        <div><br /></div>
+    <!-- <div><hr class="bg-primary"/></div> -->
+        $links
         <div class="text-muted text-center" style="color: #FFFFFF !important;">$copyRight</div>
     </div>
 </footer>
@@ -603,17 +599,19 @@ HEREDOC;
      */
 
     /**
-     * @param array  $inputFields text, password, select, hidden...
-     * @param string $submitDisplay
-     * @param string $method
-     * @param string $action
-     * @param string $formId
-     * @param bool   $backHref
-     * @param bool   $confirmationDialog
+     * @param array         $inputFields            : text, password, select, hidden...
+     * @param string        $submitDisplay          : the text displayed on the submit button
+     * @param string        $method                 : POST or GET
+     * @param string|bool   $action                 : the script that gets invoked on submit, or if 'false' no action at all(no page refresh)
+     * @param string        $formId                 : the #id of the form
+     * @param bool          $backHref               : a back-button href link
+     * @param string        $backDisplay            : the text displayed on the back button (defaults to 'Back')
+     * @param array         $confirmationDialog     : [0] == false, no confirmation dialog triggered, [0] == true - a confirmation dialog is triggered
+     *                                                [1] == true, 'text-href' [1] == false, 'button-href'
      *
-     * @return string
+     * @return string                               : the form html
      */
-    public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $confirmationDialog = false)
+    public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $backDisplay = 'Back', $confirmationDialog = [false, true])
     {
         /**
          * we use a short HEREDOC to define the action attribute
@@ -653,8 +651,10 @@ HEREDOC;
 
             /** type: text or password or email */
             if ($type === 'text' || $type === 'password' || $type === 'email' || $type === 'hidden') {
+                /* hidden form fields may not take screen space */
+                $style = ($type === 'hidden') ? "style='display: none'" : null;
                 $formFields .= <<<HEREDOC
-        <div class="form-group">
+        <div class="form-group" $style>
             <label for="$id" class="col-sm-2 control-label">$label</label>
             <div class="col-sm-10">
             <input type="$type" class="form-control" name="$name" id="$id" value="$fieldValue" placeholder="$placeholder" $options[0]>
@@ -709,7 +709,7 @@ HEREDOC;
 
         if ($backHref) {
             $backButton = <<<HEREDOC
-        <button type="button" class="btn btn-primary pull-right" onclick="location.href='$backHref';">Back</button>\n
+        <button type="button" class="btn btn-primary pull-right" onclick="location.href='$backHref';">$backDisplay</button>\n
 HEREDOC;
         } else {
             $backButton = '';
@@ -724,7 +724,10 @@ HEREDOC;
         <button type="submit" name="submit" class="btn btn-primary">$submitDisplay</button>
 HEREDOC;
 
-        $confirmSubmit = ($confirmationDialog === true) ? $this->confirmationDialog($submitDisplay, 'confirmationDialog', 'Please confirm...', false) : false;
+        // $confirmationDialog
+        $href = ($confirmationDialog[1] === true) ? true : false; // a button (if false), or a href text (if true)
+        $confirmSubmit = ($confirmationDialog[0] === true) ? $this->confirmationDialog($submitDisplay, $id = 'confirmationDialog', $uniqueConfirmName = 'confirm', $msg = 'Please confirm...', $href) : false;
+        //$confirmSubmit = ($confirmationDialog === true) ? $this->confirmationDialog($submitDisplay, 'confirmationDialog', 'Please confirm...', false) : false;
 
         /**
          *  store either 'normal' or 'confirmation' button in $submitButton
@@ -765,12 +768,33 @@ HEREDOC;
         return $formHtml;
     }
 
-    public function searchForm($method = 'post', $name = 'search')
+    /**
+     * @param string $method    : POST(default) or GET
+     * @param string $name      : the field-name we pick up wih $_POST['field-name'] or $_GET['field-name']
+     * @param bool   $action    : false == no action attribute, i.e. ensure we do not refresh page (AJAX call)
+     *
+     * @return string           : the search-form html
+     */
+    public function searchForm($method = 'POST', $name = 'search', $action = false): string
     {
+        /**
+         * we use a short HEREDOC to define the action attribute
+         * because when $action === false, we want no action attribute at all in $formOpen
+         * this is because, until HTML5, the action attribute was required. This is no longer needed.
+         * This way we are certain the system uses Ajax to send data to server (if that's what we want)
+         * and doesn't refresh the page (when going to/requesting id '#' on the same page').
+         */
+        $actionAttrib = <<<HEREDOC
+action="$action"
+HEREDOC;
+        $action = ($action !== false) ? $actionAttrib : "";
+
+        $formId = $name . date("His"); //construct a unique id by appending timestamp: e.g. 221759 (22 = hours, 17=mins, 59=secs)
+
         $searchFormHtml = <<<HEREDOC
     <div class='row'>
     <div class='col'>
-        <form class="form-inline pull-right my-2 my-lg-0" method="$method">
+        <form id="$formId" method="$method" $action class="form-inline pull-right my-2 my-lg-0">
             <input class="form-control mr-sm-2" name="$name" type="search" placeholder="Search" aria-label="Search">     
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -1380,16 +1404,17 @@ HEREDOC;
     /**
      *
      *
-     * @param string $display   : the text of the href link
-     * @param string $id        : the id of the element - IMPORTANT when e.g. rendering a list of blog-articles
-     *                            you need to set individual #id's for each <div> in the list
-     *                            so the dialog renders in the right place
-     * @param string $msg       : the confirmation message ('are you sure?')
-     * @param bool   $href      : set this to false if you want to render a button, not a <a> hypertext link
+     * @param string $display           : the text of the href link
+     * @param string $id                : the id of the element - IMPORTANT when e.g. rendering a list of blog-articles
+     *                                      you need to set individual #id's for each <div> in the list
+     *                                      so the dialog renders in the right place
+     * @param string $uniqueConfirmName : the field-name we can pick up with $_POST[] or $_GET[]
+     * @param string $msg               : the confirmation message ('are you sure?')
+     * @param bool   $href              : set this to false if you want to render a button, not a <a> hypertext link
      *
      * @return string
      */
-    public function confirmationDialog($display = '', $id = 'confirmationDialog', $msg = 'Please confirm...', $href = true): string
+    public function confirmationDialog($display = '', $id = 'confirmationDialog', $uniqueConfirmName = 'confirm', $msg = 'Please confirm...', $href = true)
     {
         $button = '';
         if ($href === true) {
@@ -1410,6 +1435,10 @@ HEREDOC;
         $action = ($href !== '') ? $href : $button;
 
 
+        /*
+         * note: we declare a unique name for the confirm field, as we may have multiple confirmation forms on one page.
+         * We can then capture a click event on $_POST['someUniqueConfirmName'], which differs from a click on $_POST['someOtherUniqueConfirmName'].
+         */
         $confirmationDialogHtml = <<<HEREDOC
 <p>
   $action
@@ -1418,8 +1447,8 @@ HEREDOC;
   <div class="card card-body">    
     <p>$msg</p>
     <div>
-      <form method='post' action=''>
-        <input type='submit' class="btn btn-primary" name='confirm' value='confirm'>
+      <form method='post' action='$id'>
+        <input type='submit' class="btn btn-primary" name='$uniqueConfirmName' value='confirm'>
         <input type='submit' class="btn btn-primary" name='cancel' value='cancel'>
       </form>
     </div>
@@ -1539,6 +1568,9 @@ HEREDOC;
     }
 
     /**
+     * BootWrap::card() wraps BootStrap card component
+     * cards provide a flexible and extensible content container with multiple variants and options.
+     *
      * @param string|null   $title
      * @param string|null   $msg
      * @param string        $class

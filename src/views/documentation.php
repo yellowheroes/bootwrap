@@ -40,8 +40,14 @@ require dirname(__DIR__) . "/views/header.php";
 $doc = new libs\Documentor($bootWrap);
 $docBlocks = $doc->getDoc();
 
+/*
+echo '<pre>';
+var_dump($docBlocks);
+echo '</pre>';
+*/
+
 foreach($docBlocks as $key => $docBlock) {
-    $component = ['alert' => ['info', $docBlock, false, false]];
+    $component = ['alert' => [$docBlock, 'info', false, false]];
     $body->render($bootWrap, $component);
 }
 /*

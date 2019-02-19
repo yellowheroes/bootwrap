@@ -21,8 +21,8 @@ $body = new libs\Body(); // use this object in your VIEW(s) to render BootWrap c
  * Bootswatch themes (21): cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, lux, materia, minty,
  * pulse, sandstone, simplex, sketchy, slate, solar, spacelab, superhero, united, yeti
  */
-$components = ['tabtitle' => $config::TABTITLE, 'theme' => $config::BOOTSWATCH_THEME];
-$invoke = new libs\Header($bootWrap, $components);
+$component = ['tabtitle' => $config::TABTITLE, 'theme' => $config::BOOTSWATCH_THEME];
+$invoke = new libs\Header($bootWrap, $component);
 
 /*
  * VIEW header.php contains the navigation menu (navbar) to ensure it is
@@ -39,9 +39,8 @@ $contact = "contact.php";
 $documentation = "documentation.php";
 
 $navItems = ['home' => $home, 'examples' => $examples, 'contact' => $contact, 'documentation' => $documentation];
-
 $logo = ['BootWrap', '../images/yh_logo.png', ''];
-$components = ['navbar' => [$navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo]];
+$component = ['navbar' => [$navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo]];
 
-/* instantiate a Body object */
-$body->render($bootWrap, $components);
+/* render nav-bar */
+$body->render($bootWrap, $component);
