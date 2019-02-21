@@ -1402,19 +1402,19 @@ HEREDOC;
      */
 
     /**
-     *
-     *
-     * @param string $display           : the text of the href link
-     * @param string $id                : the id of the element - IMPORTANT when e.g. rendering a list of blog-articles
-     *                                      you need to set individual #id's for each <div> in the list
-     *                                      so the dialog renders in the right place
-     * @param string $uniqueConfirmName : the field-name we can pick up with $_POST[] or $_GET[]
+     * @param string $display           : the text of the href link (or button) - e.g. 'delete article' or 'delete file'
+     * @param string $action            : the target script that is invoked on 'confirm' or 'cancel' (there are two submit buttons)
+     * @param string $id                : the id of the element
+     *                                      IMPORTANT - when e.g. rendering a list of items
+     *                                      you need to set individual #id's for each item <div>
+     *                                      in the list, so the dialog renders in the right place.
+     * @param string $name              : the confirm field-name we can pick up with $_POST[] or $_GET[]
      * @param string $msg               : the confirmation message ('are you sure?')
-     * @param bool   $href              : set this to false if you want to render a button, not a <a> hypertext link
+     * @param bool   $href              : set this to false if you want to render a button (i.e. not a hypertext link)
      *
      * @return string
      */
-    public function confirmationDialog($display = '', $id = 'confirmationDialog', $uniqueConfirmName = 'confirm', $msg = 'Please confirm...', $href = true)
+    public function confirmationDialog($display = '', $action = '', $id = 'confirmationDialog', $name = 'confirm', $msg = 'Please confirm...', $href = true): string
     {
         $button = '';
         if ($href === true) {
@@ -1432,23 +1432,22 @@ HEREDOC;
 HEREDOC;
         }
 
-        $action = ($href !== '') ? $href : $button;
-
+        $link = ($href !== '') ? $href : $button;
 
         /*
-         * note: we declare a unique name for the confirm field, as we may have multiple confirmation forms on one page.
+         * note: client can declare a unique name for the confirm field, as we may have multiple confirmation forms on one page.
          * We can then capture a click event on $_POST['someUniqueConfirmName'], which differs from a click on $_POST['someOtherUniqueConfirmName'].
          */
         $confirmationDialogHtml = <<<HEREDOC
 <p>
-  $action
+  $link
 </p>
 <div class="collapse" id="$id">
   <div class="card card-body">    
     <p>$msg</p>
     <div>
-      <form method='post' action='$id'>
-        <input type='submit' class="btn btn-primary" name='$uniqueConfirmName' value='confirm'>
+      <form method='post' action='$action'>
+        <input type='submit' class="btn btn-primary" name='$name' value='confirm'>
         <input type='submit' class="btn btn-primary" name='cancel' value='cancel'>
       </form>
     </div>
