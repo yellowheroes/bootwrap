@@ -599,7 +599,7 @@ HEREDOC;
      */
 
     /**
-     * @param array         $inputFields            : text, password, select, hidden, textarea...
+     * @param array         $inputFields            : text, password, select, textarea, hidden...
      * @param string        $submitDisplay          : the text displayed on the submit button
      * @param string        $method                 : POST or GET
      * @param string|bool   $action                 : the script that gets invoked on submit, or if 'false' no action at all(no page refresh)
@@ -643,7 +643,7 @@ HEREDOC;
             $type = $value[0] ?? "";
             $name = $value[1] ?? "";
             $id = $value[2] ?? $name; // if id is not set, then set it equal to $name
-            $fieldValue = $value[3] ?? ""; // can be useful to set initial value for textarea or for hidden form fields where a field value can be carried-over to next page
+            $fieldValue = $value[3] ?? ""; // can be useful to set initial value or for hidden form fields where a field value can be carried-over to next page
             $placeholder = $value[4] ?? "";
             $label = ($type !== 'hidden') ? $value[5] : "";
             $options = $value[6] ?? null; // $value[6] contains an array with options(for e.g. to set 'required' or for select or radio buttons)
