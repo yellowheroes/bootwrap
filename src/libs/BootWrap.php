@@ -599,7 +599,7 @@ HEREDOC;
      */
 
     /**
-     * @param array         $inputFields            : text, password, select, textarea, hidden...
+     * @param array         $inputFields            : ['type', 'name', 'id', 'value', 'placeholder', 'label', options[]]
      * @param string        $submitDisplay          : the text displayed on the submit button
      * @param string        $method                 : POST or GET
      * @param string|bool   $action                 : the script that gets invoked on submit, or if 'false' no action at all(no page refresh)
