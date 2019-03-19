@@ -43,8 +43,6 @@ $components = ['jumbotron' => ['BootWrap', $msg]];
 /* render jumbotron */
 $body->render($bootWrap, $components);
 
-
-
 /*
  * end view-page home.php content
  */

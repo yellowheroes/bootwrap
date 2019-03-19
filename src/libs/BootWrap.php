@@ -210,7 +210,7 @@ HEREDOC;
                     $links .= <<<HEREDOC
             $title
             <ul class="list-unstyled quick-links" style="line-height: 10px; font-size: 0.8em;">
-            <li style="text-left">
+            <li class="text-left">
             $href
             </li>
             </ul>\n
@@ -608,10 +608,11 @@ HEREDOC;
      * @param string        $backDisplay            : the text displayed on the back button (defaults to 'Back')
      * @param array         $confirmationDialog     : [0] == false, no confirmation dialog triggered, [0] == true - a confirmation dialog is triggered
      *                                                [1] == true, 'text-href' [1] == false, 'button-href'
+     *                                                [2] the target script that is invoked on 'confirm' or 'cancel' (there are two submit buttons)
      *
      * @return string                               : the form html
      */
-    public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $backDisplay = 'Back', $confirmationDialog = [false, true])
+    public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $backDisplay = 'Back', $confirmationDialog = [false, true, ''])
     {
         /**
          * we use a short HEREDOC to define the action attribute
@@ -665,7 +666,7 @@ HEREDOC;
             /* type textarea */
             if($type === 'textarea') {
                 $formFields .= <<<HEREDOC
-        <div class="form-group" $style>
+        <div class="form-group">
             <label for="$id" class="col-sm-2 control-label">$label</label>
             <div class="col-sm-10">
             <textarea class="form-control" id="$id" name="$name" rows="10" $options[0]>$fieldValue</textarea>
@@ -736,8 +737,9 @@ HEREDOC;
 HEREDOC;
 
         // $confirmationDialog
+        $confirmAction = $confirmationDialog[2]; // default '' (empty string)
         $href = ($confirmationDialog[1] === true) ? true : false; // a button (if false), or a href text (if true)
-        $confirmSubmit = ($confirmationDialog[0] === true) ? $this->confirmationDialog($submitDisplay, '', 'confirmationDialog', 'confirm', 'Please confirm...', $href) : false;
+        $confirmSubmit = ($confirmationDialog[0] === true) ? $this->confirmationDialog($submitDisplay, $confirmAction, 'confirmationDialog', 'confirm', 'Please confirm...', $href) : false;
 
         /**
          *  store either 'normal' or 'confirmation' button in $submitButton
@@ -1194,16 +1196,16 @@ HEREDOC;
 
             // second, fetch content for each 'page' / 'tab'
             // page content can be hardcoded as a string, or, more likely, be a file (.php, .html, .txt...)
-            // we put the string-content / filename in $content
+            // we put the string-content / filename in $longDes
             $active = ($count === 0) ? 'show active' : ''; // 'show active' is CSS code, only first <div> needs this
-            $content = $pageContent[$count];
+            $longDes = $pageContent[$count];
 
-            // use jQuery ajax to retrieve the $content from file for output on the 'page' / 'tab'
+            // use jQuery ajax to retrieve the $longDes from file for output on the 'page' / 'tab'
             $loadAjax = <<<HEREDOC
 
 <script>
 $(function() {
-    $("#nav-$id").load("$content", function(responseTxt, statusTxt, xhr){
+    $("#nav-$id").load("$longDes", function(responseTxt, statusTxt, xhr){
         if(statusTxt == "success")
             console.log("page content loaded successfully!");
         if(statusTxt == "error")
@@ -1213,7 +1215,7 @@ $(function() {
 </script>\n
 HEREDOC;
 
-            $insertContent = (is_file($content)) ? $loadAjax : $content;
+            $insertContent = (is_file($longDes)) ? $loadAjax : $longDes;
             $div = <<<HEREDOC
 <div class="tab-pane fade $active" id="nav-$id" role="tabpanel" aria-labelledby="nav-$id-tab">$insertContent</div>\n
 HEREDOC;
@@ -1310,16 +1312,16 @@ HEREDOC;
 
             // second, fetch content for each 'page' / 'tab'
             // page content can be hardcoded as a string, or, more likely, be a file (.php, .html, .txt...)
-            // we put the string-content / filename in $content
+            // we put the string-content / filename in $longDes
             $active = ($count === 0) ? 'show active' : ''; // 'show active' is CSS code, only first <div> needs this
-            $content = $pageContent[$count];
+            $longDes = $pageContent[$count];
 
-            // use jQuery ajax to retrieve the $content from file for output on the 'page' / 'tab'
+            // use jQuery ajax to retrieve the $longDes from file for output on the 'page' / 'tab'
             $loadAjax = <<<HEREDOC
 
 <script>
 $(function() {
-    $("#{$v}pills-$id").load("$content", function(responseTxt, statusTxt, xhr){
+    $("#{$v}pills-$id").load("$longDes", function(responseTxt, statusTxt, xhr){
         if(statusTxt == "success")
             console.log("page content loaded successfully!");
         if(statusTxt == "error")
@@ -1329,7 +1331,7 @@ $(function() {
 </script>\n
 HEREDOC;
 
-            $insertContent = (is_file($content)) ? $loadAjax : $content;
+            $insertContent = (is_file($longDes)) ? $loadAjax : $longDes;
             $div = <<<HEREDOC
 <div class="tab-pane fade $active" id="{$v}pills-$id" role="tabpanel" aria-labelledby="{$v}pills-$id-tab">$insertContent</div>\r\n
 HEREDOC;
@@ -1392,28 +1394,12 @@ HEREDOC;
 
         $navPillsHtml = $navPills . $pillContent;
         return $navPillsHtml;
-        //echo $navPills;
-        //echo $pillContent;
     }
 
-    /**
-     * confirmationDialog() is used for situations like 'do you really want to delete blog archive ... ?'
-     * confirmationDialog() works for situations where you need to set a <a href> element
-     * SET $href = false if you want a button that triggers the confirmationDialog
-     *
-     * @param type $href = true         set to false if you want to render a button, not <a > hypertext link
-     *
-     * $display = the text of the href link
-     * $id = the id of the element - IMPORTANT when e.g. rendering a list of blog-articles need to set individual #id's
-     * for each <div> in the list so the dialog renders in the right place
-     * $msg = the confirmation message
-     *
-     * two field 'name' s : 'confirm' and 'cancel'
-     */
-
-    /**
+    /*
      * @param string $display           : the text of the href link (or button) - e.g. 'delete article' or 'delete file'
-     * @param string $action            : the target script that is invoked on 'confirm' or 'cancel' (there are two submit buttons)
+     * @param bool|string $action       : the target script that is invoked on 'confirm' or 'cancel' (there are two submit buttons)
+     *                                    if set to false (bool), then NO action attribute will be rendered.
      * @param string $id                : the id of the element
      *                                      IMPORTANT - when e.g. rendering a list of items
      *                                      you need to set individual #id's for each item <div>
@@ -1424,7 +1410,7 @@ HEREDOC;
      *
      * @return string
      */
-    public function confirmationDialog($display = '', $action = '', $id = 'confirmationDialog', $name = 'confirm', $msg = 'Please confirm...', $href = true): string
+    public function confirmationDialog($display = '', $action = false, $id = 'confirmationDialog', $name = 'confirm', $msg = 'Please confirm...', $href = true): string
     {
         $button = '';
         if ($href === true) {
@@ -1444,8 +1430,14 @@ HEREDOC;
 
         $link = ($href !== '') ? $href : $button;
 
+        /* if $action is set to false, no action attribute required, we do not render 'action=' at all */
+        $actionAttrib = <<<HEREDOC
+ action="$action"
+HEREDOC;
+        $action = ($action !== false) ? $actionAttrib : "";
+
         /*
-         * note: client can declare a unique name for the confirm field, as we may have multiple confirmation forms on one page.
+         * note: we declare a unique name for the confirm field, as we may have multiple confirmation forms on one page.
          * We can then capture a click event on $_POST['someUniqueConfirmName'], which differs from a click on $_POST['someOtherUniqueConfirmName'].
          */
         $confirmationDialogHtml = <<<HEREDOC
@@ -1456,7 +1448,7 @@ HEREDOC;
   <div class="card card-body">    
     <p>$msg</p>
     <div>
-      <form method='post' action='$action'>
+      <form method='post'$action>
         <input type='submit' class="btn btn-primary" name='$name' value='confirm'>
         <input type='submit' class="btn btn-primary" name='cancel' value='cancel'>
       </form>

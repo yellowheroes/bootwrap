@@ -30,9 +30,11 @@ use yellowheroes\bootwrap\libs\Documentor;
  * 1. a type BootWrap variable (a BootWrap object)
  * 2. an array with (a) Bootwrap component(s).
  *
- * snippet: $body->render($bootWrap, $components)
+ * codeSnippet: $body->render($bootWrap, $components)
  */
 require dirname(__DIR__) . "/views/header.php";
+
+/* ----------------------------------------------- START Helper functions ------------------------------------ */
 
 /**
  * intro generator
@@ -42,91 +44,128 @@ require dirname(__DIR__) . "/views/header.php";
  *
  * @param string $id        : the html element id (for in-page links)
  * @param string $title     : name of Bootstrap component
- * @param string $des       : description of component (snippet)
- * @param string $content   : notes
+ * @param string $shortDes       : description of component
+ * @param string $longDes   : notes
  *
  * @return string           : intro-html
  */
-function intro(string $id = '', string $title = '', string $des = '', string $content = ''): string
+function intro(string $id = '', string $title = '', string $shortDes = '', string $longDes = ''): string
 {
     $introHtml = <<<HEREDOC
-<div class="anchor">
-<div id="$id" class = 'row' style="margin-top: 50px;">
-    <h1 id="content">$title</h1>
-</div>
-<div class = 'row' style="margin-bottom: 10px;">
-    <p>$des</p>
-</div>
-<div class = 'row' style="margin-bottom: 10px;">
-    <p>$content</p>
+<div class="row" style="margin-top: 50px; margin-left: -15px;">
+<div id="$id" class="col anchor" style="margin-left: -15px;">
+    <h1>$title</h1>
 </div>
 </div>
+
+<div class = 'row' style="margin-bottom: 10px; margin-left: -15px;">
+    <div class="col" style="margin-left: -15px;">$shortDes</div>
+</div>
+
+<div class = 'row' style="margin-bottom: 10px; margin-left: -15px;">
+    <div class="col" style="margin-left: -15px;">$longDes</div>
+</div>
+
 HEREDOC;
     return $introHtml;
 }
 
 /**
- * snippet() is a code snippet generator
+ * codeSnippet() is a code codeSnippet generator
  *
  * we use 'NOWDOC' so we can just copy-paste the code and
- * send it as param $code to function snippet().
+ * send it as param $code to function codeSnippet().
  *
  * we use Highlight.js for code highlighting (change theme in Config.php)
  * code highlighting is triggered by <pre><code></code></pre> block
  *
- * @param string $code      : php code snippet (example)
+ * @param string $code      : php code codeSnippet (example)
  * @param string $comment   : a comment explaining how the code works
  * @param string $example   : e.g. example #1
  *
- * @return string           : code snippet html
+ * @return string           : code codeSnippet html
  */
-function snippet(string $code = '', string $comment = '', string $example = 'code example'): string
+function codeSnippet(string $code = '', string $comment = '', string $example = 'code example'): string
 {
-    echo divider(); // render a horizontal ruler
-    $codeHtml = "<div>" . $example . "</div>\n";
-    $codeHtml .= "<pre><code>" . $code . "</code></pre>\n";
-    $comment = ($comment !== '') ? "<div style='margin-left: -15px; margin-bottom: 10px;'>" . $comment . "</div>\n" : '';
+    $rowColOpen = "<div class='row' style='margin-left: -15px; margin-bottom: 10px;><div class='col'>";
+    $rowColClose = "</div></div>";
+
+    echo ruler(); // render a horizontal ruler
+    $codeHtml = '';
+    /* example name */
+    $codeHtml .= $rowColOpen;
+    $codeHtml .= $example;
+    $codeHtml .= $rowColClose;
+
+    /* example code codeSnippet */
+    $codeHtml .= $rowColOpen;
+    $codeHtml .= "<pre><code>" . $code . "</code></pre>";
+    $codeHtml .= $rowColClose;
+
+    /* example comment */
+    $comment = ($comment !== '') ? $comment : '';
+    $codeHtml .= $rowColOpen;
     $codeHtml .= $comment;
+    $codeHtml .= $rowColClose;
+
+    $codeHtml .= $rowColOpen . $rowColClose; // empty space
+
     return $codeHtml;
 }
 
 /**
  * render a horizontal ruler
  */
+function ruler()
+{
+    $ruler = "<div style='margin-left: -15px; margin-bottom: 30px; background-color: #0AF;'>" . "<hr />" . "</div>";
+    return $ruler;
+}
+
+/* white space between component examples */
 function divider()
 {
-    echo "<div style='margin-left: -15px;'>";
-    echo "<hr>";
-    echo "</div>";
+    $rowColOpen = "<div class='row' style='margin-left: -15px; margin-bottom: 20px;><div class='col'>";
+    $rowColClose = "</div></div>";
+    $divider = $rowColOpen . ruler() . $rowColClose;
+    return $divider;
 }
+
+/* ------------------------------------------------ END Helper functions ------------------------------------- */
 
 /*
  * start view-page examples.php content
  */
 
 /*
- * list with in-page links to components
+ * list with in-page links to examples (components)
  */
 $links = <<<HEREDOC
+<div class="row">
+<div class="col">
 <a href="#" id="scroll" style="display: none;"><span></span></a> <!-- empty scroll-to-top target -->
 <a href="#alert">Alert</a> | 
 <a href="#card">Card</a> | 
 <a href="#confirmationdialog">Confirmation Dialog</a> | 
 <a href="#covernavigation">Cover Navigation (underlined)</a> | 
+<a href="#covernavigation">Form</a> |
+</div>
+</div>
 HEREDOC;
 echo $links;
 
+echo "<a href='http://www.google.com'>google</a>";
 
 /*
  * example: alert
  */
 $id = "alert";
 $title = "Alert";
-$des = "Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.";
-$content = "Three examples to show how easy it is to generate an alert.
+$shortDes = "Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.";
+$longDes = "Three examples to show how easy it is to generate an alert.
 There are 7 types of alerts: 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'";
-echo intro($id, $title, $des, $content);
-/* render code snippet -1- */
+echo intro($id, $title, $shortDes, $longDes);
+/* render code codeSnippet -1- */
 $msg = "I am an info alert, and I'm here to stay";
 $components = ['alert' => [$msg, 'info', false]]; // params: [string message, string type, bool dismissable]
 $code = <<<'NOWDOC'
@@ -135,11 +174,11 @@ $components = ['alert' => [$msg, 'info', false]]; // params: [string message, st
 $body->render($bootWrap, $components);
 NOWDOC;
 $example = "code example #1: use 'false' to make a sticky alert";
-echo snippet($code, '', $example);
+echo codeSnippet($code, '', $example);
 /* render component -1- */
 $body->render($bootWrap, $components);
 
-/* render code snippet -2- */
+/* render code codeSnippet -2- */
 $msg = "I am a dismissable warning alert - click the X and I'm gone";
 $components = ['alert' => [$msg, 'warning', true]]; // params: [string message, string type, bool dismissable]
 $code = <<<'NOWDOC'
@@ -148,11 +187,11 @@ $components = ['alert' => [$msg, 'warning', true]]; // params: [string message, 
 $body->render($bootWrap, $components);
 NOWDOC;
 $example = "code example #2: use 'true' to enable dismiss button";
-echo snippet($code, '', $example);
+echo codeSnippet($code, '', $example);
 /* render component -2- */
 $body->render($bootWrap, $components);
 
-/* render code snippet -3- */
+/* render code codeSnippet -3- */
 $msg = "I am a dismissable success alert <hr/>
 With a horizontal ruler as a divider and a longer text.
 In fact we can give quite a bit of information with an alert
@@ -167,10 +206,10 @@ $components = ['alert' => [$msg, 'success', true]]; // params: [string message, 
 $body->render($bootWrap, $components);
 NOWDOC;
 $example = "code example #3";
-echo snippet($code, '', $example);
+echo codeSnippet($code, '', $example);
 /* render component -2- */
 $body->render($bootWrap, $components);
-divider();
+echo divider();
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 /*
@@ -181,13 +220,13 @@ divider();
  */
 $id = "card";
 $title = "Card";
-$des = "cards provide a flexible and extensible content container with multiple variants and options.";
-$content = "It includes options for headers and footers,
+$shortDes = "cards provide a flexible and extensible content container with multiple variants and options.";
+$longDes = "It includes options for headers and footers,
 a wide variety of content, contextual background colors, and powerful display options. If you’re familiar with
 Bootstrap 3, cards replace old panels, wells, and thumbnails. Similar functionality to those components is
 available as modifier classes for cards.";
-echo intro($id, $title, $des, $content);
-/* render code snippet */
+echo intro($id, $title, $shortDes, $longDes);
+/* render code codeSnippet */
 $msg = 'I am a card';
 $title = 'BootWrap all the way';
 $list = ['1' => 'list item 1', '2' => 'list item 2', '3' => 'list item 3'];
@@ -211,10 +250,10 @@ NOWDOC;
 $comment = "This card includes an image (at 10% of the container size), a title, a message,
 a list with 3 items, a link and a footer. Parameter 6 (boolean false), means the links won't open
 in a new window (_blank) - set it to true if you'd like to change this behavior.";
-echo snippet($code, $comment);
+echo codeSnippet($code, $comment);
 /* render component */
 $body->render($bootWrap, $components);
-
+echo divider();
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 /*
@@ -224,62 +263,87 @@ $body->render($bootWrap, $components);
  */
 $id = "confirmationdialog";
 $title = "Confirmation Dialog";
-$des = "Confirmation dialogs are used for situations where a user must confirm an action.";
-$content = "Use this component to confirm changes to e.g. file content, or file deletes etc.
+$shortDes = "Confirmation dialogs are used for situations where a user must confirm an action.";
+$longDes = "Use this component to confirm changes to e.g. file content, or file deletes etc.
 The confirmation dialog form uses POST method to send the user's choice back to the server:
 \$_POST['confirm'] and \$_POST['cancel']. Important, if you use multiple confirmation dialogs
-on the same page, make sure you give each of the dialogs a unique ID (#id).";
-echo intro($id, $title, $des, $content);
-/* render code snippet -1- */
+on the same page, make sure you give each of the dialogs a unique ID (#id) and a unique 'name' field.";
+echo intro($id, $title, $shortDes, $longDes);
+/* render code codeSnippet -1- */
 $display = 'Delete blog post';
-$components = ['confirmationdialog' => [$display, 'confirmationDialog#1']];
+$components = ['confirmationdialog' => [$display, false, 'confirmationDialog1', 'confirm1', 'Please confirm', true]];
 $code = <<<'NOWDOC'
 $display = 'Delete blog post';
-$components = ['confirmationdialog' => [$display, 'confirmationDialog#1']];
+$components = ['confirmationdialog' => [$display, false, 'confirmationDialog1', 'confirm1', 'Please confirm', true]];
 NOWDOC;
-$comment = "A hyperlink that triggers a confirmation dialog. The blog post will only be deleted if you confirm";
+$comment = "This first example shows how we can use a hyperlink to trigger a confirmation dialog.
+            The blog post will only be deleted if you confirm. <br /><br />
+            Notice how we use a unique #id(confirmationDialog1) and name (confirm1) because we are showing
+            two examples on this page - we do not want #id or 'name-field' conflicts. <br /><br />
+            We DO NOT render an 'action=' attribute at all in this example - \$action is set to false.";
 $example = "code example #1";
-echo snippet($code, $comment, $example);
+echo codeSnippet($code, $comment, $example);
 /* render component -1- */
 $body->render($bootWrap, $components);
 
-/* render code snippet -2- */
+/* render code codeSnippet -2- */
 $display = 'Delete blog post';
-$components = ['confirmationdialog' => [$display, 'confirmationDialog#2', 'Please confirm', false]]; // false to use a button
+$components = ['confirmationdialog' => [$display, false, 'confirmationDialog2', 'confirm2', 'Please confirm', false]]; // false to use a button
 $code = <<<'NOWDOC'
 $display = 'Delete blog post';
-$components = ['confirmationdialog' => [$display, 'confirmationDialog#2', 'Please confirm', false]]; // false to use a button
+$components = ['confirmationdialog' => [$display, false, 'confirmationDialog2', 'confirm2', 'Please confirm', false]]; // false to use a button
 NOWDOC;
-$comment = "A button that triggers a confirmation dialog. The blog post will only be deleted if you confirm";
+$comment = "This second example shows how we can use a button that triggers a confirmation dialog.
+            The blog post will only be deleted if you confirm. <br /><br />
+            Notice how we use a unique #id(confirmationDialog2) and name (confirm2) because we are showing
+            two examples on this page - we do not want #id or 'name-field' conflicts.<br /><br />
+            We DO NOT render an 'action=' attribute at all in this example - \$action is set to false.";
 $example = "code example #2";
-echo snippet($code, $comment, $example);
+echo codeSnippet($code, $comment, $example);
 /* render component -2- */
 $body->render($bootWrap, $components);
-
+echo divider();
 /* ----------------------------------------------------------------------------------------------------------------- */
 
 /*
- * example: cover navigation
- * signature: public function coverNav($navItems = [], $activeNav = '', $brand = null): string
+ * example: form
+ * signature: public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $backDisplay = 'Back', $confirmationDialog = [false, true, ''])
+ *            $inputFields === ['type', 'name', 'id', 'value', 'placeholder', 'label', options[]]
  */
-$id = "covernavigation";
-$title = "Cover navigation";
-$des = "A navigation bar with underlined active nav button. We came accross this style at: https://getbootstrap.com/docs/4.0/examples/cover/#.
-For the styling to work, you MUST incorporate a css stylesheet defining the link-text coloring and the color of the bar under the active button.";
-$content = "...";
-echo intro($id, $title, $des, $content);
-/* render code snippet -1- */
-$navItems = ['home' => '#covernavigation', 'examples' => 'examples.php#covernagivation', 'contact' => '#covernavigation', 'documentation' => '#covernavigation'];
-$components = ['covernav' => [$navItems, 'examples.php#covernagivation', '']];
+$id = "form";
+$title = "Form";
+$shortDes = "Generate a form with input element types like: text, password, email, or hidden. Surely, you can just as easily generate 
+a select list or radio buttons that offer the user a pre-defined list of choices. <br /><br />
+A cool new feature with BootWrap::form() is that it allows you to get a user to confirm an action (see example #3). <br /><br />
+The default form submit method is 'POST' and the submit button has a \"name='submit'\".<br /><br />
+You can thus check form submission with isset(\$_POST['submit'])";
+$longDes = "";
+echo intro($id, $title, $shortDes, $longDes);
+/* render code codeSnippet -1- */
+$inputFields = [
+    ['text', 'username', 'username', "", 'enter user name', 'your username', ['required']],
+    ['password', 'password', 'password', "", 'password', 'your password', ['required']]
+];
+$form = [$inputFields, 'Sign In'];
+$components = ['form' => $form];
 $code = <<<'NOWDOC'
-$navItems = ['home' => '#covernavigation', 'examples' => '#covernavigation', 'contact' => '#covernavigation', 'documentation' => '#covernavigation'];
-$components = ['covernav' => [$navItems, '', '']];
+$form = $bootWrap->form($inputFields, 'Sign In');
+$components = ['form' => [$form]];
+echo $form;
+
+if (isset($_POST['submit'])) {
+...
+}
 NOWDOC;
 $comment = "no comment";
-$example = "code example #1";
-echo snippet($code, $comment, $example);
+$example = "code example #1: Form";
+echo codeSnippet($code, $comment, $example);
+
 /* render component -1- */
 $body->render($bootWrap, $components);
+
+echo divider();
+
 
 /*
  * end view-page examples.php content

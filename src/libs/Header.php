@@ -23,6 +23,7 @@ class Header
         $bootWrap->setStyles([$bootSwatchCss, $stickyFooter, $coverNavCss, $scrollToTopCss]);
 
         /* smooth scroll to anchors in articles */
+        /*
         $anchors = <<<HEREDOC
         <script>
         $(document).ready(function(){
@@ -52,7 +53,7 @@ class Header
         });
         </script>
 HEREDOC;
-
+*/
         /* the scroll-to-top jquery animation */
         $scrollToTop = <<<HEREDOC
         <script>
@@ -87,7 +88,8 @@ HEREDOC;
         <script>hljs.initHighlightingOnLoad();</script>
 HEREDOC;
 
-        $bootWrap->setJs([$highlightJs, $anchors, $scrollToTop]);
+        //$bootWrap->setJs([$highlightJs, $anchors, $scrollToTop]); // Turned off $anchors
+        $bootWrap->setJs([$highlightJs, $scrollToTop]);
         $title = $components['tabtitle'] ?? 'BootWrap';
         $head = $bootWrap->head($title);
         echo $head;
