@@ -655,8 +655,8 @@ HEREDOC;
                 $style = ($type === 'hidden') ? "style='display: none'" : null;
                 $formFields .= <<<HEREDOC
         <div class="form-group" $style>
-            <label for="$id" class="col-sm-2 control-label">$label</label>
-            <div class="col-sm-10">
+            <label for="$id" class="col-sm-4 control-label">$label</label>
+            <div class="col-sm-8">
             <input type="$type" class="form-control" name="$name" id="$id" value="$fieldValue" placeholder="$placeholder" $options[0]>
             </div>
         </div>\n
@@ -667,8 +667,8 @@ HEREDOC;
             if($type === 'textarea') {
                 $formFields .= <<<HEREDOC
         <div class="form-group">
-            <label for="$id" class="col-sm-2 control-label">$label</label>
-            <div class="col-sm-10">
+            <label for="$id" class="col-sm-4 control-label">$label</label>
+            <div class="col-sm-8">
             <textarea class="form-control" id="$id" name="$name" rows="10" $options[0]>$fieldValue</textarea>
             </div>
         </div>
@@ -679,8 +679,8 @@ HEREDOC;
             if ($type === 'select') {
                 $formFields .= <<<HEREDOC
         <div class="form-group">
-            <label for="$id" class="col-sm-2 control-label">$label</label>
-            <div class="col-sm-10">
+            <label for="$id" class="col-sm-4 control-label">$label</label>
+            <div class="col-sm-8">
             <select class="form-control" id="$id" name="$name">\n
 HEREDOC;
                 foreach ($options as $key) {
@@ -1507,14 +1507,17 @@ HEREDOC;
      * BootWrap::alert() wraps BootStrap alert component
      * use it to provide contextual feedback messages for typical user actions
      *
-     * @param string   $msg     : the message to be displayed in the alert box
-     * @param string   $type    : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
-     * @param bool     $dismiss : if set to false, the alert cannot be dismissed.
-     * @param int|null $zIndex  : overlapping elements with a larger z-index cover those with a smaller one.
+     * @param string    $msg        : the message to be displayed in the alert box
+     * @param string    $type       : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
+     *                                 Note: We also defined a class 'alert-yellow' in super.css, that can be used with $type:
+     *                                .alert-yellow{ background-color: #FFC000;} - we use it in dashboard/index.php
+     * @param bool      $dismiss    : if set to false, the alert cannot be dismissed.
+     * @param int|null  $zIndex     : overlapping elements with a larger z-index cover those with a smaller one.
+     * @param string    $textColor  : Bootstrap color classes: 'primary' for 'text-primary', 'secondary' for 'text-secondary' etc.
      *
-     * @return string           : alert-html
+     * @return string               : alert-html
      */
-    public function alert(string $msg = '', string $type = 'info', bool $dismiss = true, int $zIndex = null): string
+    public function alert(string $msg = '', string $type = 'info', bool $dismiss = true, int $zIndex = null, $textColor = ''): string
     {
         $buttonHtml = <<<HEREDOC
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -1522,8 +1525,9 @@ HEREDOC;
         $dismissable = ($dismiss === true) ? "alert-dismissible" : '';
         $button = ($dismiss === true) ? $buttonHtml : '';
         $z = ($zIndex !== null) ? "style='z-index: $zIndex;'" : '';
+        $textColor = ($textColor !== '') ? 'text-' . $textColor : '';
         $alertHtml = <<<HEREDOC
-              <div class="bs-component col-sm-10 alert $dismissable alert-$type" $z>
+              <div class="bs-component col-sm-10 alert $textColor $dismissable alert-$type" $z>
                 $button
                 $msg
               </div>

@@ -23,7 +23,7 @@ class Header
         $bootWrap->setStyles([$bootSwatchCss, $stickyFooter, $coverNavCss, $scrollToTopCss]);
 
         /* smooth scroll to anchors in articles */
-        /*
+/*
         $anchors = <<<HEREDOC
         <script>
         $(document).ready(function(){
@@ -41,7 +41,7 @@ class Header
               // Using jQuery's animate() method to add smooth page scroll
               // The optional number (1000) specifies the number of milliseconds it takes to scroll to the specified area
               $('html, body, textarea').animate({
-                scrollTop: $(hash).offset().top - 150
+                scrollTop: $(hash).offset().top - 120
               }, 1000, function(){
            
                   //the following is disabled as it moves the element under the navbar again
@@ -88,8 +88,8 @@ HEREDOC;
         <script>hljs.initHighlightingOnLoad();</script>
 HEREDOC;
 
-        //$bootWrap->setJs([$highlightJs, $anchors, $scrollToTop]); // Turned off $anchors
-        $bootWrap->setJs([$highlightJs, $scrollToTop]);
+        $bootWrap->setJs([$highlightJs, $anchors, $scrollToTop]); // Turned off $anchors
+        //$bootWrap->setJs([$highlightJs, $scrollToTop]);
         $title = $components['tabtitle'] ?? 'BootWrap';
         $head = $bootWrap->head($title);
         echo $head;

@@ -44,7 +44,7 @@ require dirname(__DIR__) . "/views/header.php";
  *
  * @param string $id        : the html element id (for in-page links)
  * @param string $title     : name of Bootstrap component
- * @param string $shortDes       : description of component
+ * @param string $shortDes  : description of component
  * @param string $longDes   : notes
  *
  * @return string           : intro-html
@@ -53,19 +53,18 @@ function intro(string $id = '', string $title = '', string $shortDes = '', strin
 {
     $introHtml = <<<HEREDOC
 <div class="row" style="margin-top: 50px; margin-left: -15px;">
-<div id="$id" class="col anchor" style="margin-left: -15px;">
+<div class="col" id="$id" class="anchor" style="margin-left: -15px;">
     <h1>$title</h1>
 </div>
 </div>
 
-<div class = 'row' style="margin-bottom: 10px; margin-left: -15px;">
+<div class = 'row' style="margin-left: -15px; margin-bottom: 15px;">
     <div class="col" style="margin-left: -15px;">$shortDes</div>
 </div>
 
-<div class = 'row' style="margin-bottom: 10px; margin-left: -15px;">
+<div class = 'row' style="margin-left: -15px;">
     <div class="col" style="margin-left: -15px;">$longDes</div>
 </div>
-
 HEREDOC;
     return $introHtml;
 }
@@ -79,18 +78,18 @@ HEREDOC;
  * we use Highlight.js for code highlighting (change theme in Config.php)
  * code highlighting is triggered by <pre><code></code></pre> block
  *
- * @param string $code      : php code codeSnippet (example)
+ * @param string $code      : php code (code example)
  * @param string $comment   : a comment explaining how the code works
  * @param string $example   : e.g. example #1
  *
- * @return string           : code codeSnippet html
+ * @return string           : codeSnippet html
  */
 function codeSnippet(string $code = '', string $comment = '', string $example = 'code example'): string
 {
-    $rowColOpen = "<div class='row' style='margin-left: -15px; margin-bottom: 10px;><div class='col'>";
+    $rowColOpen = "<div class='row' style='margin-left: -15px; margin-bottom: 10px;'><div class='col' style='margin-left: -15px;'>";
     $rowColClose = "</div></div>";
 
-    echo ruler(); // render a horizontal ruler
+    //echo divider(); // render a horizontal ruler
     $codeHtml = '';
     /* example name */
     $codeHtml .= $rowColOpen;
@@ -99,7 +98,8 @@ function codeSnippet(string $code = '', string $comment = '', string $example = 
 
     /* example code codeSnippet */
     $codeHtml .= $rowColOpen;
-    $codeHtml .= "<pre><code>" . $code . "</code></pre>";
+    $codeHtml .= "<div style='width: 100%;'>" . "<pre><code>" . $code . "</code></pre></div>";
+    //$codeHtml .= "<pre><code>" . $code . "</code></pre>";
     $codeHtml .= $rowColClose;
 
     /* example comment */
@@ -114,20 +114,26 @@ function codeSnippet(string $code = '', string $comment = '', string $example = 
 }
 
 /**
- * render a horizontal ruler
+ * The purpose of the divider is to create white space  (with/without a ruler)
+ *
+ * @param int $space        : the white-space (evenly spread over margin-top and margin-bottom)
+ * @param bool $ruler       : render a horizontal ruler (true) or not (false)
+ * @param string $color     : the color of the horizontal ruler
+ *
+ * @return string
  */
-function ruler()
+function divider($space = 30, $ruler = true, $color = "#0AF"): string
 {
-    $ruler = "<div style='margin-left: -15px; margin-bottom: 30px; background-color: #0AF;'>" . "<hr />" . "</div>";
-    return $ruler;
-}
-
-/* white space between component examples */
-function divider()
-{
-    $rowColOpen = "<div class='row' style='margin-left: -15px; margin-bottom: 20px;><div class='col'>";
+    $bottom = $space/2;
+    $top = $bottom;
+    $rowColOpen = "<div class='row' style='margin-left: -15px; margin-top: {$top}px; margin-bottom: {$bottom}px;'><div class='col'>";
     $rowColClose = "</div></div>";
-    $divider = $rowColOpen . ruler() . $rowColClose;
+
+    $rulerHtml = "<div style='margin-left: -15px; margin-bottom: {$space}px; margin-top: {$space}px; background-color: $color;'>" . "<hr />" . "</div>";
+
+
+    $rulerHtml = ($ruler === true) ? $rulerHtml : '';
+    $divider = $rowColOpen . $rulerHtml . $rowColClose;
     return $divider;
 }
 
@@ -140,10 +146,11 @@ function divider()
 /*
  * list with in-page links to examples (components)
  */
+/*
 $links = <<<HEREDOC
+<a href="#" id="scroll" style="display: none;"><span></span></a> <!-- empty scroll-to-top target -->
 <div class="row">
 <div class="col">
-<a href="#" id="scroll" style="display: none;"><span></span></a> <!-- empty scroll-to-top target -->
 <a href="#alert">Alert</a> | 
 <a href="#card">Card</a> | 
 <a href="#confirmationdialog">Confirmation Dialog</a> | 
@@ -153,8 +160,31 @@ $links = <<<HEREDOC
 </div>
 HEREDOC;
 echo $links;
+*/
+$scrollToTopTarget = <<<HEREDOC
+<!-- empty scroll-to-top target -->
+<a href="#" id="scroll" style="display: none;"><span></span></a>\n
+HEREDOC;
+echo $scrollToTopTarget;
 
-echo "<a href='http://www.google.com'>google</a>";
+/*
+ * in-page links (anchor-links)
+ */
+$id = "components";
+$title = "BootWrap Examples";
+$shortDes = "The examples on this page should get you up and running quickly with BootWrap.
+Currently there are only a limited number of examples; we'll be adding more in the future!";
+$longDes = <<<HEREDOC
+<a href="#alert">Alert</a> | 
+<a href="#card">Card</a> | 
+<a href="#form">form</a> |
+<a href="#confirmationdialog">Confirmation Dialog</a> |\n
+HEREDOC;
+echo intro($id, $title, $shortDes, $longDes);
+echo divider(150, false);
+
+
+/* ----------------------------------------------------------------------------------------------------------------- */
 
 /*
  * example: alert
@@ -174,6 +204,7 @@ $components = ['alert' => [$msg, 'info', false]]; // params: [string message, st
 $body->render($bootWrap, $components);
 NOWDOC;
 $example = "code example #1: use 'false' to make a sticky alert";
+echo divider(30, false);
 echo codeSnippet($code, '', $example);
 /* render component -1- */
 $body->render($bootWrap, $components);
@@ -187,6 +218,7 @@ $components = ['alert' => [$msg, 'warning', true]]; // params: [string message, 
 $body->render($bootWrap, $components);
 NOWDOC;
 $example = "code example #2: use 'true' to enable dismiss button";
+echo divider(30, false);
 echo codeSnippet($code, '', $example);
 /* render component -2- */
 $body->render($bootWrap, $components);
@@ -206,6 +238,7 @@ $components = ['alert' => [$msg, 'success', true]]; // params: [string message, 
 $body->render($bootWrap, $components);
 NOWDOC;
 $example = "code example #3";
+echo divider(30, false);
 echo codeSnippet($code, '', $example);
 /* render component -2- */
 $body->render($bootWrap, $components);
@@ -250,7 +283,9 @@ NOWDOC;
 $comment = "This card includes an image (at 10% of the container size), a title, a message,
 a list with 3 items, a link and a footer. Parameter 6 (boolean false), means the links won't open
 in a new window (_blank) - set it to true if you'd like to change this behavior.";
-echo codeSnippet($code, $comment);
+$example = "code example #1";
+echo divider(30, false);
+echo codeSnippet($code, $comment, $example);
 /* render component */
 $body->render($bootWrap, $components);
 echo divider();
@@ -282,6 +317,7 @@ $comment = "This first example shows how we can use a hyperlink to trigger a con
             two examples on this page - we do not want #id or 'name-field' conflicts. <br /><br />
             We DO NOT render an 'action=' attribute at all in this example - \$action is set to false.";
 $example = "code example #1";
+echo divider(30, false);
 echo codeSnippet($code, $comment, $example);
 /* render component -1- */
 $body->render($bootWrap, $components);
@@ -299,6 +335,7 @@ $comment = "This second example shows how we can use a button that triggers a co
             two examples on this page - we do not want #id or 'name-field' conflicts.<br /><br />
             We DO NOT render an 'action=' attribute at all in this example - \$action is set to false.";
 $example = "code example #2";
+echo divider(30, false);
 echo codeSnippet($code, $comment, $example);
 /* render component -2- */
 $body->render($bootWrap, $components);
@@ -337,11 +374,10 @@ if (isset($_POST['submit'])) {
 NOWDOC;
 $comment = "no comment";
 $example = "code example #1: Form";
+echo divider(30, false);
 echo codeSnippet($code, $comment, $example);
-
 /* render component -1- */
 $body->render($bootWrap, $components);
-
 echo divider();
 
 
