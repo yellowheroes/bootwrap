@@ -9,7 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace yellowheroes\bootwrap\libs;
+namespace yellowheroes\bootwrap\libs\components;
+
+use yellowheroes\bootwrap\libs as libs;
 /**
  * Class Form - a container object that can be injected with form components
  *
@@ -23,7 +25,7 @@ namespace yellowheroes\bootwrap\libs;
  *
  * @package yellowheroes\bootwrap\libs
  */
-class Form implements ComponentInterface
+class Form implements libs\ComponentInterface
 {
     public string $html = ''; // the built form-component HTML - to be injected into a BootWrap object
     private array $formElements = []; // container for form elements

@@ -9,9 +9,11 @@
  */
 declare(strict_types=1);
 
-namespace yellowheroes\bootwrap\libs;
+namespace yellowheroes\bootwrap\libs\components;
 
-class Alert implements ComponentInterface
+use yellowheroes\bootwrap\libs as libs;
+
+class Alert implements libs\ComponentInterface
 {
     public string $html = ''; // container to store the built alert-component HTML
 

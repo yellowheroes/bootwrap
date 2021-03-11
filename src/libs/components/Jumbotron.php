@@ -9,9 +9,11 @@
  */
 declare(strict_types=1);
 
-namespace yellowheroes\bootwrap\libs;
+namespace yellowheroes\bootwrap\libs\components;
 
-class Jumbotron implements ComponentInterface
+use yellowheroes\bootwrap\libs as libs;
+
+class Jumbotron implements libs\ComponentInterface
 {
     public string $html = ''; // container stores jumbotron-component HTML - is retrieved by BootWrap::inject()
 

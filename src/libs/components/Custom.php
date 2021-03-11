@@ -9,7 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace yellowheroes\bootwrap\libs;
+namespace yellowheroes\bootwrap\libs\components;
+
+use yellowheroes\bootwrap\libs as libs;
 
 /**
  * Class Custom
@@ -18,7 +20,7 @@ namespace yellowheroes\bootwrap\libs;
  *
  * @package yellowheroes\bootwrap\libs
  */
-class Custom implements ComponentInterface
+class Custom implements libs\ComponentInterface
 {
     public string $html = ''; // container to store client-provided HTML
 
