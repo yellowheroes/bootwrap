@@ -10,6 +10,7 @@
 namespace yellowheroes\bootwrap;
 
 use yellowheroes\bootwrap\libs as libs;
+use yellowheroes\bootwrap\libs\components as component;
 
 require '../vendor/autoload.php';
 
@@ -22,17 +23,17 @@ $bw = new libs\BootWrap(); // build default starter template
  * 2. build components & custom(non-component) user-provided HTML
  */
 // build a jumbotron component
-$jumbotron = new libs\Jumbotron(); // create a jumbotron object
+$jumbotron = new component\Jumbotron(); // create a jumbotron object
 $jumbotron->build('hello world'); // build the jumbotron object
 
 // build some of your own custom HTML - manual and from file
-$myHtml1 = new libs\Custom(); // create a custom HTML object
+$myHtml1 = new component\Custom(); // create a custom HTML object
 $myHtml1->build("<p style='font-size: 20px;'>My paragraph</p>"); // manually build some HTML
-$myHtml2 = new libs\Custom(); // create a custom HTML object
+$myHtml2 = new component\Custom(); // create a custom HTML object
 $myHtml2->build("./assets/html/mysnippet.html"); // build HTML from file
 
 // build an alert component
-$alert = new libs\Alert(); // create an alert object
+$alert = new component\Alert(); // create an alert object
 $alert->build('hello world again'); // build the alert object
 
 /*
