@@ -1,0 +1,200 @@
+= BootWrap
+:toc: left
+
+{empty} +
+
+== Can't wait to build your Bootstrap page? +
+<<anchor-1>> +
+<<anchor-2>>
+
+{empty} +
+
+== Introduction
+We have refactored project BootWrap turning `class BootWrap` into a container
+that produces a default BootWrap starter template and can be injected with
+components (e.g. Form, Alert, Jumbotron etc.).
+
+Components (valid Bootstrap HTML) are built by component classes e.g: `class Alert()`, `class Jumbotron()`, `class Form()` etc.
+
+Each component class *MUST* implement a `build()` method, and in most cases, is fed with arguments
+to generate HTML snippets and allow variables inside the HTML (HEREDOC) to be resolved.
+
+Each component class **MUST** have a public `html` property that stores the component html,
+built by the component class' `build()` method.
+This way, `BootWrap::inject()` can retrieve and store the component HTML inside its `$components` array.
+
+A typical component class
+[source,php]
+----
+class Jumbotron
+{
+    public string $html = ''; // container stores jumbotron-component
+
+    public function build() {
+
+        // ... logic that builds the Jumbotron component HTML string
+
+        $this->html = $jumbotronHtml;
+        return $jumbotronHtml;
+    }
+}
+----
+{empty} +
+To inject the component into a BootWrap object, use:
+
+=== BootWrap::inject()
+
+Notice how `inject()` needs to access the component object's `$html` property
+to store it in BootWrap's `$components` array.
+
+[source,php]
+----
+public function inject(ComponentInterface $component): void
+    {
+        $this->components[] = $component->html;
+    }
+----
+{empty} +
+Each component class **MUST** also return the valid Bootstrap component HTML, which allows the component
+class to also be used stand-alone, outside the BootWrap implementation (i.e. without injecting into BootWrap object).
+
+{empty} +
+
+[[anchor-1]]
+== Bootstrap starter template
+Create an empty BootWrap container object (default starter template)
+[source,php]
+----
+$bw = new BootWrap();
+----
+Render the starter template
+[source,php]
+----
+echo $bw->render();
+----
+
+Output:
+[source,html]
+----
+<!doctype html>
+<html lang="en">
+ <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap and 'other' CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>bootwrap</title>
+ </head>
+ <body class="wrapper" >
+
+    <!-- jQuery, Popper.js, Bootstrap JS and optional 'other' JavaScript libs -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- other JavaScript (e.g. for modal component - see BootWrap::modal() ) -->
+
+ </body>
+</html>
+----
+[[anchor-2]]
+== Bootstrap page with a Jumbotron
+*Build* a jumbotron with a title saying 'Hello World'
+[source,php]
+----
+$jumbotron = new Jumbotron();
+$jumbotron->build('Hello World');
+----
+*Inject* the Jumbotron
+[source,php]
+----
+$bw = new BootWrap(); // build default starter template
+$bw->inject($jumbotron); // inject component
+----
+*Render* the Bootstrap page with Jumbotron
+[source,php]
+----
+echo $bw->render(); // render page
+----
+
+Output
+[source,html]
+----
+<!doctype html>
+<html lang="en">
+ <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap and 'other' CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>bootwrap</title>
+ </head>
+ <body class="wrapper" >
+
+    <div class="jumbotron">
+      <h1 class="display-3">Hello World</h1>
+      <p class="lead"></p>
+      <hr class="my-4">
+      <p></p>
+    </div>
+
+    <!-- jQuery, Popper.js, Bootstrap JS and optional 'other' JavaScript libs -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- other JavaScript (e.g. for modal component - see BootWrap::modal() ) -->
+
+ </body>
+</html>
+----
+== Conclusion
+Each component class *MUST* implement the `ComponentInterface`.
+
+Each component class *MUST* implement a `build()` method that constructs
+and returns the required Bootstrap HTML. It *MUST* store the built HTML in public property `$html`.
+
+`Class BootWrap`, when injected with a component, stores the component
+in array `$components[]`.
+
+When you've injected the component(s) you need, and you're ready to render a page,
+use: `BootWrap::render()`
+
+{empty} +
+Two code examples to show how easy it really is: +
+
+.Create a Bootstrap starter template
+. *Build*
+[source,php]
+$bw = new BootWrap();
+
+. *Render*
+[source,php]
+echo $bw->render();
+
+{empty} +
+
+.Create a Bootstrap page with a Jumbotron that says 'BootWrap Rocks!'
+. *Build* Jumbotron
+[source,php]
+$jumbotron = new Jumbotron();
+$jumbotron->build('BootWrap Rocks!');
+
+. *Inject* Jumbotron
+[source,php]
+$bw = new BootWrap();
+$bw->inject($jumbotron); // inject component
+
+. *Render* Bootstrap page with Jumbotron
+[source,php]
+echo $bw->render();
+
+
+
+

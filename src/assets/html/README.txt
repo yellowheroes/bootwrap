@@ -1,0 +1,1 @@
+Directory 'html' contains custom (user provided) HTML snippets that can be injected into the BootWrap starter template using BootWrap::Custom()
