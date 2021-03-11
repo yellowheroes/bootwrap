@@ -1,5 +1,3 @@
-#ignore old copies starting with _
-_*.*
-
-#ignore config file
-Config.php
+.idea/
+vendor/
+tests/
