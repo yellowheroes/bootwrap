@@ -29,14 +29,14 @@ class Alert implements libs\ComponentInterface
     public function build(string $msg = '', string $type = 'info', bool $dismiss = true, int $zIndex = null, $textColor = ''): string
     {
         $buttonHtml = <<<HEREDOC
-<button type="button" class="close" data-dismiss="alert">&times;</button>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 HEREDOC;
         $dismissible = ($dismiss === true) ? "alert-dismissible" : '';
         $button = ($dismiss === true) ? $buttonHtml : '';
         $z = ($zIndex !== null) ? "style='z-index: $zIndex;'" : '';
         $textColor = ($textColor !== '') ? 'text-' . $textColor : '';
         $alertHtml = <<<HEREDOC
-  <div class="bs-component col-sm-10 alert $textColor $dismissible alert-$type" $z>
+  <div class="alert $textColor alert-$type $dismissible fade show" role="alert" $z>
   $button
   $msg
   </div>

@@ -195,6 +195,31 @@ $bw->inject($jumbotron); // inject component
 [source,php]
 echo $bw->render();
 
+{empty} +
+
+'''
+
+=== Notes
+_(from now on we use Bootstrap and BS interchangeably)_
+
+==== Components
+
+Starting Bootstrap5, link:https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/[Jquery is no longer needed]
+
+Curious which components explicitly require BS JavaScript and Popper? Click the show components link below. If you’re at all unsure about the general page structure, keep reading for an example page template.
+Show components requiring JavaScript
+
+    Alerts for dismissing
+    Buttons for toggling states and checkbox/radio functionality
+    Carousel for all slide behaviors, controls, and indicators
+    Collapse for toggling visibility of content
+    Dropdowns for displaying and positioning (also requires Popper)
+    Modals for displaying, positioning, and scroll behavior
+    Navbar for extending our Collapse plugin to implement responsive behavior
+    Toasts for displaying and dismissing
+    Tooltips and popovers for displaying and positioning (also requires Popper)
+    Scrollspy for scroll behavior and navigation updates
+
 
 
 

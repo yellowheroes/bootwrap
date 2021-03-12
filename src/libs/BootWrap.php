@@ -84,7 +84,7 @@ HEREDOC;
      * Default (Bootstrap) CSS is automatically set.
      * Client can add supplementary CSS sheets by calling this function directly.
      *
-     * @param array $styleSheets path to each style sheet
+     * @param array $styleSheets    :path to each style sheet
      *
      * @return void
      */
@@ -93,7 +93,7 @@ HEREDOC;
         // default CSS (set on BootWrap instantiation)
         if (empty($styleSheets)) {
             $this->styles = <<<HEREDOC
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">\n
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">\n
 HEREDOC;
         } else {
             // client can add additional CSS
@@ -120,12 +120,11 @@ HEREDOC;
      */
     public function setLibs(array $libs = []): void
     {
-        // set default libraries (minimum requirement for Bootstrap to function)
+        // set default libraries (Bootstrap5 no longer requires JQuery)
         if (empty($libs)) {
             $this->libs = <<<HEREDOC
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>\n
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+\n
 HEREDOC;
         } else {
             // client can add additional JS libraries
@@ -138,13 +137,15 @@ HEREDOC;
     }
 
     /**
+     * Set complementary javascript snippets - anything that's not a full-blown library
+     *
      * @param string $other    : complementary JavaScript (e.g. for modal to function)
      *
      * @return void
      */
     public function setOtherJs(string $other): void
     {
-        $this->otherjs .= <<<HEREDOC
+        $this->otherJs .= <<<HEREDOC
 $other\n
 HEREDOC;
     }
@@ -213,7 +214,7 @@ $this->htmlOpen
     <!-- Required meta tags -->
     $this->meta
     
-    <!-- Bootstrap and 'other' CSS -->
+    <!-- Bootstrap5 and 'other' CSS -->
     $this->styles
         
     $this->title
@@ -221,9 +222,9 @@ $this->htmlOpen
  <body class="wrapper" $this->bsNavBarHack>\n
 $components
 
-    <!-- jQuery, Popper.js, Bootstrap JS and optional 'other' JavaScript libs -->
+    <!-- Bootstrap5: JavaScript Bundle with Popper and 'other' js libs-->
     $this->libs
-    <!-- other JavaScript (e.g. for modal component - see BootWrap::modal() ) -->
+    <!-- other JavaScript snippets (e.g. for modal component) -->
     $this->otherJs
     $this->footer
  </body>

@@ -28,12 +28,12 @@ use yellowheroes\bootwrap\libs as libs;
 class Form implements libs\ComponentInterface
 {
     public string $html = ''; // the built form-component HTML - to be injected into a BootWrap object
-    private array $formElements = []; // container for form elements
+    private array $formElements = []; // container for injected form elements
 
     /**
      * @return string   : the form-component HTML - to be injected into a BootWrap object
      */
-    public function build(): string
+    public function build(?string $action = ''): string
     {
         $formHtml = '';
 
@@ -49,12 +49,12 @@ class Form implements libs\ComponentInterface
         }
 
         /*
-         * If $action === false, user wants no action attribute at all - i.e. use xhr (AJAX).
+         * If $action === null, user wants no action attribute at all - e.g. use xhr (AJAX).
          */
         $actionAttrib = <<<HEREDOC
 action="$action"
 HEREDOC;
-        $action = ($action !== false) ? $actionAttrib : "";
+        $action = $action ?? "";
 
         $formOpen = <<<HEREDOC
         <div class="bs-docs-section">
@@ -137,11 +137,11 @@ HEREDOC;
     /**
      * Inject Bootstrap form element html into a form
      *
-     * @param FormInterface $formElement
+     * @param libs\FormInterface $formElement
      *
      * @return void
      */
-    public function inject(FormInterface $formElement): void
+    public function inject(libs\FormInterface $formElement): void
     {
         $this->formElements[] = $formElement->html;
     }

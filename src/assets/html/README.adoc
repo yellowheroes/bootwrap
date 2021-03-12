@@ -1,0 +1,31 @@
+= Custom HTML content
+
+Directory `html` contains custom (user provided) HTML snippets that can be injected into the BootWrap starter template using the Custom() component class.
+
+An example, showing how to inject some of your custom HTML content:
+
+[source,php]
+----
+<?php
+/*
+ * 1. build a default starter template
+ */
+$bw = new libs\BootWrap();
+
+/*
+ * 2. build your custom HTML - both manual and from file
+ */
+$myHtml1 = new component\Custom(); // create a custom HTML object
+$myHtml1->build("<p style='font-size: 20px;'>My paragraph</p>"); // manually build some HTML
+
+$myHtml2 = new component\Custom(); // create a custom HTML object
+$myHtml2->build("./assets/html/mysnippet.html"); // build custom HTML from file
+
+/*
+ * 3. inject custom HTML into Bootstrap template page
+ */
+$bw->inject($myHtml1);
+$bw->inject($myHtml2);
+
+echo $bw->render(); // render page
+----
