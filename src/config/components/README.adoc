@@ -1,0 +1,7 @@
+= Component configuration
+
+Currently Bootwrap components don't use separate configuration files.
+
+The default configuration for a component resides inside the component class.
+
+Each component class has accessor(getter) and mutator(setter) methods to retrieve and change configuration settings.

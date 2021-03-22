@@ -1,5 +1,7 @@
-= BootWrap
+= Bootwrap
 :toc: left
+:toclevels: 4
+:icons: font
 
 {empty} +
 
@@ -10,64 +12,132 @@
 {empty} +
 
 == Introduction
-We have refactored project BootWrap turning `class BootWrap` into a container
-that produces a default BootWrap starter template and can be injected with
-components (e.g. Form, Alert, Jumbotron etc.).
+BootWrap is a container that allows you to build a default link:https://getbootstrap.com/docs/5.0/getting-started/introduction/#starter-template[Bootstrap5 starter template] - a Bootstrap enabled web page. A BootWrap container can be injected with Bootstrap components (e.g. Navbar, Form, Alert, Jumbotron etc.) and your own custom HTML snippets to design and customize responsive mobile-first sites with only a few lines of code.
 
-Components (valid Bootstrap HTML) are built by component classes e.g: `class Alert()`, `class Jumbotron()`, `class Form()` etc.
+Surely, BootWrap also allows referencing additional CSS style sheets and Javascript libraries, so you can easily extend the functionality and styling of your pages.
 
+=== Components
+link:https://getbootstrap.com/docs/5.0/components/accordion/[Bootstrap5 components] are built by Bootwrap's component classes like e.g: `class Navbar()`, `class Alert()`, `class Jumbotron()`, `class Form()` and many others.
+
+NOTE: There is a special component class: `Custom`. This is not an actual Bootstrap component, but allows you to inject your own HTML snippets (hardcoded or from file).
+
+==== Requirements
 Each component class *MUST* implement a `build()` method, and in most cases, is fed with arguments
-to generate HTML snippets and allow variables inside the HTML (HEREDOC) to be resolved.
+to generate valid Bootstrap component HTML. The `build()` method will uses HEREDOC to allow variables inside a Bootstrap HTML-template to be resolved.
 
-Each component class **MUST** have a public `html` property that stores the component html,
-built by the component class' `build()` method.
-This way, `BootWrap::inject()` can retrieve and store the component HTML inside its `$components` array.
+Each component class **MUST** have a `public $html` property that stores the built component HTML.
+This way, `BootWrap::inject()` can store and retrieve the component (HTML) for rendering.
 
-A typical component class
+Finally, the components are rendered on a FIFO basis inside the `<body>` of a Bootstrap HTML page.
+
+{empty} +
+
+===== A typical component class
 [source,php]
 ----
-class Jumbotron
+class Jumbotron implements libs\ComponentInterface
 {
-    public string $html = ''; // container stores jumbotron-component
+    private string $html = ''; // Bootstrap Jumbotron component (HTML).
 
-    public function build() {
+    private ?array $components = []; // Injected child components (e.g. buttons).
 
-        // ... logic that builds the Jumbotron component HTML string
+    // default config settings
+    private string $bgColor = 'dark';
+    private string $txtColor = 'secondary';
+    ...
 
-        $this->html = $jumbotronHtml;
-        return $jumbotronHtml;
+    public function build(): void
+    {
+        ... logic that builds the Jumbtron HTML
+
+        $this->set($jumbotronHtml); // store component in private $html
+    }
+
+    // getters and setters
+    public function get() { ... }
+    public function set() { ... }
+    ...
+    public function getBgColor() { ... }
+    public function setBgColor(string $bgColor){ ... }
+    ...
+
+    // injects a child component (e.g. a button) into a Jumbotron component.
+    public function inject(libs\ComponentInterface $component): void
+    {
+        $this->components[] = $component->get();
     }
 }
 ----
 {empty} +
-To inject the component into a BootWrap object, use:
 
-=== BootWrap::inject()
+==== Component configuration
+Each component has default configuration settings defined inside the component class. To change a configuration setting on a component, all you need to do is invoke the appropriate setter method.
 
-Notice how `inject()` needs to access the component object's `$html` property
-to store it in BootWrap's `$components` array.
+For example, if we want to change the background color of a Jumbotron:
+
+[source,php]
+----
+$jumbotron = new Jumbotron();
+$jumbotron->setBgColor('warning'); // change background color
+$jumbotron->build('BootWrap is pretty snazzy...'); // component ready to be injected in a BootWrap container.
+----
+And then inject the Jumbotron into a BootWrap container (a Bootstrap starter template):
+[source,php]
+----
+$bw = new BootWrap(); // build default Bootstrap starter template
+$bw->inject($jumbotron); // inject component
+echo $bw->render(); // render page
+----
+{empty} +
+
+---
+{empty} +
+
+=== Inject components with other components
+Some components are eligible to be injected with other components. For example, a Jumbotron component could be injected with one or more Button component(s).
+
+This is why e.g. class Jumbotron has its own `inject()` method.
+
+IMPORTANT: Some components (_mother_) can be injected with other components (_children_). These (_mother_) components MUST have a `inject()` method.
+
+Surely, not all components are suited to have child components injected. Ever seen a button with a form inside it?
+
+{empty} +
+
+---
+{empty} +
+
+=== Build your Bootstrap page - inject()
+After you have built (and configured) one or more components, you can inject the component(s) into a Bootstrap enabled page (starter template), using `BootWrap::inject(_component_)` for each _component_.
+
+NOTE: `BootWrap::inject()` requires access to a component object's `public $html` property. `inject()` stores all components in a `$components[]` array. The components are injected on a FIFO basis into the Bootstrap starter template.
+
 
 [source,php]
 ----
 public function inject(ComponentInterface $component): void
     {
-        $this->components[] = $component->html;
+        $this->components[] = $component->html; // add a component
     }
 ----
+
 {empty} +
-Each component class **MUST** also return the valid Bootstrap component HTML, which allows the component
-class to also be used stand-alone, outside the BootWrap implementation (i.e. without injecting into BootWrap object).
+Each component class **MUST** also return valid Bootstrap component HTML, which allows the component
+class to also be used stand-alone, outside the BootWrap implementation.
 
 {empty} +
 
 [[anchor-1]]
-== Bootstrap starter template
-Create an empty BootWrap container object (default starter template)
+== Build an empty Bootstrap template page (starter template)
+
+NOTE: _Build &#x2799; Render_
+
+*1. Build* an empty BootWrap container object (default starter template)
 [source,php]
 ----
 $bw = new BootWrap();
 ----
-Render the starter template
+*2. Render* the starter template
 [source,php]
 ----
 echo $bw->render();
@@ -83,38 +153,44 @@ Output:
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap and 'other' CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Bootstrap5 and 'other' CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
 
     <title>bootwrap</title>
  </head>
  <body class="wrapper" >
 
-    <!-- jQuery, Popper.js, Bootstrap JS and optional 'other' JavaScript libs -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
-    <!-- other JavaScript (e.g. for modal component - see BootWrap::modal() ) -->
+
+    <!-- Bootstrap5: JavaScript Bundle with Popper and 'other' js libs-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+
+    <!-- other JavaScript snippets (e.g. for modal component) -->
+
 
  </body>
 </html>
 ----
 [[anchor-2]]
-== Bootstrap page with a Jumbotron
-*Build* a jumbotron with a title saying 'Hello World'
+== Build a Bootstrap page with a Jumbotron
+
+NOTE: _Build &#x2799; Inject &#x2799; Render_
+
+*1. Build* a jumbotron with a title saying 'Hello World'
 [source,php]
 ----
 $jumbotron = new Jumbotron();
 $jumbotron->build('Hello World');
 ----
-*Inject* the Jumbotron
+*2. Inject* the Jumbotron
 [source,php]
 ----
 $bw = new BootWrap(); // build default starter template
 $bw->inject($jumbotron); // inject component
 ----
-*Render* the Bootstrap page with Jumbotron
+*3. Render* the Bootstrap page with Jumbotron
 [source,php]
 ----
 echo $bw->render(); // render page
@@ -199,15 +275,33 @@ echo $bw->render();
 
 '''
 
-=== Notes
+== Notes
 _(from now on we use Bootstrap and BS interchangeably)_
 
-==== Components
+=== Migration to Bootstrap5
+link:https://getbootstrap.com/[Bootstrap5]
 
-Starting Bootstrap5, link:https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/[Jquery is no longer needed]
+Starting Bootstrap5, link:https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/[Jquery is no longer needed].
 
-Curious which components explicitly require BS JavaScript and Popper? Click the show components link below. If you’re at all unsure about the general page structure, keep reading for an example page template.
-Show components requiring JavaScript
+Check out the link:https://getbootstrap.com/docs/5.0/migration/[migration guide]
+
+{empty} +
+
+=== Components in Bootstrap5
+Jumbotron component no longer exists in BS5. It is, however, rather easy to emulate it: link:https://stackoverflow.com/questions/63141494/how-to-create-jumbotron-in-bootstrap-5[SO solution]
+
+All we need to do is replace
+[source,html]
+`<div class="jumbotron">`
+
+with
+[source,html]
+`<div class="bg-light p-5 rounded-3 m-3">`
+<!-- notice that we also had to change rounded-lg in BS4 to rounded-3 in BS5 -->
+
+{empty} +
+
+==== Bootstrap5 components requiring JavaScript and/or Popper
 
     Alerts for dismissing
     Buttons for toggling states and checkbox/radio functionality
@@ -220,6 +314,38 @@ Show components requiring JavaScript
     Tooltips and popovers for displaying and positioning (also requires Popper)
     Scrollspy for scroll behavior and navigation updates
 
+=== text colors
+[source,html]
+----
+<p class="text-primary">.text-primary</p>
+<p class="text-secondary">.text-secondary</p>
+<p class="text-success">.text-success</p>
+<p class="text-danger">.text-danger</p>
+<p class="text-warning bg-dark">.text-warning</p>
+<p class="text-info bg-dark">.text-info</p>
+<p class="text-light bg-dark">.text-light</p>
+<p class="text-dark">.text-dark</p>
+<p class="text-body">.text-body</p>
+<p class="text-muted">.text-muted</p>
+<p class="text-white bg-dark">.text-white</p>
+<p class="text-black-50">.text-black-50</p>
+<p class="text-white-50 bg-dark">.text-white-50</p>
+----
+{empty} +
+
+=== Typography
+Explanations re. Bootstrap CSS classes, e.g. alignment, headings, display headings, block quotes etc.
+
+link:https://getbootstrap.com/docs/5.0/content/typography/[typography]
+
+=== Images
+link:https://getbootstrap.com/docs/5.0/content/images/[images]
+
+=== Tables
+link:https://getbootstrap.com/docs/5.0/content/tables/[tables]
+
+=== Figures (with captions)
+link:https://getbootstrap.com/docs/5.0/content/figures/[figures with captions]
 
 
 

@@ -24,7 +24,11 @@ $bw = new libs\BootWrap(); // build default starter template
  */
 // build a jumbotron component
 $jumbotron = new component\Jumbotron(); // create a jumbotron object
-$jumbotron->build('hello world'); // build the jumbotron object
+$jumbotron->config->setBgColor('info'); // set color
+$jumbotron->config->setTxtColor('white'); // set color
+$jumbotron->config->setBtnColor('light'); // set color
+$jumbotron->build('Bootwrap snazzy', 'all the way...',
+                  'welcome to...', ['href' => '#', 'display' => 'home']);
 
 // build some of your own custom HTML - manual and from file
 $myHtml1 = new component\Custom(); // create a custom HTML object
@@ -34,7 +38,8 @@ $myHtml2->build("./assets/html/mysnippet.html"); // build HTML from file
 
 // build an alert component
 $alert = new component\Alert(); // create an alert object
-$alert->build('hello world again'); // build the alert object
+$msg = '<h1>Your upload was successful</h1><hr><p>to manage your files, go to file manager</p>';
+$alert->build($msg, 'success', true, null, 'success');
 
 /*
  * 3. inject components and custom HTML into Bootstrap template page

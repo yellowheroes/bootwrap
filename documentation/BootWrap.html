@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.12">
-<title>BootWrap</title>
+<title>Bootwrap</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,24 +437,47 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>BootWrap</h1>
+<h1>Bootwrap</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_cant_wait_to_build_your_bootstrap_page">Can&#8217;t wait to build your Bootstrap page?<br></a></li>
 <li><a href="#_introduction">Introduction</a>
 <ul class="sectlevel2">
-<li><a href="#_bootwrapinject">BootWrap::inject()</a></li>
+<li><a href="#_components">Components</a>
+<ul class="sectlevel3">
+<li><a href="#_requirements">Requirements</a>
+<ul class="sectlevel4">
+<li><a href="#_a_typical_component_class">A typical component class</a></li>
 </ul>
 </li>
-<li><a href="#anchor-1">Bootstrap starter template</a></li>
-<li><a href="#anchor-2">Bootstrap page with a Jumbotron</a></li>
-<li><a href="#_conclusion">Conclusion</a>
+<li><a href="#_component_configuration">Component configuration</a></li>
+</ul>
+</li>
+<li><a href="#_inject_components_with_other_components">Inject components with other components</a></li>
+<li><a href="#_build_your_bootstrap_page_inject">Build your Bootstrap page - inject()</a></li>
+</ul>
+</li>
+<li><a href="#anchor-1">Build an empty Bootstrap template page (starter template)</a></li>
+<li><a href="#anchor-2">Build a Bootstrap page with a Jumbotron</a></li>
+<li><a href="#_conclusion">Conclusion</a></li>
+<li><a href="#_notes">Notes</a>
 <ul class="sectlevel2">
-<li><a href="#_notes">Notes</a></li>
+<li><a href="#_migration_to_bootstrap5">Migration to Bootstrap5</a></li>
+<li><a href="#_components_in_bootstrap5">Components in Bootstrap5</a>
+<ul class="sectlevel3">
+<li><a href="#_bootstrap5_components_requiring_javascript_andor_popper">Bootstrap5 components requiring JavaScript and/or Popper</a></li>
+</ul>
+</li>
+<li><a href="#_text_colors">text colors</a></li>
+<li><a href="#_typography">Typography</a></li>
+<li><a href="#_images">Images</a></li>
+<li><a href="#_tables">Tables</a></li>
+<li><a href="#_figures_with_captions">Figures (with captions)</a></li>
 </ul>
 </li>
 </ul>
@@ -472,8 +495,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_cant_wait_to_build_your_bootstrap_page">Can&#8217;t wait to build your Bootstrap page?<br></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="#anchor-1">Bootstrap starter template</a><br>
-<a href="#anchor-2">Bootstrap page with a Jumbotron</a></p>
+<p><a href="#anchor-1">Build an empty Bootstrap template page (starter template)</a><br>
+<a href="#anchor-2">Build a Bootstrap page with a Jumbotron</a></p>
 </div>
 <div class="paragraph">
 <p><br></p>
@@ -484,63 +507,181 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We have refactored project BootWrap turning <code>class BootWrap</code> into a container
-that produces a default BootWrap starter template and can be injected with
-components (e.g. Form, Alert, Jumbotron etc.).</p>
+<p>BootWrap is a container that allows you to build a default <a href="https://getbootstrap.com/docs/5.0/getting-started/introduction/#starter-template">Bootstrap5 starter template</a> - a Bootstrap enabled web page. A BootWrap container can be injected with Bootstrap components (e.g. Navbar, Form, Alert, Jumbotron etc.) and your own custom HTML snippets to design and customize responsive mobile-first sites with only a few lines of code.</p>
 </div>
 <div class="paragraph">
-<p>Components (valid Bootstrap HTML) are built by component classes e.g: <code>class Alert()</code>, <code>class Jumbotron()</code>, <code>class Form()</code> etc.</p>
+<p>Surely, BootWrap also allows referencing additional CSS style sheets and Javascript libraries, so you can easily extend the functionality and styling of your pages.</p>
 </div>
+<div class="sect2">
+<h3 id="_components">Components</h3>
+<div class="paragraph">
+<p><a href="https://getbootstrap.com/docs/5.0/components/accordion/">Bootstrap5 components</a> are built by Bootwrap&#8217;s component classes like e.g: <code>class Navbar()</code>, <code>class Alert()</code>, <code>class Jumbotron()</code>, <code>class Form()</code> and many others.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There is a special component class: <code>Custom</code>. This is not an actual Bootstrap component, but allows you to inject your own HTML snippets (hardcoded or from file).
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_requirements">Requirements</h4>
 <div class="paragraph">
 <p>Each component class <strong>MUST</strong> implement a <code>build()</code> method, and in most cases, is fed with arguments
-to generate HTML snippets and allow variables inside the HTML (HEREDOC) to be resolved.</p>
+to generate valid Bootstrap component HTML. The <code>build()</code> method will uses HEREDOC to allow variables inside a Bootstrap HTML-template to be resolved.</p>
 </div>
 <div class="paragraph">
-<p>Each component class <strong>MUST</strong> have a public <code>html</code> property that stores the component html,
-built by the component class' <code>build()</code> method.
-This way, <code>BootWrap::inject()</code> can retrieve and store the component HTML inside its <code>$components</code> array.</p>
+<p>Each component class <strong>MUST</strong> have a <code>public $html</code> property that stores the built component HTML.
+This way, <code>BootWrap::inject()</code> can store and retrieve the component (HTML) for rendering.</p>
 </div>
 <div class="paragraph">
-<p>A typical component class</p>
+<p>Finally, the components are rendered on a FIFO basis inside the <code>&lt;body&gt;</code> of a Bootstrap HTML page.</p>
 </div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="sect4">
+<h5 id="_a_typical_component_class">A typical component class</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Jumbotron</span>
+<pre class="CodeRay highlight"><code data-lang="php"><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Jumbotron</span> <span style="color:#080;font-weight:bold">implements</span> libs\<span style="color:#036;font-weight:bold">ComponentInterface</span>
 {
-    <span style="color:#080;font-weight:bold">public</span> <span style="color:#0a8;font-weight:bold">string</span> <span style="color:#950">$html</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#710">'</span></span>; <span style="color:#777">// container stores jumbotron-component</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">string</span> <span style="color:#950">$html</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#710">'</span></span>; <span style="color:#777">// Bootstrap Jumbotron component (HTML).</span>
 
-    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">build</span>() {
+    <span style="color:#080;font-weight:bold">private</span> ?<span style="color:#369;font-weight:bold">array</span> <span style="color:#950">$components</span> = []; <span style="color:#777">// Injected child components (e.g. buttons).</span>
 
-        <span style="color:#777">// ... logic that builds the Jumbotron component HTML string</span>
+    <span style="color:#777">// default config settings</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">string</span> <span style="color:#950">$bgColor</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">dark</span><span style="color:#710">'</span></span>;
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#0a8;font-weight:bold">string</span> <span style="color:#950">$txtColor</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">secondary</span><span style="color:#710">'</span></span>;
+    ...
 
-        <span style="color:#950">$this</span>-&gt;html = <span style="color:#950">$jumbotronHtml</span>;
-        <span style="color:#080;font-weight:bold">return</span> <span style="color:#950">$jumbotronHtml</span>;
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">build</span>(): void
+    {
+        ... logic that builds the <span style="color:#036;font-weight:bold">Jumbtron</span> <span style="color:#036;font-weight:bold">HTML</span>
+
+        <span style="color:#950">$this</span>-&gt;set(<span style="color:#950">$jumbotronHtml</span>); <span style="color:#777">// store component in private $html</span>
+    }
+
+    <span style="color:#777">// getters and setters</span>
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">get</span>() { ... }
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">set</span>() { ... }
+    ...
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">getBgColor</span>() { ... }
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">setBgColor</span>(<span style="color:#0a8;font-weight:bold">string</span> <span style="color:#950">$bgColor</span>){ ... }
+    ...
+
+    <span style="color:#777">// injects a child component (e.g. a button) into a Jumbotron component.</span>
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">inject</span>(libs\<span style="color:#036;font-weight:bold">ComponentInterface</span> <span style="color:#950">$component</span>): void
+    {
+        <span style="color:#950">$this</span>-&gt;components[] = <span style="color:#950">$component</span>-&gt;get();
     }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><br>
-To inject the component into a BootWrap object, use:</p>
+<p><br></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_component_configuration">Component configuration</h4>
+<div class="paragraph">
+<p>Each component has default configuration settings defined inside the component class. To change a configuration setting on a component, all you need to do is invoke the appropriate setter method.</p>
+</div>
+<div class="paragraph">
+<p>For example, if we want to change the background color of a Jumbotron:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span style="color:#950">$jumbotron</span> = <span style="color:#080;font-weight:bold">new</span> <span style="color:#036;font-weight:bold">Jumbotron</span>();
+<span style="color:#950">$jumbotron</span>-&gt;setBgColor(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">warning</span><span style="color:#710">'</span></span>); <span style="color:#777">// change background color</span>
+<span style="color:#950">$jumbotron</span>-&gt;build(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">BootWrap is pretty snazzy...</span><span style="color:#710">'</span></span>); <span style="color:#777">// component ready to be injected in a BootWrap container.</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then inject the Jumbotron into a BootWrap container (a Bootstrap starter template):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span style="color:#950">$bw</span> = <span style="color:#080;font-weight:bold">new</span> <span style="color:#036;font-weight:bold">BootWrap</span>(); <span style="color:#777">// build default Bootstrap starter template</span>
+<span style="color:#950">$bw</span>-&gt;inject(<span style="color:#950">$jumbotron</span>); <span style="color:#777">// inject component</span>
+<span style="color:#369;font-weight:bold">echo</span> <span style="color:#950">$bw</span>-&gt;render(); <span style="color:#777">// render page</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<hr>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_bootwrapinject">BootWrap::inject()</h3>
+<h3 id="_inject_components_with_other_components">Inject components with other components</h3>
 <div class="paragraph">
-<p>Notice how <code>inject()</code> needs to access the component object&#8217;s <code>$html</code> property
-to store it in BootWrap&#8217;s <code>$components</code> array.</p>
+<p>Some components are eligible to be injected with other components. For example, a Jumbotron component could be injected with one or more Button component(s).</p>
+</div>
+<div class="paragraph">
+<p>This is why e.g. class Jumbotron has its own <code>inject()</code> method.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Some components (<em>mother</em>) can be injected with other components (<em>children</em>). These (<em>mother</em>) components MUST have a <code>inject()</code> method.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Surely, not all components are suited to have child components injected. Ever seen a button with a form inside it?</p>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<hr>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_build_your_bootstrap_page_inject">Build your Bootstrap page - inject()</h3>
+<div class="paragraph">
+<p>After you have built (and configured) one or more components, you can inject the component(s) into a Bootstrap enabled page (starter template), using <code>BootWrap::inject(<em>component</em>)</code> for each <em>component</em>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>BootWrap::inject()</code> requires access to a component object&#8217;s <code>public $html</code> property. <code>inject()</code> stores all components in a <code>$components[]</code> array. The components are injected on a FIFO basis into the Bootstrap starter template.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="php"><span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">function</span> <span style="color:#06B;font-weight:bold">inject</span>(<span style="color:#036;font-weight:bold">ComponentInterface</span> <span style="color:#950">$component</span>): void
     {
-        <span style="color:#950">$this</span>-&gt;components[] = <span style="color:#950">$component</span>-&gt;html;
+        <span style="color:#950">$this</span>-&gt;components[] = <span style="color:#950">$component</span>-&gt;html; <span style="color:#777">// add a component</span>
     }</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><br>
-Each component class <strong>MUST</strong> also return the valid Bootstrap component HTML, which allows the component
-class to also be used stand-alone, outside the BootWrap implementation (i.e. without injecting into BootWrap object).</p>
+Each component class <strong>MUST</strong> also return valid Bootstrap component HTML, which allows the component
+class to also be used stand-alone, outside the BootWrap implementation.</p>
 </div>
 <div class="paragraph">
 <p><br></p>
@@ -549,10 +690,22 @@ class to also be used stand-alone, outside the BootWrap implementation (i.e. wit
 </div>
 </div>
 <div class="sect1">
-<h2 id="anchor-1">Bootstrap starter template</h2>
+<h2 id="anchor-1">Build an empty Bootstrap template page (starter template)</h2>
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Build &#x2799; Render</em>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Create an empty BootWrap container object (default starter template)</p>
+<p><strong>1. Build</strong> an empty BootWrap container object (default starter template)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -560,7 +713,7 @@ class to also be used stand-alone, outside the BootWrap implementation (i.e. wit
 </div>
 </div>
 <div class="paragraph">
-<p>Render the starter template</p>
+<p><strong>2. Render</strong> the starter template</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -579,19 +732,22 @@ class to also be used stand-alone, outside the BootWrap implementation (i.e. wit
     <span style="color:#070;font-weight:bold">&lt;meta</span> <span style="color:#b48">charset</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">utf-8</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
     <span style="color:#070;font-weight:bold">&lt;meta</span> <span style="color:#b48">name</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">viewport</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">content</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">width=device-width, initial-scale=1, shrink-to-fit=no</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
 
-    <span style="color:#777">&lt;!-- Bootstrap and 'other' CSS --&gt;</span>
-    <span style="color:#070;font-weight:bold">&lt;link</span> <span style="color:#b48">rel</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stylesheet</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">href</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">integrity</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">crossorigin</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">anonymous</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
+    <span style="color:#777">&lt;!-- Bootstrap5 and 'other' CSS --&gt;</span>
+    <span style="color:#070;font-weight:bold">&lt;link</span> <span style="color:#b48">href</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">rel</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stylesheet</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">integrity</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">crossorigin</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">anonymous</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>
+
 
     <span style="color:#070;font-weight:bold">&lt;title&gt;</span>bootwrap<span style="color:#070;font-weight:bold">&lt;/title&gt;</span>
  <span style="color:#070;font-weight:bold">&lt;/head&gt;</span>
  <span style="color:#070;font-weight:bold">&lt;body</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">wrapper</span><span style="color:#710">&quot;</span></span> <span style="color:#070;font-weight:bold">&gt;</span>
 
-    <span style="color:#777">&lt;!-- jQuery, Popper.js, Bootstrap JS and optional 'other' JavaScript libs --&gt;</span>
-    <span style="color:#070;font-weight:bold">&lt;script</span> <span style="color:#b48">src</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">https://code.jquery.com/jquery-3.5.1.slim.min.js</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">integrity</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">crossorigin</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">anonymous</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span><span style="color:#070;font-weight:bold">&lt;/script&gt;</span>
-    <span style="color:#070;font-weight:bold">&lt;script</span> <span style="color:#b48">src</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">integrity</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">crossorigin</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">anonymous</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span><span style="color:#070;font-weight:bold">&lt;/script&gt;</span>
-    <span style="color:#070;font-weight:bold">&lt;script</span> <span style="color:#b48">src</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">integrity</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">crossorigin</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">anonymous</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span><span style="color:#070;font-weight:bold">&lt;/script&gt;</span>
 
-    <span style="color:#777">&lt;!-- other JavaScript (e.g. for modal component - see BootWrap::modal() ) --&gt;</span>
+
+    <span style="color:#777">&lt;!-- Bootstrap5: JavaScript Bundle with Popper and 'other' js libs--&gt;</span>
+    <span style="color:#070;font-weight:bold">&lt;script</span> <span style="color:#b48">src</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">integrity</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">crossorigin</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">anonymous</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span><span style="color:#070;font-weight:bold">&lt;/script&gt;</span>
+
+
+    <span style="color:#777">&lt;!-- other JavaScript snippets (e.g. for modal component) --&gt;</span>
+
 
  <span style="color:#070;font-weight:bold">&lt;/body&gt;</span>
 <span style="color:#070;font-weight:bold">&lt;/html&gt;</span></code></pre>
@@ -600,10 +756,22 @@ class to also be used stand-alone, outside the BootWrap implementation (i.e. wit
 </div>
 </div>
 <div class="sect1">
-<h2 id="anchor-2">Bootstrap page with a Jumbotron</h2>
+<h2 id="anchor-2">Build a Bootstrap page with a Jumbotron</h2>
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Build &#x2799; Inject &#x2799; Render</em>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p><strong>Build</strong> a jumbotron with a title saying 'Hello World'</p>
+<p><strong>1. Build</strong> a jumbotron with a title saying 'Hello World'</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -612,7 +780,7 @@ class to also be used stand-alone, outside the BootWrap implementation (i.e. wit
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Inject</strong> the Jumbotron</p>
+<p><strong>2. Inject</strong> the Jumbotron</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -621,7 +789,7 @@ class to also be used stand-alone, outside the BootWrap implementation (i.e. wit
 </div>
 </div>
 <div class="paragraph">
-<p><strong>Render</strong> the Bootstrap page with Jumbotron</p>
+<p><strong>3. Render</strong> the Bootstrap page with Jumbotron</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -748,20 +916,56 @@ Two code examples to show how easy it really is:<br></p>
 <p><br></p>
 </div>
 <hr>
-<div class="sect2">
-<h3 id="_notes">Notes</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_notes">Notes</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p><em>(from now on we use Bootstrap and BS interchangeably)</em></p>
 </div>
+<div class="sect2">
+<h3 id="_migration_to_bootstrap5">Migration to Bootstrap5</h3>
+<div class="paragraph">
+<p><a href="https://getbootstrap.com/">Bootstrap5</a></p>
+</div>
+<div class="paragraph">
+<p>Starting Bootstrap5, <a href="https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/">Jquery is no longer needed</a>.</p>
+</div>
+<div class="paragraph">
+<p>Check out the <a href="https://getbootstrap.com/docs/5.0/migration/">migration guide</a></p>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_components_in_bootstrap5">Components in Bootstrap5</h3>
+<div class="paragraph">
+<p>Jumbotron component no longer exists in BS5. It is, however, rather easy to emulate it: <a href="https://stackoverflow.com/questions/63141494/how-to-create-jumbotron-in-bootstrap-5">SO solution</a></p>
+</div>
+<div class="paragraph">
+<p>All we need to do is replace</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">`<span style="color:#070;font-weight:bold">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">jumbotron</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>`</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>with</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html">`<span style="color:#070;font-weight:bold">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">bg-light p-5 rounded-3 m-3</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>`
+<span style="color:#777">&lt;!-- notice that we also had to change rounded-lg in BS4 to rounded-3 in BS5 --&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
 <div class="sect3">
-<h4 id="_components">Components</h4>
-<div class="paragraph">
-<p>Starting Bootstrap5, <a href="https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/">Jquery is no longer needed</a></p>
-</div>
-<div class="paragraph">
-<p>Curious which components explicitly require BS JavaScript and Popper? Click the show components link below. If you’re at all unsure about the general page structure, keep reading for an example page template.
-Show components requiring JavaScript</p>
-</div>
+<h4 id="_bootstrap5_components_requiring_javascript_andor_popper">Bootstrap5 components requiring JavaScript and/or Popper</h4>
 <div class="literalblock">
 <div class="content">
 <pre>Alerts for dismissing
@@ -778,12 +982,62 @@ Scrollspy for scroll behavior and navigation updates</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_text_colors">text colors</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html"><span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-primary</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-primary<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-secondary</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-secondary<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-success</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-success<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-danger</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-danger<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-warning bg-dark</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-warning<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-info bg-dark</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-info<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-light bg-dark</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-light<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-dark</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-dark<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-body</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-body<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-muted</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-muted<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-white bg-dark</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-white<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-black-50</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-black-50<span style="color:#070;font-weight:bold">&lt;/p&gt;</span>
+<span style="color:#070;font-weight:bold">&lt;p</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">text-white-50 bg-dark</span><span style="color:#710">&quot;</span></span><span style="color:#070;font-weight:bold">&gt;</span>.text-white-50<span style="color:#070;font-weight:bold">&lt;/p&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_typography">Typography</h3>
+<div class="paragraph">
+<p>Explanations re. Bootstrap CSS classes, e.g. alignment, headings, display headings, block quotes etc.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://getbootstrap.com/docs/5.0/content/typography/">typography</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_images">Images</h3>
+<div class="paragraph">
+<p><a href="https://getbootstrap.com/docs/5.0/content/images/">images</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tables">Tables</h3>
+<div class="paragraph">
+<p><a href="https://getbootstrap.com/docs/5.0/content/tables/">tables</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_figures_with_captions">Figures (with captions)</h3>
+<div class="paragraph">
+<p><a href="https://getbootstrap.com/docs/5.0/content/figures/">figures with captions</a></p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-12 14:01:55 +0100
+Last updated 2021-03-22 11:57:26 +0100
 </div>
 </div>
 </body>

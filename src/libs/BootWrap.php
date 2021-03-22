@@ -18,8 +18,8 @@ class BootWrap
     private string $styles = ''; // CSS stylesheets (in <head>)
     private string $title = ''; // browser tab title
     private string $footer = ''; // footer block
-    private string $libs = ''; // Bootstrap libraries, other javascript libraries
-    private string $otherJs = ''; // other javascript
+    private string $libs = ''; // Bootstrap libraries, other Javascript libraries
+    private string $otherJs = ''; // other javascript snippets
     private string $htmlClose = ''; // closing block html5 page
     private array $components = []; // container for client-set Bootstrap components (rendered when BootWrap::render() is invoked)
     private string $bsNavBarHack = ''; // see - https://stackoverflow.com/questions/11124777/twitter-bootstrap-navbar-fixed-top-overlapping-site
@@ -73,7 +73,8 @@ HEREDOC;
     public function setMeta(): void
     {
         $this->meta = <<<HEREDOC
-<meta charset="utf-8">
+<!-- Required meta tags -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 HEREDOC;
     }
@@ -93,7 +94,8 @@ HEREDOC;
         // default CSS (set on BootWrap instantiation)
         if (empty($styleSheets)) {
             $this->styles = <<<HEREDOC
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">\n
+<!-- Bootstrap5 and 'other' CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">\n
 HEREDOC;
         } else {
             // client can add additional CSS
@@ -120,14 +122,14 @@ HEREDOC;
      */
     public function setLibs(array $libs = []): void
     {
-        // set default libraries (Bootstrap5 no longer requires JQuery)
+        // set default Bootstrap libraries
         if (empty($libs)) {
             $this->libs = <<<HEREDOC
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-\n
+<!-- Bootstrap5 and 'other' Javascript libraries-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>\n
 HEREDOC;
         } else {
-            // client can add additional JS libraries
+            // additional Javascript libraries
             foreach ($libs as $lib) {
                 $this->libs .= <<<HEREDOC
     <script src="$lib"></script>\n
@@ -146,6 +148,7 @@ HEREDOC;
     public function setOtherJs(string $other): void
     {
         $this->otherJs .= <<<HEREDOC
+<!-- JavaScript snippets -->
 $other\n
 HEREDOC;
     }
@@ -162,23 +165,6 @@ HEREDOC;
         $this->title = <<<HEREDOC
 <title>$title</title>
 HEREDOC;
-    }
-
-    /**
-     * @param null   $link
-     * @param string $display
-     * @param string $class
-     * @param null   $cssClass
-     *
-     * @return string
-     */
-    public function href($link = null, $display = 'click me', $class = 'primary', $cssClass = null)
-    {
-        $hrefHtml = '';
-        $hrefHtml = <<<HEREDOC
-       <span class="$cssClass"><a href="$link">$display</a></span>
-HEREDOC;
-        return $hrefHtml;
     }
 
     /**
@@ -211,26 +197,33 @@ HEREDOC;
         $page = <<<HEREDOC
 $this->htmlOpen
  <head>
-    <!-- Required meta tags -->
     $this->meta
     
-    <!-- Bootstrap5 and 'other' CSS -->
-    $this->styles
-        
+    $this->styles     
     $this->title
  </head>
  <body class="wrapper" $this->bsNavBarHack>\n
 $components
 
-    <!-- Bootstrap5: JavaScript Bundle with Popper and 'other' js libs-->
     $this->libs
-    <!-- other JavaScript snippets (e.g. for modal component) -->
     $this->otherJs
     $this->footer
  </body>
 $this->htmlClose
 HEREDOC;
         return $page;
+    }
+
+    /**
+     * Inject Bootstrap component into the Bootstrap (template) HTML page
+     *
+     * @param ComponentInterface $component
+     *
+     * @return void
+     */
+    public function inject(ComponentInterface $component): void
+    {
+        $this->components[] = $component->get();
     }
 
     /**
@@ -279,17 +272,5 @@ HEREDOC;
     public function getFooter(): string
     {
         return $this->footer;
-    }
-
-    /**
-     * Inject Bootstrap component into the Bootstrap (template) HTML page
-     *
-     * @param ComponentInterface $component
-     *
-     * @return void
-     */
-    public function inject(ComponentInterface $component): void
-    {
-        $this->components[] = $component->html;
     }
 }
