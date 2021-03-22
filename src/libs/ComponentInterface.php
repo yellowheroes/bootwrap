@@ -20,7 +20,7 @@ namespace yellowheroes\bootwrap\libs;
 interface ComponentInterface
 {
     /**
-     * @param ComponentInterface $component Injects a child component
+     * @param ComponentInterface $component Injects a (child) component
      */
     public function inject(ComponentInterface $component): void;
 
