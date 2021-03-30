@@ -2,7 +2,7 @@
 /**
  * Created by Yellow Heroes
  * Project: BootWrap
- * File: Jumbotron.php
+ * File: Navbar.php
  * User: Robert
  * Date: 8/22/2020
  * Time: 21:57
@@ -14,19 +14,20 @@ namespace yellowheroes\bootwrap\libs\components;
 use yellowheroes\bootwrap\libs as libs;
 
 /**
- * Builds a Bootstrap Jumbotron component.
+ * Builds a Bootstrap Navbar component.
  *
- * A lightweight, flexible component that can optionally extend the entire
- * viewport to showcase key marketing messages on your site.
+ * Bootstrap’s powerful, responsive navigation header, the navbar.
+ * Includes support for branding, navigation, and more,
+ * including support for Bootstrap's collapse plugin.
  *
- * @link    https://getbootstrap.com/docs/4.0/components/jumbotron/
+ * @link    https://getbootstrap.com/docs/4.0/components/navbar/
  *
  * @package yellowheroes\bootwrap\libs\components
  */
-class Jumbotron implements libs\ComponentInterface
+class Navbar implements libs\ComponentInterface
 {
     /**
-     * @var string Bootstrap Jumbotron component (HTML)
+     * @var string Bootstrap Navbar component (HTML)
      */
     private string $component = '';
 
@@ -61,14 +62,8 @@ class Jumbotron implements libs\ComponentInterface
         ?string $subTitle = null,
         ?string $msg = null
     ): void {
-        // create Jumbotron
-        $jumbotronOpen = <<<HEREDOC
-    <div class="$this->customClass bg-$this->bgColor text-$this->txtColor p-$this->padding rounded-$this->rounded m-$this->margin">
-      <h1 class="display-$this->titleSize">$title</h1>
-      <p class="lead">$subTitle</p>
-      <hr class="my-$this->rulerMargin">
-      <p>$msg</p>\n
-HEREDOC;
+        // TODO: create Navbar
+       $navbar = '';
 
         // Injected (child) components - build HTML
         $components = '';
@@ -78,20 +73,14 @@ HEREDOC;
             }
         }
 
-        $jumbotronClose = <<<HEREDOC
-    </div>\n
-HEREDOC;
-
-        $jumbotron = $jumbotronOpen . $components . $jumbotronClose;
-
-        // store Jumbotron
-        $this->component = $jumbotron;
+        // store Navbar
+        $this->component = $navbar;
     }
 
     /**
      * Injects a child component.
      *
-     * A Jumbotron can be injected with child components (e.g. buttons).
+     * A Navbar can be injected with child components.
      *
      * @param libs\ComponentInterface $component A component to be injected
      *
@@ -102,7 +91,7 @@ HEREDOC;
     }
 
     /**
-     * @return string   Component (HTML) built with Jumbotron::build().
+     * @return string   Component (HTML) built with Navbar::build().
      */
     public function get(): string
     {
@@ -122,7 +111,7 @@ HEREDOC;
      *
      * @return $this
      */
-    public function setBgColor(string $bgColor): Jumbotron
+    public function setBgColor(string $bgColor): Navbar
     {
         if (in_array($bgColor, $this->colors)) {
             $this->bgColor = $bgColor;
@@ -143,7 +132,7 @@ HEREDOC;
      *
      * @return $this
      */
-    public function setTxtColor(string $txtColor): Jumbotron
+    public function setTxtColor(string $txtColor): Navbar
     {
         if (in_array($txtColor, $this->colors)) {
             $this->txtColor = $txtColor;
@@ -164,7 +153,7 @@ HEREDOC;
      *
      * @return $this
      */
-    public function setTitleSize(int $titleSize): Jumbotron
+    public function setTitleSize(int $titleSize): Navbar
     {
         if ($titleSize >= 1 && $titleSize <= 6) $this->titleSize = (string)$titleSize;
         return $this;
@@ -181,9 +170,9 @@ HEREDOC;
     /**
      * @param int $padding
      *
-     * @return Jumbotron
+     * @return Navbar
      */
-    public function setPadding(int $padding): Jumbotron
+    public function setPadding(int $padding): Navbar
     {
         $this->padding = (string)$padding;
         return $this;
@@ -203,7 +192,7 @@ HEREDOC;
      *
      * @return $this
      */
-    public function setRounded(int $size, string $style): Jumbotron
+    public function setRounded(int $size, string $style): Navbar
     {
         $size = ($size >= 0 && $size <= 3) ? (string)$size : $this->rounded;
         $styles = ['top', 'end', 'bottom', 'start', 'pill'];
@@ -214,7 +203,7 @@ HEREDOC;
     }
 
     /**
-     * @return string margin of the Jumbotron
+     * @return string margin of the Navbar
      */
     public function getMargin(): string
     {
@@ -224,9 +213,9 @@ HEREDOC;
     /**
      * @param int $margin 0-5 or -1 for 'auto'
      *
-     * @return Jumbotron
+     * @return Navbar
      */
-    public function setMargin(int $margin): Jumbotron
+    public function setMargin(int $margin): Navbar
     {
         if ($margin >= 0 && $margin <= 5) $this->margin = (string)$margin;
         elseif ($margin === -1) $this->margin = 'auto';
@@ -246,7 +235,7 @@ HEREDOC;
      *
      * @return $this
      */
-    public function setRulerMargin(int $rulerMargin): Jumbotron
+    public function setRulerMargin(int $rulerMargin): Navbar
     {
         if ($rulerMargin >= 0 && $rulerMargin <= 5) $this->rulerMargin = (string)$rulerMargin;
         elseif ($rulerMargin === -1) $this->rulerMargin = 'auto';

@@ -11,33 +11,140 @@ declare(strict_types=1);
 
 namespace yellowheroes\bootwrap\libs;
 
+use yellowheroes\bootwrap\config\Config;
+use yellowheroes\bootwrap\libs\components\Footer;
+use yellowheroes\bootwrap\libs\components\Navbar;
+
 class BootWrap
 {
+    private ?object $config = null; // access to core config
     private string $htmlOpen = ''; // opening block html5 page
     private string $meta = ''; // html meta-data
     private string $styles = ''; // CSS stylesheets (in <head>)
     private string $title = ''; // browser tab title
-    private string $footer = ''; // footer block
+    private string $header = ''; // header block
     private string $libs = ''; // Bootstrap libraries, other Javascript libraries
-    private string $otherJs = ''; // other javascript snippets
+    private string $otherJs = ''; // other javascript snippets (optional)
     private string $htmlClose = ''; // closing block html5 page
-    private array $components = []; // container for client-set Bootstrap components (rendered when BootWrap::render() is invoked)
-    private string $bsNavBarHack = ''; // see - https://stackoverflow.com/questions/11124777/twitter-bootstrap-navbar-fixed-top-overlapping-site
+    private array $components = []; // container for client-set Bootstrap components
+    private string $footer = ''; // footer block (optional)
+    private string $navBar = ''; // navigation bar (optional)
+    private string $navCss = ''; // see - https://stackoverflow.com/questions/11124777/twitter-bootstrap-navbar-fixed-top-overlapping-site
 
     /**
      * Creates a minimum default Bootstrap starter template (HTML).
      *
-     * If you want to inject components into the starter template, use BootWrap::inject().
-     * The starter template, with/without injected components, can then be rendered using BootWrap::render().
+     * use BootWrap::inject() to inject components into the starter template.
+     * The starter template, with/without injected components, can be rendered
+     * using BootWrap::render().
      */
     public function __construct()
     {
+        $this->config = new Config();
         $this->setHtmlOpen();
         $this->setMeta();
         $this->setStyles();
         $this->setTitle();
         $this->setLibs();
         $this->setHtmlClose();
+    }
+
+    /**
+     * Constructs a Bootstrap enabled page [with injected components].
+     *
+     * Returns the minimum required Bootstrap HTML (starter template)
+     * including any user-injected Bootstrap components, stylesheets,
+     * libraries.
+     * (for more on components:
+     * https://getbootstrap.com/docs/5.0/components/alerts/)
+     *
+     * @return string A Bootstrap HTML page (starter template + injected
+     *                components).
+     */
+    public function render(): string
+    {
+        /*
+         * Process injected (child) components - build HTML
+         *
+         * Each element in array $this->components[] contains a Bootstrap component(HTML)
+         * and is rendered inside the page's <main>...</main> block.
+         *
+         * There are two exceptions:
+         * - the Navbar component is rendered inside the <header>...</header> block.
+         * - the Footer component is rendered outside the <main>...</main> block.
+         *
+         * Navbar is assigned key 'navbar' and Footer key 'footer' when stored in $this->components[].
+         * We use these associative keys to filter for them and process them separately,
+         * so they are rendered in the correct location.
+         */
+        $components = '';
+        if (!empty($this->components)) {
+            foreach ($this->components as $key => $component) {
+                if ($key === 'footer') {
+                    $this->footer = $component . "\n"; // add footer
+                } elseif ($key === 'navbar') {
+                    $this->navBar = $component . "\n"; // add navbar
+                } else $components .= $component . "\n"; // add other components
+            }
+        }
+
+        // build the page
+        $page = <<<HEREDOC
+$this->htmlOpen
+ <head>
+    $this->meta
+    
+    $this->styles     
+    $this->title
+ </head>
+ <body>\n
+    <header class="page-header">\n$this->navBar\t</header>\n
+    <main class="page-body">\n$components\t</main>\n
+    $this->footer
+    $this->libs
+    $this->otherJs
+    
+$this->htmlClose
+HEREDOC;
+        return $page;
+    }
+
+    /**
+     * Injects Bootstrap component into the Bootstrap (template) HTML page
+     *
+     * Navbar & Footer components are injected outside <main>...</main> block.
+     * - Navbar component is keyed 'navbar', as it MUST be built inside the
+     * <header> block.
+     * - Footer component is keyed 'footer', as it MUST be built outside the
+     * <main> block.
+     *
+     * These associative keys allow us to identify / process these components
+     * in BootWrap::build()
+     *
+     * @param ComponentInterface $component
+     *
+     * @return void
+     */
+    public function inject(ComponentInterface $component): void
+    {
+        if ($component instanceof Footer) {
+            if ($component->isSticky()) {
+                $sticky = $this->config->getPaths()['css'] .
+                    'sticky-footer.css';
+                $this->setStyles([$sticky]); // set sticky footer
+            }
+            $this->components['footer'] = $component->get();
+        } elseif ($component instanceof Navbar) {
+            $this->components['navbar'] = $component->get();
+        } else $this->components[] = $component->get();
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlOpen(): string
+    {
+        return $this->htmlOpen;
     }
 
     /**
@@ -54,6 +161,14 @@ HEREDOC;
     }
 
     /**
+     * @return string
+     */
+    public function getHtmlClose(): string
+    {
+        return $this->htmlClose;
+    }
+
+    /**
      * build the closing block for a html5 page
      *
      * @return void
@@ -61,12 +176,21 @@ HEREDOC;
     public function setHtmlClose(): void
     {
         $this->htmlClose = <<<HEREDOC
+ </body>
 </html>
 HEREDOC;
     }
 
     /**
-     * set the required html meta tags (in <head> block)
+     * @return string
+     */
+    public function getMeta(): string
+    {
+        return $this->meta;
+    }
+
+    /**
+     * Sets the required html meta tags (in <head> block).
      *
      * @return void
      */
@@ -80,12 +204,21 @@ HEREDOC;
     }
 
     /**
-     * Set CSS stylesheets (in <head> block)
+     * @return string
+     */
+    public function getStyles(): string
+    {
+        return $this->styles;
+    }
+
+    /**
+     * Sets CSS stylesheets (in <head> block)
      *
      * Default (Bootstrap) CSS is automatically set.
-     * Client can add supplementary CSS sheets by calling this function directly.
+     * Client can add supplementary CSS sheets by calling this function
+     * directly.
      *
-     * @param array $styleSheets    :path to each style sheet
+     * @param array $styleSheets path to each style sheet
      *
      * @return void
      */
@@ -108,13 +241,41 @@ HEREDOC;
     }
 
     /**
-     * Set libraries that MUST be referenced to enable Bootstrap
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Sets the document title that will be shown on the browser-tab
      *
-     * MUST require jQuery, Popper.js, and Bootstrap's own JavaScript plugins (in that order).
-     * Placed near the end of your page right before the closing </body> tag, to enable them.
+     * @param string $title defaults to 'Bootwrap'
      *
-     * Upon BootWrap object instantiation the default libs are automatically set.
-     * Client can add supplementary JS libs by calling this function directly.
+     * @return void
+     */
+    public function setTitle(string $title = 'Bootwrap'): void
+    {
+        $this->title = <<<HEREDOC
+<title>$title</title>
+HEREDOC;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLibs(): string
+    {
+        return $this->libs;
+    }
+
+    /**
+     * Sets libraries (Javascript).
+     *
+     * Upon BootWrap object instantiation the default libs are automatically
+     * set. Client can add supplementary libs by calling this function
+     * directly.
      *
      * @param array $libs
      *
@@ -139,9 +300,19 @@ HEREDOC;
     }
 
     /**
-     * Set complementary javascript snippets - anything that's not a full-blown library
+     * @return string
+     */
+    public function getOtherJs(): string
+    {
+        return $this->otherJs;
+    }
+
+    /**
+     * Set complementary javascript snippet - anything that's not a full-blown
+     * library
      *
-     * @param string $other    : complementary JavaScript (e.g. for modal to function)
+     * @param string $other : complementary JavaScript (e.g. for modal to
+     *                      function)
      *
      * @return void
      */
@@ -151,126 +322,5 @@ HEREDOC;
 <!-- JavaScript snippets -->
 $other\n
 HEREDOC;
-    }
-
-    /**
-     * set the document title that will be shown on the browser-tab
-     *
-     * @param string $title    : defaults to 'bootwrap'
-     *
-     * @return void
-     */
-    public function setTitle(string $title = 'bootwrap'): void
-    {
-        $this->title = <<<HEREDOC
-<title>$title</title>
-HEREDOC;
-    }
-
-    /**
-     * Construct a Bootstrap enabled page
-     *
-     * render() returns the minimum required Bootstrap HTML (starter template)
-     * plus any user-set Bootstrap components, stylesheets, libs etc.
-     * (for more on components: https://getbootstrap.com/docs/4.5/components/)
-     *
-     * @return string                   : a Bootstrap HTML page (starter template + components)
-     */
-    public function render(): string
-    {
-        /*
-         * build Bootstrap components HTML
-         * each element in $this->components(array) holds Boostrap HTML for a component
-         * we concatenate all of the components HTML and store them in container(string) $components.
-         *
-         * The components are rendered inside <body></body>
-         */
-        $components = '';
-        if(!empty($this->components)) {
-            foreach($this->components as $component) {
-                $components .= $component . "\n"; // build HTML
-            }
-        }
-
-        // bsnavbarhack - sets the necessary <body> padding for navbar
-        // see https://stackoverflow.com/questions/11124777/twitter-bootstrap-navbar-fixed-top-overlapping-site
-        $page = <<<HEREDOC
-$this->htmlOpen
- <head>
-    $this->meta
-    
-    $this->styles     
-    $this->title
- </head>
- <body class="wrapper" $this->bsNavBarHack>\n
-$components
-
-    $this->libs
-    $this->otherJs
-    $this->footer
- </body>
-$this->htmlClose
-HEREDOC;
-        return $page;
-    }
-
-    /**
-     * Inject Bootstrap component into the Bootstrap (template) HTML page
-     *
-     * @param ComponentInterface $component
-     *
-     * @return void
-     */
-    public function inject(ComponentInterface $component): void
-    {
-        $this->components[] = $component->get();
-    }
-
-    /**
-     * @return string
-     */
-    public function getHtmlOpen(): string
-    {
-        return $this->htmlOpen;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMeta(): string
-    {
-        return $this->meta;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStyles(): string
-    {
-        return $this->styles;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLibs(): string
-    {
-        return $this->libs;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOtherJs(): string
-    {
-        return $this->otherJs;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFooter(): string
-    {
-        return $this->footer;
     }
 }

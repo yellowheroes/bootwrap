@@ -28,7 +28,7 @@ class Button implements libs\ComponentInterface
     /**
      * @var string Bootstrap Button HTML
      */
-    private string $html = '';
+    private string $component = '';
 
     /**
      * @var array|null Injected (child) components
@@ -40,33 +40,27 @@ class Button implements libs\ComponentInterface
         'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light',
         'dark', 'body', 'muted', 'white', 'black-50', 'white-50',
     ];
-    private array $types = ['button', 'submit', 'href', 'reset'];
+    private array $types = ['button', 'submit', 'nav', 'reset'];
     private string $bgColor = 'dark';
     private string $txtColor = 'secondary';
     private string $type = 'button';
-    private string $href = '';
+    private string $uri = '';
     private string $size = 'sm';
     private bool $outline = false;
 
     /**
-     * @param string|null $id      The id must be unique
      * @param string|null $display The text on a button
-     * @param string|null $name    Submitted as form data (e.g. $_POST['id'])
+     * @param string|null $id      The id must be unique
+     * @param string|null $name    Submitted as form data (e.g.
+     *                             $_POST['firstName'])
      *
      * @return void
      */
     public function build(
-        ?string $id = null,
         ?string $display = null,
+        ?string $id = null,
         ?string $name = null
     ): void {
-        // get the config settings
-        $bgColor = $this->bgColor ?? null;
-        $txtColor = $this->txtColor ?? null;
-        $type = $this->type ?? null;
-        $size = $this->size ?? null;
-        $outline = $this->outline ?? null;
-
         // Injected (child) components - build HTML
         $components = '';
         if (!empty($this->components)) {
@@ -76,27 +70,26 @@ class Button implements libs\ComponentInterface
         }
 
         // create Button
-        $id = $id ?? uniqid();
-        $name = $name ?? $id;
-        if ($type !== 'href') {
-            $buttonHtml = <<<HEREDOC
-<button id="$id" name="$name" type="$type" class="btn btn-$size btn-{$outline}$bgColor $txtColor">$display $components</button>
+        if ($this->type !== 'nav') {
+            $button = <<<HEREDOC
+<span><button id="$id" name="$name" type="$this->type" class="btn btn-$this->size 
+btn-{$this->outline}$this->bgColor $this->txtColor">$display</button> $components</span>
 HEREDOC;
         } else {
-            $href = $this->href;
-            $buttonHtml = <<<HEREDOC
-<a id="$id" class="btn btn-{$outline}$bgColor btn-$size $txtColor" href="$href" role="button">$display</a>
+            $button = <<<HEREDOC
+<span><a id="$id" class="btn btn-{$this->outline}$this->bgColor btn-$this->size $this->txtColor" 
+href="$this->uri" role="button">$display</a> $components</span>
 HEREDOC;
         }
 
         // store Button
-        $this->set($buttonHtml);
+        $this->component = $button;
     }
 
     /**
      * Injects a child component.
      *
-     * A Jumbotron can be injected with child components (e.g. buttons).
+     * A Button can be injected with child components (e.g. badge).
      *
      * @param libs\ComponentInterface $component A component to be injected
      *
@@ -107,19 +100,11 @@ HEREDOC;
     }
 
     /**
-     * @return string   Component HTML built with Button::build()
+     * @return string   Component (HTML) built with Button::build().
      */
     public function get(): string
     {
-        return $this->html;
-    }
-
-    /**
-     * @param string $html Component HTML built with Button::build()
-     */
-    private function set(string $html): void
-    {
-        $this->html = $html;
+        return $this->component;
     }
 
     /**
@@ -173,13 +158,13 @@ HEREDOC;
     }
 
     /**
-     * @param string $type 'button', 'submit', 'href', 'reset'.
+     * @param string $type 'button', 'submit', 'nav', 'reset'.
      *
      * @return Button
      */
     public function setType(string $type): Button
     {
-        if(in_array($type, $this->types)) {
+        if (in_array($type, $this->types)) {
             $this->type = $type;
         }
         return $this;
@@ -200,7 +185,7 @@ HEREDOC;
      */
     public function setSize(string $size): Button
     {
-        if($size === 'sm' || $size === 'lg') {
+        if ($size === 'sm' || $size === 'lg') {
             $this->size = $size;
         }
         return $this;
@@ -215,7 +200,8 @@ HEREDOC;
     }
 
     /**
-     * @param bool $outline True for an outline button, false for a solid button.
+     * @param bool $outline True for an outline button, false for a solid
+     *                      button.
      *
      * @return Button
      */
@@ -228,16 +214,17 @@ HEREDOC;
     /**
      * @return string a link to a resource as a reference URL
      */
-    public function getHref(): string
+    public function getUri(): string
     {
-        return $this->href;
+        return $this->uri;
     }
 
     /**
-     * @param string $href The href attribute defines a link to a resource as a reference URL
+     * @param string $uri The href attribute defines a link to a resource as a
+     *                    reference URL
      */
-    public function setHref(string $href): void
+    public function setUri(string $uri): void
     {
-        $this->href = $href;
+        $this->uri = $uri;
     }
 }

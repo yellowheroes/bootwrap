@@ -15,74 +15,132 @@ use yellowheroes\bootwrap\libs as libs;
 
 class Footer implements libs\ComponentInterface
 {
-    public string $html = ''; // container stores footer HTML - is retrieved by BootWrap::inject()
+    /**
+     * @var string Footer HTML
+     */
+    private string $component = '';
 
     /**
-     * Set the document footer
-     *
-     * The footer can be constructed to contain hyperlinks.
-     *
-     * format:
-     *          ['category title' => ['display txt' => 'linked doc', 'display txt' => 'linked doc'],]
-     *
-     *          e.g. [
-     *                'general' => ['contact us' => 'home.php', 'about us' => 'about.php'],
-     *                'api' => ['documentation' => 'docs.php'],
-     *               ]
-     *
-     * @param string $copyRight    copyright message
-     * @param array  $hrefs        hypertext links
-     * @param string $imageSrcPath image src path (e.g. logo)
-     *
-     * @return string
+     * @var array|null Injected (child) components.
      */
-    public function build(string $copyRight = 'organisation', array $hrefs = [], string $imageSrcPath = ''): string
-    {
-        $footerHtml = '';
-        /* set default: copyright symbol and year */
-        $copyRightSymbol = " &#169 ";
+    private ?array $components = [];
+
+    // default config
+    private array $colors = [
+        'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light',
+        'dark', 'body', 'muted', 'white', 'black-50', 'white-50', 'off',
+    ];
+    private bool $sticky = true; // true for sticky footer
+    private string $bgColor = 'dark';
+    private string $txtColor = 'white';
+    private string $txtSize = '0.8em';
+    private string $lineHeight = '20px';
+    private string $padding = '0';
+    private string $margin = '0';
+    private ?string $customClass = null; // set your proprietary css
+
+    /**
+     * Builds a Footer component.
+     *
+     * The footer can be constructed to contain headers and hyperlinks.
+     *
+     * $hrefs[] format:
+     *          ['header' => ['display txt' => 'linked resource'], ...]
+     *
+     *          e.g.
+     *          [
+     *           'general' => ['contact' => 'contact.php', 'about' =>
+     *           'about.php'],
+     *           'api' => ['documentation' => 'docs.php'],
+     *          ]
+     *
+     * @param string $org Organisation
+     * @param array  $hrefs Hypertext links (groups)
+     * @param string $image Path to image (e.g. logo)
+     *
+     * @return void
+     */
+    public function build(
+        string $org = 'organisation',
+        array $hrefs = [],
+        string $image = ''
+    ): void {
+        // set default copyright symbol and year
+        $copyRightSymbol = " &#169; ";
         $copyRightYear = date("Y");
-        $copyRight = $copyRight . $copyRightSymbol . $copyRightYear; // append Copyright notice: c YYYY - to footer content
+        $copyRight = $org . $copyRightSymbol . $copyRightYear;
 
-        /* construct the href - text-links - block */
+        // construct the footer
         $links = '';
-        $image = ($imageSrcPath !== '') ? "<img class='float-right' src='$imageSrcPath' width='48px' height='48' style='margin: 10px;'>" : ''; // logo
+        $image = ($image !== '') ?
+            "<img class='float-right' src='$image' width='48px' height='48' style='margin: 10px;'>" :
+            null;
         if (!empty($hrefs)) {
-            $links = "<div class='row'>";
-            $links .= "<div class='col'>$image</div>"; // logo
-            foreach ($hrefs as $title => $textLink) { // each href list-block can have a header-title
-                $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
-                foreach ($textLink as $display => $link) { // the actual links
-                    $title = $title ?? '';
-                    $title = strtoupper($title);
-                    $href = $this->href($link, $display);
-                    $links .= <<<HEREDOC
-            $title
-            <ul class="list-unstyled quick-links" style="line-height: 10px; font-size: 0.8em;">
-            <li class="text-left">
-            $href
-            </li>
-            </ul>\n
-HEREDOC;
-                    $title = null; // render title only once for each block or category of hrefs
+            $links = "<div class='row' style='line-height: $this->lineHeight; font-size: $this->txtSize;'>";
+            //$links .= ($image !== '') ? '<div class="col-sm">' . $image . '</div>' : '';
+            $links .= '<div class="col-sm">' . $image . '</div>';
+            foreach ($hrefs as $header => $href) {
+                $links .= '<div class="col-sm">';
+                $links .= (is_string($header)) ? $header : '';
+                $links .= '<br /><br />';
+                foreach ($href as $display => $uri) {
+                    $lnk = new Link();
+                    $lnk->build($uri, $display);
+                    $links .= $lnk->get(); // hypertext link
+                    $links .= '<br />';
                 }
-                $links .= "</div>"; // end div-column for a list-block of hrefs
+                $links .= '</div>'; // close column
             }
-            $links .= "</div>"; // end div-row - all hypertext link blocks are generated
+            $links .= '</div>'; // close row
         }
-        $links = ($links !== '') ? "<div class='text-muted' style='color: #FFFFFF !important;'>$links</div><div><br /></div>" : '';
 
-        $footerHtml = <<<HEREDOC
-<footer class="footer" style="margin-top: 80px;">
-    <div class="container-fluid bg-dark">
-    <!-- <div><hr class="bg-primary"/></div> -->
+        $footer = <<<HEREDOC
+<footer class="$this->customClass page-footer bg-$this->bgColor text-$this->txtColor p-$this->padding m-$this->margin">
+    <div class="container-fluid">
         $links
-        <div class="text-muted text-center" style="color: #FFFFFF !important;">$copyRight</div>
+        <div class="text-muted text-center p-3" style="color: #FFFFFF !important; font-size: 0.8em;">$copyRight</div>
     </div>
-</footer>\n
+\t</footer>\n
 HEREDOC;
 
-        $this->html = $footerHtml;
-        return $footerHtml;
+        // store Footer
+        $this->component = $footer;
+    }
+
+    /**
+     * Injects a child component.
+     *
+     * A Footer can be injected with child components.
+     *
+     * @param libs\ComponentInterface $component A component to be injected
+     *
+     */
+    public function inject(libs\ComponentInterface $component): void
+    {
+        $this->components[] = $component->get();
+    }
+
+    /**
+     * @return string   Component (HTML) built with Footer::build().
+     */
+    public function get(): string
+    {
+        return $this->component;
+    }
+
+    /**
+     * @return bool true = footer sticks to bottom of viewport and scrolls down
+     */
+    public function isSticky(): bool
+    {
+        return $this->sticky;
+    }
+
+    /**
+     * @param bool $sticky true = footer sticks to bottom of viewport
+     */
+    public function setSticky(bool $sticky): void
+    {
+        $this->sticky = $sticky;
     }
 }
