@@ -72,20 +72,11 @@ echo $bw->render();
 {empty} +
 
 === Inject components with components
-Some, if not most components are themselves eligible to be injected with other components. For example, a Bootstrap Alert component could be injected with one or more Button component(s).
+Some, if not most components are themselves eligible to be injected with other components. For example, a Bootstrap Alert component could be injected with one or more Button components.
 
 To accommodate this behavior, each component has its own `inject()` method.
 
 There are currently no restrictions on injecting components with other components, BootWrap allows you to freely use and experiment with this feature.
-
-{empty} +
-
----
-
-
-=== Build your Bootstrap page - inject()
-After you have built (and configured) one or more components, you can inject the component(s) into a Bootstrap enabled page (starter template), using `BootWrap::inject(_component_)` for each _component_.
----
 
 {empty} +
 
