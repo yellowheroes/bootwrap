@@ -22,37 +22,117 @@ use yellowheroes\bootwrap\libs as libs;
  */
 class Alert implements libs\ComponentInterface
 {
-    public string $html = ''; // Bootstrap Alert component (HTML)
+    /**
+     * @var string Bootstrap Alert component (HTML).
+     */
+    private string $component = '';
 
     /**
-     * @param ?string    $msg        : the message to be displayed in the alert box
-     * @param ?string    $type       : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
-     * @param ?bool      $dismiss    : if set to false, the alert cannot be dismissed.
-     * @param ?int       $zIndex     : overlapping elements with a larger z-index cover those with a smaller one.
-     * @param ?string    $textColor  : Bootstrap color classes: 'primary' for 'text-primary', 'secondary' for 'text-secondary' etc.
-     *
-     * @return string                : Bootstrap Alert component (HTML)
+     * @var array|null Injected (child) components.
      */
-    public function build(?string $msg = '', ?string $type = 'info', ?bool $dismiss = true, ?int $zIndex = null, ?string $textColor = ''): string
-    {
-        $buttonHtml = <<<HEREDOC
+    private ?array $components = [];
+
+    // default config
+    private array $colors = [
+        'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light',
+        'dark', 'body', 'muted', 'white', 'black-50', 'white-50', 'off'
+    ];
+    private string $bgColor = 'dark';
+    private string $txtColor = 'secondary';
+    private string $padding = '3';
+    private string $rounded = '3';
+    private string $margin = '3';
+    private string $rulerMargin = '4';
+    private ?string $customClass = null; // set your proprietary css classes
+
+    public function build(
+        ?string $msg = '',
+        ?bool $dismiss = true,
+        ?int $zIndex = null
+    ): void {
+        // Injected (child) components - build HTML
+        $components = '';
+        if (!empty($this->components)) {
+            foreach ($this->components as $component) {
+                $components .= $component . "\n";
+            }
+        }
+
+        // create Alert
+        $dismissBtn = <<<HEREDOC
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 HEREDOC;
-
         $dismissible = ($dismiss === true) ? "alert-dismissible" : '';
-        $button = ($dismiss === true) ? $buttonHtml : '';
+        $button = ($dismiss === true) ? $dismissBtn : '';
         $z = ($zIndex !== null) ? "style='z-index: $zIndex;'" : '';
-        $textColor = ($textColor !== '') ? 'text-' . $textColor : '';
-
-        $alertHtml = <<<HEREDOC
-  <div class="alert $textColor alert-$type $dismissible fade show" role="alert" $z>
+        $alert = <<<HEREDOC
+<div class="$this->customClass alert text-$this->txtColor alert-$this->bgColor $dismissible fade show" role="alert" $z>
   $msg
   $button
-  </div>
+  $components
+</div>
 HEREDOC;
 
-        $this->html = $alertHtml; // store component HTML
+        // store Alert
+        $this->component = $alert;
+    }
 
-        return $alertHtml; // return component HTML
+    /**
+     * Injects a child component.
+     *
+     * An Alert can be injected with child components (e.g. buttons).
+     *
+     * @param libs\ComponentInterface $component A component to be injected
+     *
+     */
+    public function inject(libs\ComponentInterface $component): void
+    {
+        $this->components[] = $component->get();
+    }
+
+    /**
+     * @return string   Component (HTML) built with Alert::build().
+     */
+    public function get(): string
+    {
+        return $this->component;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBgColor(): string
+    {
+        return $this->bgColor;
+    }
+
+    /**
+     * @param string $bgColor
+     *
+     * @return $this
+     */
+    public function setBgColor(string $bgColor): Alert
+    {
+        $this->bgColor = $bgColor;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTxtColor(): string
+    {
+        return $this->txtColor;
+    }
+
+    /**
+     * @param string $txtColor
+     *
+     * @return $this
+     */
+    public function setTxtColor(string $txtColor): Alert
+    {
+        $this->txtColor = $txtColor;
+        return $this;
     }
 }

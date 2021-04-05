@@ -12,104 +12,73 @@
 {empty} +
 
 == Introduction
-Bootwrap allows you to build a default link:https://getbootstrap.com/docs/5.0/getting-started/introduction/#starter-template[Bootstrap5 starter template] that can be injected with Bootstrap components (e.g. Navbar, Form, Alert, Link, Jumbotron etc.) and your own custom HTML snippets to design and customize responsive mobile-first sites with only a few lines of code.
+Bootwrap allows you to build a default link:https://getbootstrap.com/docs/5.0/getting-started/introduction/#starter-template[Bootstrap starter template] that can be injected with Bootstrap components (e.g. Navbar, Form, Alert, Link, Jumbotron etc.) and your own custom HTML snippets to design and customize responsive mobile-first sites with only a few lines of code.
 
 Surely, you can reference additional CSS style sheets and Javascript code(libraries), so you can easily extend the functionality and styling of your pages to fit your specific needs.
 
 === Starter template
-Two lines is all you need to generate a Bootstrap starter template and render it:
+Two lines is all you need to generate an empty BootWrap container object and render an empty default starter template:
 [source,php]
 ----
-$bw = new libs\BootWrap(); // create a BootWrap container object
-echo $bw->render(); // render your default Bootstrap starter template
+$bw = new libs\BootWrap(); // create an empty BootWrap container
+echo $bw->render(); // render your Bootstrap starter template
 ----
-The BootWrap container in this example is still empty, let's have a look at how we can inject Bootstrap components to bring our page to life!
+The BootWrap container in this example is still empty, let's have a look at how you can inject Bootstrap components to bring your page to life!
 
-=== Components
-Bootwrap really packs a punch with its component classes. Each component class is a wrapper for a link:https://getbootstrap.com/docs/5.0/components/accordion/[Bootstrap5 component]. These components can be configured and injected into a BootWrap container to build your pages.
+=== Bootstrap components
+Bootwrap really packs a punch with its component classes. Each component class is in fact a wrapper for a link:https://getbootstrap.com/docs/5.0/components/accordion/[Bootstrap component] footnote:[.Bootstrap 5 components, unless otherwise mentioned.]
 
-NOTE: There is one special component class: `Custom`. This is not an actual Bootstrap component, but allows you to inject your own HTML snippets (hardcoded or from file).
+These components can be configured and injected into a BootWrap container to build your pages.
 
-==== Requirements
-Each component class *MUST* implement a `build()` method, and in most cases, is fed with arguments
-to generate valid Bootstrap component HTML. The `build()` method will uses HEREDOC to allow variables inside a Bootstrap HTML-template to be resolved.
+NOTE: There is one special component class: `Custom`. This is not a Bootstrap component, but allows you to inject your own HTML snippets, hardcoded or from file.
 
-Each component class **MUST** have a `public $html` property that stores the built component HTML.
-This way, `BootWrap::inject()` can store and retrieve the component (HTML) for rendering.
-
-Finally, the components are rendered on a FIFO basis inside the `<body>` of a Bootstrap HTML page.
-
-{empty} +
-
-===== A typical component class
+To follow on from the previous example, let's have a look at how you can inject a component into your Bootstrap page:
 [source,php]
 ----
-class Jumbotron implements libs\ComponentInterface
-{
-    private string $html = ''; // Bootstrap Jumbotron component (HTML).
+// build an Alert
+$alert = new Alert();
+$msg = "I am a HAL 9000 computer";
+$alert->build($msg);
 
-    private ?array $components = []; // Injected child components (e.g. buttons).
-
-    // default config settings
-    private string $bgColor = 'dark';
-    private string $txtColor = 'secondary';
-    ...
-
-    public function build(): void
-    {
-        ... logic that builds the Jumbtron HTML
-
-        $this->set($jumbotronHtml); // store component in private $html
-    }
-
-    // getters and setters
-    public function get() { ... }
-    public function set() { ... }
-    ...
-    public function getBgColor() { ... }
-    public function setBgColor(string $bgColor){ ... }
-    ...
-
-    // injects a child component (e.g. a button) into a Jumbotron component.
-    public function inject(libs\ComponentInterface $component): void
-    {
-        $this->components[] = $component->get();
-    }
-}
+// inject Alert component into a BootWrap container and render page
+$bw = new BootWrap();
+$bw->inject($alert);
+echo $bw->render();
 ----
+
 {empty} +
 
 ==== Component configuration
-Each component has default configuration settings defined inside the component class. To change a configuration setting on a component, all you need to do is invoke the appropriate setter method.
-
-For example, if we want to change the background color of a Jumbotron:
+Changing the look and feel of a component is incredibly easy. For example, if you want to change the text and background color of an Alert:
 
 [source,php]
 ----
-$jumbotron = new Jumbotron();
-$jumbotron->setBgColor('warning'); // change background color
-$jumbotron->build('BootWrap is pretty snazzy...'); // component ready to be injected in a BootWrap container.
+// Change the text and background color and build your Alert
+$alert = new Alert();
+$alert->setTxtColor('dark')->setBgColor('warning');
+$msg = "I am a HAL 9000 computer";
+$alert->build($msg);
 ----
-And then inject the Jumbotron into a BootWrap container (a Bootstrap starter template):
+Once built, to render your Alert, inject it into a BootWrap container and invoke `BootWrap::render()`:
 [source,php]
 ----
-$bw = new BootWrap(); // build default Bootstrap starter template
-$bw->inject($jumbotron); // inject component
-echo $bw->render(); // render page
+$bw = new BootWrap();
+$bw->inject($alert);
+echo $bw->render();
 ----
 {empty} +
 
 ---
 {empty} +
 
-=== Inject components with other components
-Some components are eligible to be injected with other components. For example, a Jumbotron component could be injected with one or more Button component(s).
+=== Inject components with components
+Some, if not most components are themselves eligible to be injected with other components. For example, a Bootstrap Alert component could be injected with one or more Button component(s).
 
-This is why e.g. class Jumbotron has its own `inject()` method.
+To accommodate this behavior, each component has its own `inject()` method.
 
-IMPORTANT: Some components (_mother_) can be injected with other components (_children_). These (_mother_) components MUST have a `inject()` method.
+There are currently no restrictions on injecting components with other components, BootWrap allows you to freely use and experiment with this feature.
 
-Surely, not all components are suited to have child components injected. Ever seen a button with a form inside it?
+You can thus
 
 {empty} +
 

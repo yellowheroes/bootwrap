@@ -39,9 +39,11 @@ class Navbar implements libs\ComponentInterface
     // default config
     private array $colors = [
         'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light',
-        'dark', 'body', 'muted', 'white', 'black-50', 'white-50', 'off'
+        'dark', 'body', 'white', 'transparent', 'muted', 'black-50', 'white-50',
+        'off',
     ];
-    private string $bgColor = 'dark';
+    private string $theme = 'dark'; // 'light' for light background colors
+    private string $bgColor = 'dark'; // 'light' background colors with 'light' theme
     private string $txtColor = 'secondary';
     private string $titleSize = '4';
     private string $padding = '3';
@@ -51,20 +53,15 @@ class Navbar implements libs\ComponentInterface
     private ?string $customClass = null; // set your proprietary css classes
 
     /**
-     * @param ?string $title    The main title
-     * @param ?string $subTitle A sub-title
-     * @param ?string $msg      A (marketing) message
-     *
-     * @return void
+     * @param array       $navItems  [$uri => $display-name, ...].
+     * @param string|null $active    The display-name of the active page.
+     * @param string|null $brandName Company, product, or project name.
      */
     public function build(
-        ?string $title = null,
-        ?string $subTitle = null,
-        ?string $msg = null
+        array $navItems = [],
+        ?string $active = '',
+        ?string $brandName = null
     ): void {
-        // TODO: create Navbar
-       $navbar = '';
-
         // Injected (child) components - build HTML
         $components = '';
         if (!empty($this->components)) {
@@ -72,6 +69,59 @@ class Navbar implements libs\ComponentInterface
                 $components .= $component . "\n";
             }
         }
+
+        // Create Navbar
+        $navLinks = ''; // basic navigation links
+        $dropDown = ''; // drop-down navigation menu
+        $activePage = null;
+        foreach ($navItems as $uri => $display) {
+            $activePage = ($active === $display) ? 'active' : null;
+            $current = ($active === $display) ? 'aria-current="page"' : null;
+            if (is_array($display)) {
+                // for a dropdown, $uri is the dropdown 'header'
+                $activePage = ($active === $uri) ? 'active' : null;
+                $current = ($active === $uri) ? 'aria-current="page"' : null;
+                $dropDown .= <<<HEREDOC
+<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle $activePage $this->customClass" $current href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                $uri
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">\n
+HEREDOC;
+                foreach ($display as $ddUri => $ddDisplay) {
+                    $dropDown .= <<<HEREDOC
+                <li><a class="dropdown-item" href="$ddUri">$ddDisplay</a></li>\n
+HEREDOC;
+                }
+                $dropDown .= <<<HEREDOC
+            </ul>
+            </li>
+HEREDOC;
+                $navLinks .= $dropDown; // inject dropdown menu in navbar
+            } else {
+                $navLinks .= <<<HEREDOC
+<li class="nav-item">
+             <a class="nav-link $activePage $this->customClass" $current href="$uri">$display</a>
+            </li>\n\t\t\t
+HEREDOC;
+            }
+        }
+
+        $navbar = <<<HEREDOC
+    <nav class="navbar navbar-expand-lg navbar-$this->theme bg-$this->bgColor">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">$brandName</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            $navLinks
+          </ul>
+        </div>
+      </div>
+    </nav>
+HEREDOC;
 
         // store Navbar
         $this->component = $navbar;
@@ -96,6 +146,25 @@ class Navbar implements libs\ComponentInterface
     public function get(): string
     {
         return $this->component;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTheme(): string
+    {
+        return $this->theme;
+    }
+
+    /**
+     * @param string $theme
+     *
+     * @return $this
+     */
+    public function setTheme(string $theme): Navbar
+    {
+        $this->theme = $theme;
+        return $this;
     }
 
     /**
@@ -170,7 +239,7 @@ class Navbar implements libs\ComponentInterface
     /**
      * @param int $padding
      *
-     * @return Navbar
+     * @return $this
      */
     public function setPadding(int $padding): Navbar
     {
@@ -213,7 +282,8 @@ class Navbar implements libs\ComponentInterface
     /**
      * @param int $margin 0-5 or -1 for 'auto'
      *
-     * @return Navbar
+     * @return $this
+     *
      */
     public function setMargin(int $margin): Navbar
     {
@@ -243,7 +313,7 @@ class Navbar implements libs\ComponentInterface
     }
 
     /**
-     * @param string|null $customClass  custom (non Bootstrap) CSS class name(s)
+     * @param string|null $customClass custom (non Bootstrap) CSS class name(s)
      */
     public function setCustomClass(?string $customClass): void
     {
