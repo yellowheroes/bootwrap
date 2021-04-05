@@ -91,14 +91,11 @@ After you have built (and configured) one or more components, you can inject the
 
 1. Build an empty BootWrap container object (default Bootstrap 5 starter template)
 [source,php]
-----
 $bw = new BootWrap();
-----
+
 2. Render the starter template
 [source,php]
-----
 echo $bw->render();
-----
 
 Output:
 [source,html]
@@ -192,6 +189,8 @@ Output
  </body>
 </html>
 ----
+
+{empty} +
 
 == Conclusion
 {empty} +
