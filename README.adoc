@@ -86,6 +86,8 @@ There are currently no restrictions on injecting components with other component
 === Build your Bootstrap page - inject()
 After you have built (and configured) one or more components, you can inject the component(s) into a Bootstrap enabled page (starter template), using `BootWrap::inject(_component_)` for each _component_.
 
+{empty} +
+
 [[anchor-1]]
 == Build an empty Bootstrap template page (starter template)
 
