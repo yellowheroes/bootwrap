@@ -76,6 +76,8 @@ To accommodate this behavior, each component has its own `inject()` method.
 
 There are currently no restrictions on injecting components with other components, BootWrap allows you to freely use and experiment with this feature.
 
+---
+
 {empty} +
 
 [[anchor-1]]
