@@ -37,8 +37,7 @@ To follow on from the previous example, let's have a look at how you can inject 
 ----
 // build an Alert
 $alert = new Alert();
-$msg = "I am a HAL 9000 computer";
-$alert->build($msg);
+$alert->build("I am a HAL 9000 computer");
 
 // inject Alert component into a BootWrap container and render page
 $bw = new BootWrap();
@@ -56,8 +55,7 @@ Changing the look and feel of a component is incredibly easy. For example, if yo
 // Change the text and background color and build your Alert
 $alert = new Alert();
 $alert->setTxtColor('dark')->setBgColor('warning');
-$msg = "I am a HAL 9000 computer";
-$alert->build($msg);
+$alert->build("I am a HAL 9000 computer");
 ----
 Once built, to render your Alert, inject it into a BootWrap container and invoke `BootWrap::render()`:
 [source,php]
@@ -114,11 +112,8 @@ Output:
     <main class="page-body">
 	</main>
 
-
     <!-- Bootstrap5 and 'other' Javascript libraries-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
-
 
  </body>
 </html>
