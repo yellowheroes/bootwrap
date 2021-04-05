@@ -74,7 +74,7 @@ Some, if not most components are themselves eligible to be injected with other c
 
 To accommodate this behavior, each component has its own `inject()` method.
 
-There are currently no restrictions on injecting components with other components, BootWrap allows you to freely use and experiment with this feature.
+There are currently no restrictions on injecting components with other components, BootWrap allows you to freely experiment with this feature.
 
 ---
 
@@ -120,6 +120,9 @@ Output:
  </body>
 </html>
 ----
+
+{empty} +
+
 [[anchor-2]]
 == Build a Bootstrap page with a Jumbotron
 
