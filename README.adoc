@@ -66,9 +66,7 @@ echo $bw->render();
 ----
 {empty} +
 
----
-
-=== Inject components with components
+==== Inject components with components
 Some, if not most components are themselves eligible to be injected with other components. For example, a Bootstrap Alert component could be injected with one or more Button components.
 
 To accommodate this behavior, each component has its own `inject()` method.
