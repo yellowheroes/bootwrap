@@ -26,7 +26,7 @@ echo $bw->render(); // render your Bootstrap starter template
 The BootWrap container in this example is still empty, let's have a look at how you can inject Bootstrap components to bring your page to life!
 
 === Bootstrap components
-Bootwrap really packs a punch with its component classes. Each component class is in fact a wrapper for a link:https://getbootstrap.com/docs/5.0/components/accordion/[Bootstrap component] footnote:[.Bootstrap 5 components, unless otherwise mentioned.]
+Bootwrap really packs a punch with its component classes. Each component class is in fact a wrapper for a link:https://getbootstrap.com/docs/5.0/components/accordion/[Bootstrap component] footnote:[Bootstrap 5 components, unless otherwise mentioned.]
 
 These components can be configured and injected into a BootWrap container to build your pages.
 
@@ -67,7 +67,6 @@ echo $bw->render();
 {empty} +
 
 ---
-{empty} +
 
 === Inject components with components
 Some, if not most components are themselves eligible to be injected with other components. For example, a Bootstrap Alert component could be injected with one or more Button components.
@@ -75,7 +74,6 @@ Some, if not most components are themselves eligible to be injected with other c
 To accommodate this behavior, each component has its own `inject()` method.
 
 There are currently no restrictions on injecting components with other components, BootWrap allows you to freely experiment with this feature.
-
 ---
 
 {empty} +
