@@ -32,6 +32,7 @@ These components can be configured and injected into a BootWrap container to bui
 
 NOTE: There is one special component class: `Custom`. This is not a Bootstrap component, but allows you to inject your own HTML snippets, hardcoded or from file.
 
+==== inject components
 To follow on from the previous example, let's have a look at how you can inject a component into your Bootstrap page:
 [source,php]
 ----
@@ -47,7 +48,7 @@ echo $bw->render();
 
 {empty} +
 
-==== Component configuration
+==== Configure components
 Changing the look and feel of a component is incredibly easy. For example, if you want to change the text and background color of an Alert:
 
 [source,php]
@@ -71,7 +72,7 @@ Some, if not most components are themselves eligible to be injected with other c
 
 To accommodate this behavior, each component has its own `inject()` method.
 
-There are currently no restrictions on injecting components with other components, BootWrap allows you to freely experiment with this feature.
+There are currently no restrictions on injecting components with other components, Bootwrap allows you to freely experiment with this feature.
 ---
 
 {empty} +
