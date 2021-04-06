@@ -77,8 +77,11 @@ There are currently no restrictions on injecting components with other component
 
 {empty} +
 
+== Examples
+{empty} +
+
 [[anchor-1]]
-== Build an empty Bootstrap template page (starter template)
+=== Build an empty Bootstrap template page (starter template)
 
 1. Build an empty BootWrap container object (default Bootstrap 5 starter template)
 [source,php]
@@ -121,9 +124,7 @@ Output:
 {empty} +
 
 [[anchor-2]]
-== Build a Bootstrap page with a Jumbotron
-
-NOTE: _Build &#x2799; Inject &#x2799; Render_
+=== Build a Bootstrap page with a Jumbotron footnoteref:[jumbotron, Jumbotron is no longer a component in Bootstrap 5 - we have built a replica and included it in Bootwrap]
 
 *1. Build* a jumbotron with a title saying 'Bootwrap Snazzy'
 [source,php]
@@ -198,7 +199,7 @@ echo $bw->render();
 
 {empty} +
 
-.Create a Bootstrap page with a Jumbotron that says 'BootWrap Snazzy!'
+.Create a Bootstrap page with a Jumbotron footnoteref:[jumbotron] that says 'BootWrap Snazzy!'
 . *Build* Jumbotron
 [source,php]
 $jumbotron = new Jumbotron();
