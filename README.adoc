@@ -1,6 +1,6 @@
 = Bootwrap
 :toc: left
-:toclevels: 5
+:toclevels: 6
 :icons: font
 
 {empty} +
