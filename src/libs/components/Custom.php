@@ -22,29 +22,55 @@ use yellowheroes\bootwrap\libs as libs;
  */
 class Custom implements libs\ComponentInterface
 {
-    public string $html = ''; // container to store client-provided HTML
+    /**
+     * @var string Custom component (HTML)
+     */
+    private string $component = '';
 
     /**
-     * @param string $html    : HTML to be injected inside the <body> </body> tags
-     *
-     * @return string         : client-provided HTML
+     * @var array|null Injected (child) components.
      */
-    public function build(string $html = ''): string
+    private ?array $components = [];
+
+    /**
+     * @param string $html HTML to be injected inside the <body> </body> tags
+     *
+     * @return void
+     */
+    public function build(string $html = ''): void
     {
         /*
          * $html can be a user provided HTML snippet
          * or a reference to a file with a HTML snippet
          */
-        if(is_file($html)) {
-            $html = file_get_contents($html);
-        }
+        if(is_file($html)) $html = file_get_contents($html);
 
-        $customHtml = <<<HEREDOC
+        $custom = <<<HEREDOC
   $html\n
 HEREDOC;
 
-        $this->html = $customHtml;
-
-        return $customHtml;
+        $this->component = $custom;
     }
+
+    /**
+     * Injects a child component.
+     *
+     * A Custom component can be injected with child components (e.g. buttons).
+     *
+     * @param libs\ComponentInterface $component A component to be injected
+     *
+     */
+    public function inject(libs\ComponentInterface $component): void
+    {
+        $this->components[] = $component->get();
+    }
+
+    /**
+     * @return string   Component (HTML) built with Custom::build().
+     */
+    public function get(): string
+    {
+        return $this->component;
+    }
+
 }

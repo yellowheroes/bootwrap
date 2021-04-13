@@ -26,6 +26,15 @@ class Config
     {
         $this->roots = $this->getRoots();
         $this->paths = $this->getPaths();
+
+        if(self::DEBUG) {
+            echo '<pre>';
+            print_r($this->roots);
+            echo '</pre>';
+            echo '<pre>';
+            print_r($this->paths);
+            echo '</pre>';
+        }
     }
 
     /**
@@ -116,7 +125,7 @@ class Config
              *    project directory (file includes)
              * ---------------------------------------
              */
-            'views' => $roots['project'] . 'src/app/views/',
+            'templates' => $roots['project'] . 'src/templates/',
         ];
         // @formatter:on
 
