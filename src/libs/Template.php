@@ -21,6 +21,7 @@ class Template
         $this->config = new Config();
         $templates = $this->config->getPath()['templates'];
         $this->tmplPath = $templates . $template;
+        $this->build($this->tmplPath, $vars);
     }
 
     /**
