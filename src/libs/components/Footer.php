@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace yellowheroes\bootwrap\libs\components;
 
 use yellowheroes\bootwrap\libs as libs;
+use yellowheroes\bootwrap\libs\Template;
 
 class Footer implements libs\ComponentInterface
 {
@@ -30,7 +31,7 @@ class Footer implements libs\ComponentInterface
         'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light',
         'dark', 'body', 'muted', 'white', 'black-50', 'white-50', 'off',
     ];
-    private bool $sticky = true; // true for sticky footer
+    private bool $sticky = true; // checked on page-build in BootWrap::inject()
     private string $bgColor = 'dark';
     private string $txtColor = 'white';
     private string $txtSize = '0.8em';
@@ -77,7 +78,6 @@ class Footer implements libs\ComponentInterface
             null;
         if (!empty($hrefs)) {
             $links = "<div class='row' style='line-height: $this->lineHeight; font-size: $this->txtSize;'>";
-            //$links .= ($image !== '') ? '<div class="col-sm">' . $image . '</div>' : '';
             $links .= '<div class="col-sm">' . $image . '</div>';
             foreach ($hrefs as $header => $href) {
                 $links .= '<div class="col-sm">';
@@ -94,14 +94,11 @@ class Footer implements libs\ComponentInterface
             $links .= '</div>'; // close row
         }
 
-        $footer = <<<HEREDOC
-<footer class="$this->customClass page-footer bg-$this->bgColor text-$this->txtColor p-$this->padding m-$this->margin">
-    <div class="container-fluid">
-        $links
-        <div class="text-muted text-center p-3" style="color: #FFFFFF !important; font-size: 0.8em;">$copyRight</div>
-    </div>
-\t</footer>\n
-HEREDOC;
+        // build from template - inject template variables
+        $css = "page-footer $this->customClass bg-$this->bgColor text-$this->txtColor p-$this->padding m-$this->margin";
+        $vars = ['style' => $css, 'links' => $links, 'copyRight' => $copyRight];
+        $template = new Template('footer.tmpl.php', $vars);
+        $footer = $template->build();
 
         // store Footer
         $this->component = $footer;
@@ -130,6 +127,7 @@ HEREDOC;
 
     /**
      * @return bool true = footer sticks to bottom of viewport and scrolls down
+     *              (this bool is checked on page-build in BootWrap::inject() )
      */
     public function isSticky(): bool
     {
@@ -138,6 +136,7 @@ HEREDOC;
 
     /**
      * @param bool $sticky true = footer sticks to bottom of viewport
+     *                     (this bool is checked on page-build in BootWrap::inject() )
      */
     public function setSticky(bool $sticky): void
     {
