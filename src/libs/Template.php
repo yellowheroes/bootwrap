@@ -29,14 +29,14 @@ class Template
     /**
      * @return string The resolved template (HTML)
      */
-    public function build(): string
+    public function resolve(): string
     {
         ob_start(); // start output buffering
         if (file_exists($this->template)) {
-            // extract() variables to current scope - resolve vars inside template
+            // extract() template variables to current scope
             extract($this->vars);
 
-            // import the template HTML and inject(resolve) available variables
+            // import the template HTML and inject(resolve) template variables
             include($this->template);
         }
         return ob_get_clean(); // remove buffer and return resolved template.

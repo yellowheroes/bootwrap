@@ -61,6 +61,7 @@ class Footer implements libs\ComponentInterface
      *
      * @return void
      */
+
     public function build(
         string $org = 'organisation',
         array $hrefs = [],
@@ -98,7 +99,7 @@ class Footer implements libs\ComponentInterface
         $css = "page-footer $this->customClass bg-$this->bgColor text-$this->txtColor p-$this->padding m-$this->margin";
         $vars = ['style' => $css, 'links' => $links, 'copyRight' => $copyRight];
         $template = new Template('footer.tmpl.php', $vars);
-        $footer = $template->build();
+        $footer = $template->resolve();
 
         // store Footer
         $this->component = $footer;

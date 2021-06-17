@@ -33,7 +33,14 @@ These components can be configured and injected into a BootWrap container to bui
 NOTE: There is one special component class: `Custom`. This is not a Bootstrap component, but allows you to inject your own HTML snippets, hardcoded or from file.
 
 ==== inject components
-To follow on from the previous example, let's have a look at how you can inject a component into your Bootstrap page:
+To follow on from the previous example, let's have a look at how you can inject a component into your Bootstrap page.
+
+A short example to show how you can inject an alert into your Bootstrap page.
+
+1. Build an Alert component with a text message.
+2. Inject the component into a BootWrap container
+3. Render page.
+
 [source,php]
 ----
 // build an Alert
